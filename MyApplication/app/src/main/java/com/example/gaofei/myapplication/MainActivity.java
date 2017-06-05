@@ -56,11 +56,7 @@ public class MainActivity extends BaseAct {
         Log.d("test aaa","dddddd123");
     }
 
-    private void initView2() {
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton = (ImageView) findViewById(R.id.button);
-    }
+
 
 
 }
