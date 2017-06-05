@@ -45,48 +45,22 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,SkipAct.class);
-                startActivity(intent);
-            }
-        });
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,SkipAct.class);
-                startActivity(intent);
-            }
-        });
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,SkipAct.class);
-                startActivity(intent);
-            }
-        });
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","b1");
-        Log.d("test aaa","b2");
-        Log.d("test aaa","b3");
-        Log.d("test aaa","a1");
-        Log.d("test aaa","a2");
-        Log.d("test aaa","a3");
-        Log.d("test aaa","b4");
-        Log.d("test aaa","b5");
-        Log.d("test aaa","b6");
-        Log.d("test aaa","a4");
-        Log.d("test aaa","a5");
-        Log.d("test aaa","a6");
-        Log.d("test aaa","a7");
-        Log.d("test aaa","a8");
-        Log.d("test aaa","a9");
-        Log.d("test aaa","b7");
-        Log.d("test aaa","b8");
-        Log.d("test aaa","b9");
+       findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+           }
+       }); findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+           }
+       }); findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+           }
+       });
     }
 
 

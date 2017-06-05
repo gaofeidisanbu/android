@@ -26,4 +26,6 @@ public class Instance {
     public static void fun2(){}
     public static void fun3(){}
     public static void fun4(){}
+    public static void fun5(){}
+    public static void fun6(){}
 }
