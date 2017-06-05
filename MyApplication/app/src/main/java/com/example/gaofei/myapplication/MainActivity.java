@@ -45,28 +45,14 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-       findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-           }
-       }); findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-           }
-       }); findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-
-           }
-       });
-        Log.d("test aaa","command2");
-        Log.d("test aaa","command2");
-        Log.d("test aaa","command2");
-        Log.d("test aaa","command3");
-        Log.d("test aaa","command3");
-        Log.d("test aaa","command3");
+        mButton = (ImageView) findViewById(R.id.button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SkipAct.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
