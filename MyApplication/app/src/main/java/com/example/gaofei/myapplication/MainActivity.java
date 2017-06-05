@@ -45,6 +45,8 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
+        Log.d("test aaa","command2");
+        Log.d("test aaa","command2");
         Log.d("test aaa","command10");
         Log.d("test aaa","command10");
         mButton.setOnClickListener(new View.OnClickListener() {
