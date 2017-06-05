@@ -85,6 +85,7 @@ public class MainActivity extends BaseAct {
         Log.d("test aaa","a8");
         Log.d("test aaa","a9");
         Log.d("test aaa","b7");
+        Log.d("test aaa","b8");
     }
 
 
