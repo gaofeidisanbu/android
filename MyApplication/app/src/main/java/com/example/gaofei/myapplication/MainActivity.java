@@ -56,6 +56,14 @@ public class MainActivity extends BaseAct {
         Log.d("test 2aaa","dddddd");
         Log.d("test2 aaa","dddddd");
         Log.d("test aaa","dddddd");
+        mButton = (ImageView) findViewById(R.id.button);
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SkipAct.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
