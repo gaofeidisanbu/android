@@ -66,6 +66,9 @@ public class MainActivity extends BaseAct {
                 startActivity(intent);
             }
         });
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
     }
 
 
