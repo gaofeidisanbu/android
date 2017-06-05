@@ -22,10 +22,4 @@ public class Instance {
         return mInstance;
     }
 
-    public static void fun(){}
-    public static void fun2(){}
-    public static void fun3(){}
-    public static void fun4(){}
-    public static void fun5(){}
-    public static void fun6(){}
 }
