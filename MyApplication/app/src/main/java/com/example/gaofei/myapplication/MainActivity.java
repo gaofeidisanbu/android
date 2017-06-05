@@ -45,7 +45,6 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        mButton = (ImageView) findViewById(R.id.button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +52,7 @@ public class MainActivity extends BaseAct {
                 startActivity(intent);
             }
         });
+        Log.d("test aaa","dddddd123");
     }
 
 
