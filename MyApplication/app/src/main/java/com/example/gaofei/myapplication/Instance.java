@@ -22,4 +22,6 @@ public class Instance {
         return mInstance;
     }
 
+    public void fun(){}
+
 }
