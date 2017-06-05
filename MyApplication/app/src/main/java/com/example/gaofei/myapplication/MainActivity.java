@@ -45,7 +45,27 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        Log.d("","");
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SkipAct.class);
+                startActivity(intent);
+            }
+        });
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SkipAct.class);
+                startActivity(intent);
+            }
+        });
+        mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,SkipAct.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
