@@ -45,8 +45,8 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        Log.d("test aaa","b3");
-        Log.d("test aaa","b3");
+        Log.d("test aaa","b4");
+        Log.d("test aaa","b4");
     }
 
 
