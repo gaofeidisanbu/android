@@ -23,4 +23,5 @@ public class Instance {
     }
 
     public static void fun(){}
+    public static void fun2(){}
 }
