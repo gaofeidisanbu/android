@@ -61,6 +61,9 @@ public class MainActivity extends BaseAct {
 
            }
        });
+        Log.d("test aaa","command");
+        Log.d("test aaa","command");
+        Log.d("test aaa","command");
     }
 
 
