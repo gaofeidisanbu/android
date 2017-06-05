@@ -10,8 +10,4 @@ import android.support.v7.app.AppCompatActivity;
  */
 
 public class BaseAct extends AppCompatActivity{
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-    }
 }
