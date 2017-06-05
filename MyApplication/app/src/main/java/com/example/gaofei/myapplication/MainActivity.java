@@ -33,12 +33,15 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView() {
-//        Test test = new Test();
-//        test.fun("d");
-        Test2 test2 = new Test2();
-        test2.aa("");
-//        Test test = new Test();
-//        test.fun("");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
     }
 
 
