@@ -47,14 +47,14 @@ public class MainActivity extends BaseAct {
     private void initView2() {
         Log.d("test aaa","dddddd");
         Log.d("test aaa","dddddd");
-        Log.d("test aaa22","dddddd");
-        Log.d("test aaa33","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
+        Log.d("test 2aaa22","dddddd");
+        Log.d("test2 aaa33","dddddd");
+        Log.d("test2 aaa","dddddd");
+        Log.d("test2 aaa","dddddd");
+        Log.d("test 2aaa","dddddd");
+        Log.d("test 2aaa","dddddd");
+        Log.d("test 2aaa","dddddd");
+        Log.d("test2 aaa","dddddd");
         Log.d("test aaa","dddddd");
     }
 
