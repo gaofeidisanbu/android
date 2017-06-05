@@ -24,4 +24,9 @@ public class BaseAct extends AppCompatActivity{
     protected void onStop() {
         super.onStop();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

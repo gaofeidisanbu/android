@@ -45,7 +45,10 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        mButton = (ImageView) findViewById(R.id.button);
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa","dddddd");
+        Log.d("test aaa22","dddddd");
+        Log.d("test aaa33","dddddd");
         Log.d("test aaa","dddddd");
         Log.d("test aaa","dddddd");
         Log.d("test aaa","dddddd");
@@ -53,21 +56,6 @@ public class MainActivity extends BaseAct {
         Log.d("test aaa","dddddd");
         Log.d("test aaa","dddddd");
         Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd123ddddddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd123");
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton = (ImageView) findViewById(R.id.button);
     }
 
 
