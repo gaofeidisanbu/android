@@ -14,4 +14,5 @@ public class BaseAct extends AppCompatActivity{
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);}
 
+
 }
