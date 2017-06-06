@@ -22,26 +22,11 @@ public class MainActivity extends BaseAct {
     }
 
     private void initData() {
-        mButton = (ImageView) findViewById(R.id.button);
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,SkipAct.class);
-                startActivity(intent);
-            }
-        });
+
     }
 
     private void initView() {
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd");
-        Log.d("test aaa","dddddd123");
+
     }
 
 
