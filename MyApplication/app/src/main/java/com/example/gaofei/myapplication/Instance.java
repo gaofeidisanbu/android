@@ -22,5 +22,9 @@ public class Instance {
         return mInstance;
     }
 
-
+public void fun1(){}
+public void fun2(){}
+public void fun3(){}
+public void fun4(){}
+public void fun5(){}
 }
