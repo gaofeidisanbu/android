@@ -14,5 +14,18 @@ public class BaseAct extends AppCompatActivity{
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);}
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
