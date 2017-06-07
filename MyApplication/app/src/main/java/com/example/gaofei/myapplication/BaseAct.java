@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 /**
  * Created by gaofei on 2017/5/17.
@@ -17,6 +18,7 @@ public class BaseAct extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("","2");
     }
 
     @Override
