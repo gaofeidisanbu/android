@@ -20,6 +20,7 @@ public class BaseAct extends AppCompatActivity{
         super.onPause();
         Log.d("","2");
         Log.d("","3");
+        Log.d("","4");
     }
 
     @Override
