@@ -29,4 +29,6 @@ public class Instance {
         Log.d("week","3");
     }
 
+    public void fun2(){}
+
 }
