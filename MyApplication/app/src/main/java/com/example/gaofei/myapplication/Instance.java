@@ -1,6 +1,7 @@
 package com.example.gaofei.myapplication;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Created by gaofei on 2017/5/17.
@@ -20,6 +21,10 @@ public class Instance {
         }
 
         return mInstance;
+    }
+
+    public void fun(){
+        Log.d("week","1");
     }
 
 }
