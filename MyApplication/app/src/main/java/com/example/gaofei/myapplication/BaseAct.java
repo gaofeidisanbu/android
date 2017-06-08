@@ -33,5 +33,6 @@ public class BaseAct extends AppCompatActivity{
     protected void onDestroy() {
         super.onDestroy();
         Log.d("master","1");
+        Log.d("master","2");
     }
 }
