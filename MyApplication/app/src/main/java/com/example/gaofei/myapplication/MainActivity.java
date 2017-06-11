@@ -37,5 +37,6 @@ public class MainActivity extends BaseAct {
         super.onDestroy();
         Log.d("master 11","1");
         Log.d("master 11","2");
+        Log.d("master 11","3");
     }
 }
