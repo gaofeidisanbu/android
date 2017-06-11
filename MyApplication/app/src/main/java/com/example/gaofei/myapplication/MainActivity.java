@@ -35,5 +35,6 @@ public class MainActivity extends BaseAct {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("master 11","1");
     }
 }
