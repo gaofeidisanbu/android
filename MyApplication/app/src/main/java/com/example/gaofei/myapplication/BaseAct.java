@@ -39,5 +39,6 @@ public class BaseAct extends AppCompatActivity{
         Log.d("master","5");
         Log.d("master","6");
         Log.d("master","8");
+        Log.d("BaseAct","9");
     }
 }
