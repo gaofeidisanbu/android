@@ -42,5 +42,6 @@ public class MainActivity extends BaseAct {
         Log.d("master 11","5");
         Log.d("master 11","6");
         Log.d("master 11","7");
+        Log.d("master 11","8");
     }
 }

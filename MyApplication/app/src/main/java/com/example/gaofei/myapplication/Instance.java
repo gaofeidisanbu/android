@@ -32,6 +32,7 @@ public class Instance {
     public void fun2(){
         Log.d("Instance","1");
         Log.d("Instance","2");
+        Log.d("Instance","3");
     }
 
 }
