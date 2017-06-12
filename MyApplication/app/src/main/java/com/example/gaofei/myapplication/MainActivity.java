@@ -22,7 +22,6 @@ public class MainActivity extends BaseAct {
     }
 
     private void initData() {
-        sysout
 
     }
 
@@ -30,7 +29,7 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        Log.d("test aaa","rebase");
+        Log.d("test aaa","rebaseda1122dddddddddddddddddddddddd");
     }
 
     @Override
