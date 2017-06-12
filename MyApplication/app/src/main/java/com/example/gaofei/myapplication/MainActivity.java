@@ -29,7 +29,6 @@ public class MainActivity extends BaseAct {
     }
 
     private void initView2() {
-        Log.d("test aaa","rebaseda1122dddddddddddddddddddddddd");
     }
 
     @Override
