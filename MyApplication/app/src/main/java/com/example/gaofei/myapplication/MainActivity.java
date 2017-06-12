@@ -22,6 +22,7 @@ public class MainActivity extends BaseAct {
     }
 
     private void initData() {
+        sysout
 
     }
 
