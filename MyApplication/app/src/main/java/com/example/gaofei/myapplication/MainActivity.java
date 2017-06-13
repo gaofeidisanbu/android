@@ -35,5 +35,19 @@ public class MainActivity extends BaseAct {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+<<<<<<< HEAD
+=======
+        Log.d("master 11","1");
+        Log.d("master 11","2");
+        Log.d("master 11","3");
+        Log.d("master 11","4");
+        Log.d("master 11","5");
+        Log.d("master 11","6");
+        Log.d("master 11","7");
+        Log.d("master 11","8");
+        Log.d("master 11","9");
+        Log.d("master 11","11");
+        Log.d("master 11","12");
+>>>>>>> dev 12
     }
 }
