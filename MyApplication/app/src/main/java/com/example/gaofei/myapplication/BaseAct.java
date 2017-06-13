@@ -18,10 +18,6 @@ public class BaseAct extends AppCompatActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("","2");
-        Log.d("","3");
-        Log.d("","4");
-        Log.d("","5");
     }
 
     @Override
@@ -32,13 +28,6 @@ public class BaseAct extends AppCompatActivity{
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("master","1");
-        Log.d("master","2");
-        Log.d("master","3");
-        Log.d("master","4");
-        Log.d("master","5");
-        Log.d("master","6");
-        Log.d("master","8");
-        Log.d("BaseAct","9");
     }
+
 }
