@@ -13,7 +13,7 @@
 
         </activity>
         <activity android:name=".SkipAct" ></activity>
-        <activity android:name="com.example.gaofei.myapplication.act.RecyclerAct" >
+        <activity android:name="com.example.gaofei.myapplication.act.KeyboardAct" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
