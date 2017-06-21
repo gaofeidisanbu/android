@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import com.example.mylibrary.Test2;
 
 public class MainActivity extends BaseAct {
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "WebviewActivity";
     private ImageView mButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

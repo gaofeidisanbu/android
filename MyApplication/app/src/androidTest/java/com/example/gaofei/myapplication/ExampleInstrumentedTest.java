@@ -22,5 +22,6 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.example.gaofei.myapplication", appContext.getPackageName());
+        System.out.print("dddd");
     }
 }
