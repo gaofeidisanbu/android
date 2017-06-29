@@ -35,7 +35,7 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     private Handler mHandler = new Handler();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();

@@ -15,7 +15,7 @@ public class SkipAct extends BaseAct {
     private TextView mTextView;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acty_skip);
         Instance.getInstance(this);

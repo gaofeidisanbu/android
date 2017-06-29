@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,17 +13,19 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
+import com.example.gaofei.myapplication.act.ExceptionAct;
 
 
 @SuppressLint("SetJavaScriptEnabled") 
-public class WebviewActivity extends Activity {
+public class WebviewActivity extends BaseAct {
 
     private WebView webView;
     private WVJBWebViewClient webViewClient;
     
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView=(WebView) findViewById(R.id.webview);
@@ -32,7 +35,7 @@ public class WebviewActivity extends Activity {
 
         webViewClient = new MyWebViewClient(webView);
         webViewClient.enableLogging();        
-        webView.setWebViewClient(webViewClient);       
+        webView.setWebViewClient(webViewClient);
 
         findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
 
@@ -43,6 +46,8 @@ public class WebviewActivity extends Activity {
 					@Override
 					public void callback(Object data) {
 						Toast.makeText(WebviewActivity.this, "sendMessage got response: " + data, Toast.LENGTH_LONG).show();
+						Intent intent = new Intent(WebviewActivity.this,ExceptionAct.class);
+						startActivity(intent);
 					}
 				}); 
 			}

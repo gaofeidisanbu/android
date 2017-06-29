@@ -22,11 +22,11 @@ public class ExceptionAct extends BaseAct{
         findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
+//                try {
                     fun(null);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
 
             }
         });
