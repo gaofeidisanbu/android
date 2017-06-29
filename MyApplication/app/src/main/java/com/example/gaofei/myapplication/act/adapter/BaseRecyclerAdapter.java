@@ -32,7 +32,7 @@ public class BaseRecyclerAdapter extends RecyclerView.Adapter<MyBaseViewHolder> 
 
     @Override
     public MyBaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return ViewHolderHandler.onCreateViewHolder(parent,viewType);
+        return ViewHolderHandler.onCreateViewHolder(parent,viewType,onBaseAdapterListener);
     }
 
     @Override
