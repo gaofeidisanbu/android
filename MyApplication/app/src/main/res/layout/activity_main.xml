@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res/res-auto"
+    xmlns:app1="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app1="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root"
     android:orientation="vertical"
-    tools:layout_editor_absoluteY="81dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="81dp">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_gravity="center_horizontal"
+        android:text="test"
         app1:layout_constraintEnd_toEndOf="@+id/root"
-        tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="308dp"
-        android:id="@+id/textView" />
-
-    <ImageView
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app1:srcCompat="@android:drawable/alert_dark_frame"
-        tools:layout_editor_absoluteX="168dp"
         tools:layout_editor_absoluteY="0dp" />
 
+    <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#e8e8e8"
+        android:layout_weight="1">
+
+        <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeRefreshHeaderLayout
+            android:id="@+id/swipe_refresh_header"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/swipe_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+        <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeLoadMoreFooterLayout
+            android:id="@+id/swipe_load_more_footer"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+    </com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout>
 
 
 </LinearLayout>

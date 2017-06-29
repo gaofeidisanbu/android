@@ -18,17 +18,17 @@
         tools:replace="android:name"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".SkipAct" ></activity>
-        <activity android:name="com.example.gaofei.myapplication.act.ExceptionAct" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name="com.example.gaofei.myapplication.webview.WebviewActivity"  android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".SkipAct" ></activity>
+        <activity android:name="com.example.gaofei.myapplication.act.ExceptionAct" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
+        </activity>
+        <activity android:name="com.example.gaofei.myapplication.webview.WebviewActivity"  android:windowSoftInputMode="adjustPan">
+
         </activity>
     </application>
 

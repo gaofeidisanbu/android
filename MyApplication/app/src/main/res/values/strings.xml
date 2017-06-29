@@ -3,4 +3,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="send_message">Send message</string>
     <string name="call_handler">Call handler</string>
+    <string name="load_more_data_str">上拉加载更多</string>
+    <string name="load_more_data_success_str">加载成功</string>
+    <string name="load_more_data_loading_str">正在加载...</string>
+    <string name="refresh_data_loading_str" >正在刷新...</string>
+    <string name="refresh_data_str" >下拉刷新数据</string>
+    <string name="refresh_data_success_str" >刷新成功</string>
 </resources>
