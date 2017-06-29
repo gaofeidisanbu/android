@@ -1,10 +1,12 @@
 package com.example.gaofei.myapplication;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.gaofei.myapplication.utils.LogUtils;
@@ -16,12 +18,28 @@ import com.example.gaofei.myapplication.utils.LogUtils;
 public class BaseAct extends AppCompatActivity{
     public static String TAG ;
     private static String COMMON_TAG = "GAOFEI:";
+    public static final String TITLE = "title";
+    public static String mClassName ;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG = COMMON_TAG + getClass().getSimpleName();
+        mClassName = getClass().getSimpleName();
+        TAG = COMMON_TAG + mClassName;
         Log.d(TAG,"------- onCreate");
+        initActionBar();
+    }
+
+    protected void initActionBar(){
+        String title = getIntent().getStringExtra(TITLE);
+        if(TextUtils.isEmpty(title)){
+            title = mClassName;
+        }
+       android.support.v7.app.ActionBar actionBar =  getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setTitle(title);
+        }
     }
 
     @Override

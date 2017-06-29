@@ -2,21 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.gaofei.myapplication">
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
-        android:allowBackup="true"
-        android:supportsRtl="true"
         android:name=".MainApplication"
+        android:allowBackup="true"
         android:icon="@mipmap/icon"
-        tools:replace="android:name"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:name">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SkipAct" ></activity>
-        <activity android:name="com.example.gaofei.myapplication.act.ExceptionAct" android:theme="@style/AppTheme.NoActionBar" android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name="com.example.gaofei.myapplication.webview.WebviewActivity"  android:windowSoftInputMode="adjustPan" >
+        <activity android:name=".act.SkipAct"/>
+        <activity android:name="com.example.gaofei.myapplication.act.ExceptionAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.WebviewActivity" />
+        <activity android:name="com.example.gaofei.myapplication.act.RecyclerSwipeAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.KeyboardAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.TestAct" />
 
-        </activity>
     </application>
 
 </manifest>

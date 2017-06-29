@@ -10,28 +10,30 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.example.gaofei.myapplication.act.ExceptionAct;
+import com.example.gaofei.myapplication.act.KeyboardAct;
+import com.example.gaofei.myapplication.act.RecyclerSwipeAct;
+import com.example.gaofei.myapplication.act.TestAct;
+import com.example.gaofei.myapplication.act.WebviewActivity;
 import com.example.gaofei.myapplication.act.adapter.BaseRecyclerAdapter;
-import com.example.gaofei.myapplication.act.adapter.RecyclerViewAdapter;
 import com.example.gaofei.myapplication.act.holder.MainViewHolder;
 import com.example.gaofei.myapplication.act.holder.ViewHolderHandler;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnRefreshListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout;
 import com.example.gaofei.myapplication.utils.CommonUtils;
-import com.example.gaofei.myapplication.webview.WebviewActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseAdapterListener, OnRefreshListener, OnLoadMoreListener {
-    public static final int TEST = 0;
-    public static final int WEBVIEW = 1;
-    private static final String TAG = "WebviewActivity";
     private RecyclerView mRecyclerView;
     private SwipeToLoadLayout mSwipeToLoadLayout;
-    private String[] textArr = {"Test","WebView"};
-    private String[] buttonArr = {"跳转","跳转"};
-    private int[] typeArr = {TEST,WEBVIEW};
+    /**
+     * 增加一个测试类，需要同时在三个数组增加
+     */
+    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class, WebviewActivity.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView"};
     private Handler mHandler = new Handler();
 
     @Override
@@ -48,12 +50,13 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
 
     private List<ViewHolderHandler.Item> getListData() {
         List<ViewHolderHandler.Item> list = new ArrayList<>();
-        for (int i = 0; i < textArr.length; i++) {
+        int len = classArr.length;
+        for (int i = len - 1; i >= 0; i--) {
             ViewHolderHandler.Item item = new ViewHolderHandler.Item();
             MainViewHolder.MyObject myObject = new MainViewHolder.MyObject();
-            myObject.type = typeArr[i];
-            myObject.text = textArr[i];
-            myObject.buttonText = buttonArr[i];
+            myObject.type = i;
+            myObject.text = buttonArr[i];
+            myObject.buttonText = classArr[i].getSimpleName();
             item.object = myObject;
             item.itemType = ViewHolderHandler.ItemType.RECYCLERITEMMAIN;
             list.add(item);
@@ -85,10 +88,9 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     @Override
     public void click(View view, ViewHolderHandler.Item item) {
         MainViewHolder.MyObject myObject = (MainViewHolder.MyObject) item.object;
-        if (myObject.type == MainActivity.WEBVIEW) {
-            Intent intent = new Intent(MainActivity.this, WebviewActivity.class);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(MainActivity.this, classArr[myObject.type]);
+        intent.putExtra(TITLE,buttonArr[myObject.type]);
+        startActivity(intent);
     }
 
     @Override

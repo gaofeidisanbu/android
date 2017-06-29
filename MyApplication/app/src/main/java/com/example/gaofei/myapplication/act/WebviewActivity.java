@@ -1,10 +1,9 @@
-package com.example.gaofei.myapplication.webview;
+package com.example.gaofei.myapplication.act;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 
 import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
-import com.example.gaofei.myapplication.act.ExceptionAct;
+import com.example.gaofei.myapplication.webview.WVJBWebViewClient;
 
 
 @SuppressLint("SetJavaScriptEnabled") 

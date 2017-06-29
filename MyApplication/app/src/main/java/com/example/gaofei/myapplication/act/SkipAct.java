@@ -1,10 +1,14 @@
-package com.example.gaofei.myapplication;
+package com.example.gaofei.myapplication.act;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.gaofei.myapplication.BaseAct;
+import com.example.gaofei.myapplication.Instance;
+import com.example.gaofei.myapplication.R;
 
 /**
  * Created by gaofei on 2017/5/17.
