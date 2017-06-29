@@ -15,6 +15,7 @@ public class ViewHolderHandler {
     public static int[] layout = {R.layout.recycler_view_item_main};
 
     public static class Item {
+        // 一种类型对应一种样式
         public ItemType itemType;
         public Object object;
     }
