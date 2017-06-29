@@ -30,7 +30,7 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     private RecyclerView mRecyclerView;
     private SwipeToLoadLayout mSwipeToLoadLayout;
     /**
-     * 增加一个测试类，需要同时在三个数组增加
+     * 增加一个测试类，需要同时在2个数组增加
      */
     private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class, WebviewActivity.class};
     private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView"};

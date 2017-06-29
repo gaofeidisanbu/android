@@ -39,6 +39,7 @@ public class BaseAct extends AppCompatActivity{
        android.support.v7.app.ActionBar actionBar =  getSupportActionBar();
         if(actionBar != null){
             actionBar.setTitle(title);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
 
