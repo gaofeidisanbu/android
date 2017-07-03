@@ -14,7 +14,7 @@ import com.example.gaofei.myapplication.act.ExceptionAct;
 import com.example.gaofei.myapplication.act.KeyboardAct;
 import com.example.gaofei.myapplication.act.RecyclerSwipeAct;
 import com.example.gaofei.myapplication.act.TestAct;
-import com.example.gaofei.myapplication.act.WebviewActivity;
+import com.example.gaofei.myapplication.webview.WebviewActivity;
 import com.example.gaofei.myapplication.act.adapter.BaseRecyclerAdapter;
 import com.example.gaofei.myapplication.act.holder.MainViewHolder;
 import com.example.gaofei.myapplication.act.holder.ViewHolderHandler;

@@ -28,7 +28,7 @@
         </activity>
         <activity android:name=".act.SkipAct"/>
         <activity android:name="com.example.gaofei.myapplication.act.ExceptionAct" />
-        <activity android:name="com.example.gaofei.myapplication.act.WebviewActivity" />
+        <activity android:name="com.example.gaofei.myapplication.webview.WebviewActivity" />
         <activity android:name="com.example.gaofei.myapplication.act.RecyclerSwipeAct" />
         <activity android:name="com.example.gaofei.myapplication.act.KeyboardAct" />
         <activity android:name="com.example.gaofei.myapplication.act.TestAct" />
