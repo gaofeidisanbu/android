@@ -32,6 +32,7 @@
         <activity android:name="com.example.gaofei.myapplication.act.RecyclerSwipeAct" />
         <activity android:name="com.example.gaofei.myapplication.act.KeyboardAct" />
         <activity android:name="com.example.gaofei.myapplication.act.TestAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.AnnoAct" />
 
     </application>
 
