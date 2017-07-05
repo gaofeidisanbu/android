@@ -13,7 +13,10 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * Created by gaofei on 2017/7/4.
@@ -32,11 +35,23 @@ public class AnnoAct extends BaseAct {
 
 
     public void processAnno(){
+        Test test = new Test();
         Method[] declaredMethods = Test.class.getDeclaredMethods();
         for (Method method:declaredMethods){
             AnnoTest annoTest =  method.getAnnotation(AnnoTest.class);
+            Type type = method.getReturnType();
+            if(type  == Void.TYPE){
+                Log.d(TAG,"isNull = class "+(type  == Void.TYPE));
+            }
             boolean isNull = (annoTest == null);
-            Log.d(TAG,"isNull = "+isNull+" methodName = "+method.getName());
+//            try {
+////                Object object = method.invoke(test);
+                Log.d(TAG,"isNull = "+isNull+" methodName = "+method.getName()+" return = "+type+" ");
+//            } catch (IllegalAccessException e) {
+//                e.printStackTrace();
+//            } catch (InvocationTargetException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 

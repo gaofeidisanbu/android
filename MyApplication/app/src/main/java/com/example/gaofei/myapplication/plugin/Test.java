@@ -12,4 +12,8 @@ public class Test {
     public void fun(){
 
     }
+
+    public String fun2(){
+        return "11";
+    }
 }
