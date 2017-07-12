@@ -33,6 +33,7 @@
         <activity android:name="com.example.gaofei.myapplication.act.KeyboardAct" />
         <activity android:name="com.example.gaofei.myapplication.act.TestAct" />
         <activity android:name="com.example.gaofei.myapplication.act.AnnoAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.ScreenshotAct" />
 
     </application>
 

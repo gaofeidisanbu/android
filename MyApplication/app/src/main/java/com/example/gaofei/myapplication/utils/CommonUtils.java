@@ -5,18 +5,13 @@ import android.app.ActivityManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.hardware.Camera;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
@@ -49,7 +44,6 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -846,7 +840,7 @@ public class CommonUtils {
 
     public static Spannable getSpanText(String str, int color, int start, int end) {
         Spannable spannable = new SpannableString(str);
-        spannable.setSpan(new ForegroundColorSpan(YCResourceManager.getColor(color)), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(new ForegroundColorSpan(GFResourceManager.getColor(color)), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         return spannable;
     }
 
@@ -866,14 +860,14 @@ public class CommonUtils {
             int end = start + label.length();
             if (start < 0) continue;
 
-            spannable.setSpan(new ForegroundColorSpan(YCResourceManager.getColor(color)), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(GFResourceManager.getColor(color)), start, end, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
         }
 
         return spannable;
     }
 
     public static Spannable getSpanText(int res, int color, String... target) {
-        String str = YCResourceManager.getString(res);
+        String str = GFResourceManager.getString(res);
         return getSpanText(str, color, target);
     }
 
@@ -900,7 +894,7 @@ public class CommonUtils {
 
     public static Spannable getImageSpanText(String str, int drawable) {
         str += "h";
-        Drawable d = YCResourceManager.getDrawable(drawable);
+        Drawable d = GFResourceManager.getDrawable(drawable);
         d.setBounds(0, 0, d.getIntrinsicWidth(), d.getIntrinsicHeight());
         Spannable spannable = new SpannableString(str);
         spannable.setSpan(new ImageSpan(d, ImageSpan.ALIGN_BASELINE), str.length() - 1, str.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
@@ -926,13 +920,13 @@ public class CommonUtils {
     }
 
     public static Drawable getRoundedDrawable(Bitmap bitmap, float cornerRadius) {
-        RoundedBitmapDrawable rd = RoundedBitmapDrawableFactory.create(YCResourceManager.getResource(), bitmap);
+        RoundedBitmapDrawable rd = RoundedBitmapDrawableFactory.create(GFResourceManager.getResource(), bitmap);
         rd.setCornerRadius(cornerRadius);
         return rd;
     }
 
     public static Drawable getRoundedDrawable(int resId) {
-        Bitmap bitmap = BitmapFactory.decodeResource(YCResourceManager.getResource(), resId);
+        Bitmap bitmap = BitmapFactory.decodeResource(GFResourceManager.getResource(), resId);
         return getRoundedDrawable(bitmap, CommonUtils.dip2px(MainApplication.getContext(), 3));
     }
 

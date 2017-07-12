@@ -19,7 +19,7 @@ import com.example.gaofei.myapplication.MainApplication;
 /**
  * Created by liushuo on 16/5/11.
  */
-public class YCResourceManager {
+public class GFResourceManager {
 
     public static AssetManager getAssets() {
         Context context = MainApplication.getContext();

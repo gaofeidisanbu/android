@@ -7,6 +7,8 @@ import android.util.Log;
 //import com.google.gson.Gson;
 //import com.google.gson.GsonBuilder;
 
+import com.example.gaofei.myapplication.MainApplication;
+
 import java.util.List;
 
 /**
@@ -89,6 +91,10 @@ public class LogUtils {
 
     public static void d(Object object, Throwable tr) {
         log(Log.DEBUG, object, tr);
+    }
+
+    public static void d(String tag,String str){
+        Log.d(tag,str);
     }
 
     public static void i(Throwable tr) {
