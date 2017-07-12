@@ -14,17 +14,19 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
-import android.webkit.ValueCallback;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 
 @SuppressLint({"SetJavaScriptEnabled", "NewApi"})
 public class WVJBWebViewClient extends WebViewClient {
 
     private static final String kTag = "WVJB";
     private static final String kInterface = kTag + "Interface";
-    private static final String kCustomProtocolScheme = "wvjbscheme";
-    private static final String kQueueHasMessage = "__WVJB_QUEUE_MESSAGE__";
+    private static final String kCustomProtocolScheme = "htt1ps";
+    private static final String kQueueHasMessage = "__wvjb_queue_message__";
+    private static final String kBridgeLoaded = "__bridge_loaded__";
 
     private static boolean logging = false;
 
@@ -266,22 +268,23 @@ public class WVJBWebViewClient extends WebViewClient {
                     }
                 }
             });
-        } else {
-            if (callback != null) {
-                myInterface.addCallback(++uniqueId + "", callback);
-                webView.loadUrl("javascript:window." + kInterface
-                        + ".onResultForScript(" + uniqueId + "," + script + ")");
-            } else {
-                webView.loadUrl("javascript:" + script);
-            }
         }
+//        else {
+//            if (callback != null) {
+//                myInterface.addCallback(++uniqueId + "", callback);
+//                webView.loadUrl("javascript:window." + kInterface
+//                        + ".onResultForScript(" + uniqueId + "," + script + ")");
+//            } else {
+//                webView.loadUrl("javascript:" + script);
+//            }
+//        }
     }
 
     @Override
     public void onPageFinished(WebView view, String url) {
         try {
             InputStream is = webView.getContext().getAssets()
-                    .open("WebViewJavascriptBridge.js.txt");
+                    .open("WebViewJavascriptBridge_new.js");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -311,6 +314,7 @@ public class WVJBWebViewClient extends WebViewClient {
         }
         return super.shouldOverrideUrlLoading(view, url);
     }
+
 
     private class WVJBMessage {
         Object data = null;

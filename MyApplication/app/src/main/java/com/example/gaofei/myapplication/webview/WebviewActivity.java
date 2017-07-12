@@ -8,13 +8,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.ExceptionAct;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebView;
 
 
 @SuppressLint("SetJavaScriptEnabled") 
@@ -30,11 +30,11 @@ public class WebviewActivity extends BaseAct {
         webView=(WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebChromeClient(new WebChromeClient());
-        webView.loadUrl("file:///android_asset/ExampleApp.html");
-
+        webView.loadUrl("file:///android_asset/ExampleAppNew.html");
         webViewClient = new MyWebViewClient(webView);
         webViewClient.enableLogging();        
         webView.setWebViewClient(webViewClient);
+		webView.getSettings().setDomStorageEnabled(true);
 
         findViewById(R.id.button1).setOnClickListener(new OnClickListener() {
 
