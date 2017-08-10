@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.gaofei.myapplication.act.AnnoAct;
 import com.example.gaofei.myapplication.act.ExceptionAct;
 import com.example.gaofei.myapplication.act.KeyboardAct;
+import com.example.gaofei.myapplication.act.LayoutAct;
 import com.example.gaofei.myapplication.act.RecyclerSwipeAct;
 import com.example.gaofei.myapplication.act.ScreenshotAct;
 import com.example.gaofei.myapplication.act.TestAct;
@@ -34,8 +35,8 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     /**
      * 增加一个测试类，需要同时在2个数组增加
      */
-    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class, WebviewActivity.class,AnnoAct.class,ScreenshotAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView","注解","截屏"};
+    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class, WebviewActivity.class,AnnoAct.class,ScreenshotAct.class,LayoutAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView","注解","截屏","layout"};
     private Handler mHandler = new Handler();
 
     @Override

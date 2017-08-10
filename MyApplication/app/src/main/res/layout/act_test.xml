@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/img_icon_anim"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:scaleType="centerCrop"
+        android:background="#ff6666"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"/>
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/img_icon_anim_1"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_below="@+id/img_icon_anim"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/img_icon_anim_2"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:layout_below="@+id/img_icon_anim_1"
+        app:lottie_fileName="S_Flower.json"/>
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/img_icon_anim_2"
+        android:text="ddddddddd"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_bubble"
+        android:layout_below="@+id/text"
+        android:layout_width="25dp"
+        android:layout_height="32dp"
+        android:background="#FF7777"
+        android:layout_marginLeft="-5dp"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:text="点击" />
+</RelativeLayout>

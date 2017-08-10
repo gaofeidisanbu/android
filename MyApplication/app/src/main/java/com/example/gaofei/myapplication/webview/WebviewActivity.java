@@ -5,7 +5,9 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.ExceptionAct;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 
@@ -29,7 +34,7 @@ public class WebviewActivity extends BaseAct {
         setContentView(R.layout.activity_webview);
         webView=(WebView) findViewById(R.id.webview);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setWebChromeClient(new WebChromeClient());
+		webView.setWebChromeClient(new WebChromeClient());
         webView.loadUrl("file:///android_asset/ExampleAppNew.html");
         webViewClient = new MyWebViewClient(webView);
         webViewClient.enableLogging();        
@@ -126,7 +131,20 @@ public class WebviewActivity extends BaseAct {
 
 		@Override
 		public void onPageFinished(WebView view, String url) {
+
 			super.onPageFinished(view, url);
+		}
+
+		@Override
+		public void onReceivedError(WebView webView, int i, String s, String s1) {
+			super.onReceivedError(webView, i, s, s1);
+			Log.d(TAG,"onReceivedError s =  "+s  +" s1 = "+s1);
+		}
+
+		@Override
+		public void onReceivedError(WebView webView, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
+			super.onReceivedError(webView, webResourceRequest, webResourceError);
+			Log.d(TAG,"url = "+webResourceRequest.getUrl()  +" onReceivedError = "+webResourceError.getErrorCode()+" code = "+webResourceError.getErrorCode());
 		}
 
 		@Override
@@ -134,6 +152,11 @@ public class WebviewActivity extends BaseAct {
 			return super.shouldOverrideUrlLoading(view, url);
 		}
 
+		@Override
+		public void onReceivedHttpError(WebView webView, WebResourceRequest webResourceRequest, WebResourceResponse webResourceResponse) {
+			super.onReceivedHttpError(webView, webResourceRequest, webResourceResponse);
+			Log.d(TAG,"onReceivedHttpError url = "+webResourceRequest.getUrl() );
+		}
 	}
 
 }

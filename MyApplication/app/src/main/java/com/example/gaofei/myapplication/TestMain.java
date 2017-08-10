@@ -1,35 +1,90 @@
 package com.example.gaofei.myapplication;
 
-import android.util.Log;
+import android.net.Uri;
+import android.net.UrlQuerySanitizer;
+import android.text.TextUtils;
+import android.webkit.URLUtil;
 
-import com.example.gaofei.myapplication.act.AnnoAct;
 import com.example.gaofei.myapplication.plugin.Test;
 import com.google.gson.Gson;
 
-import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by gaofei on 2017/7/7.
  */
 
 public class TestMain {
+    public static String BASE_H5_URL             = "https://h5.yangcong345.com";
     public static final String TAG = "TestMain";
-
+    public static       String URL_TEACHER_GUIDE    = BASE_H5_URL + "/teacherH5-login.html#/welcome?token=%s&deviceType=%s";
+    public static       String URL_FORGET_PSW       = BASE_H5_URL + "/mobile_forget_password.html";
     public static void main(String[] args) {
         try {
-            fun3();
+//            rxjava();
+//            json();
+//            generic();
+            addPubParam(URL_TEACHER_GUIDE);
+            addPubParam(URL_FORGET_PSW);
+            System.out.println(convertTime(747034096));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
             System.out.println(e);
+        }
+    }
+
+    public static String addPubParam(String url) {
+        String queryParam = "";
+            if (url.contains("?")) {
+                queryParam = "&appVersion=" + "1.1";
+            } else {
+                queryParam = "?appVersion=" + "1.1";
+            }
+            url += queryParam;
+        System.out.println(url);
+        return url;
+    }
+
+
+    public static class B<T> {
+        public final <R> Observable<R> flatMap(Function<? super T, ? extends ObservableSource<? extends R>> mapper) {
+            return null;
+        }
+
+        public final <R> Observable<R> flatMap1(Function<T, ? extends ObservableSource<? extends R>> mapper) {
+            return null;
+        }
+
+        public final <R> Observable<R> flatMap2(Function<? extends T, ? extends ObservableSource<? extends R>> mapper) {
+            return null;
         }
     }
 
@@ -51,7 +106,7 @@ public class TestMain {
         for (Method method : declaredMethods) {
             Class[] paramterTypes = method.getParameterTypes();
             for (Class cla : paramterTypes) {
-                System.out.println("method1 = " + cla.toString()+" type = "+cla.isPrimitive());
+                System.out.println("method1 = " + cla.toString() + " type = " + cla.isPrimitive());
             }
             Class[] exceptions = method.getParameterTypes();
             for (Class cla : exceptions) {
@@ -71,7 +126,7 @@ public class TestMain {
             for (Method method : methods) {
                 Class[] paramterTypes = method.getParameterTypes();
                 for (Class cla : paramterTypes) {
-                    System.out.println("method1 = " + cla.toString()+" type = "+cla.isPrimitive());
+                    System.out.println("method1 = " + cla.toString() + " type = " + cla.isPrimitive());
                 }
                 Integer aa = 3;
                 method.invoke(object, aa);
@@ -88,32 +143,178 @@ public class TestMain {
     }
 
     public static void fun3() {
-        System.out.println(isMethodTypeMatch(int.class,int.class));
-        System.out.println(isMethodTypeMatch(boolean.class,Boolean.TYPE));
-        System.out.println(isMethodTypeMatch(Map.class,Map.class));
-        System.out.println(isMethodTypeMatch(Map.class,HashMap.class));
-        System.out.println((Class<Integer>) Integer[].class.getComponentType());
+//        System.out.println(isMethodTypeMatch(int.class,int.class));
+//        System.out.println(isMethodTypeMatch(boolean.class,Boolean.TYPE));
+//        System.out.println(isMethodTypeMatch(Map.class,Map.class));
+//        System.out.println(isMethodTypeMatch(Map.class,HashMap.class));
+//        System.out.println((Class<Integer>) Integer[].class.getComponentType());
+//        for (int i = 0; i < 20; i++) {
+//            isPercent(20);
+//        }
+
+//        System.out.println(convertTime(856321932));
     }
 
-    public static boolean isMethodTypeMatch(Class methodPara ,Class inputPara){
-        if(methodPara == null && inputPara == null){
+    private static String convertTime(long mill) {
+        String str = "";
+        int ss = 1000;
+        int mi = ss * 60;
+        int hh = mi * 60;
+        int dd = hh * 24;
+        long day = mill / dd;
+        long hour = (mill - day * dd) / hh;
+        long minute = (mill - day * dd - hour * hh) / mi;
+        if (day > 0) {
+            str = str + day + "天";
+        }
+        str = str + hour + "小时" + minute + "分";
+        return str;
+    }
+
+    private static boolean isPercent(int percent) {
+        boolean is = false;
+        Random random = new Random();
+        int temp = random.nextInt(100);
+        if (temp < percent) {
+            is = true;
+
+        }
+        System.out.println(temp);
+        return is;
+    }
+
+    public static boolean isMethodTypeMatch(Class methodPara, Class inputPara) {
+        if (methodPara == null && inputPara == null) {
             return true;
         }
-        if(methodPara == null || inputPara == null){
+        if (methodPara == null || inputPara == null) {
             return false;
         }
 
-        if(methodPara.isPrimitive() && inputPara.isPrimitive()){
+        if (methodPara.isPrimitive() && inputPara.isPrimitive()) {
             return methodPara == inputPara;
         }
 
-        if(!methodPara.isPrimitive() && !inputPara.isPrimitive()){
+        if (!methodPara.isPrimitive() && !inputPara.isPrimitive()) {
             return methodPara.isAssignableFrom(inputPara);
         }
 
-        
 
         return false;
+    }
+
+    public static void rxjava() {
+        List<String> list = new ArrayList<>();
+        list.add("aa");
+        list.add("bb");
+        Observable.fromIterable(list).subscribe(new DisposableObserver<String>() {
+            @Override
+            public void onNext(String s) {
+                System.out.println("fromIterable = " + s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        Observable observable = Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> e) throws Exception {
+                System.out.println("subscribe ---->" + "  observable threadId= " + Thread.currentThread().getId());
+                e.onNext("aaa");
+                e.onNext("bbb");
+                e.onNext("ccc");
+                e.onNext("ddd");
+                e.onNext("eee");
+                e.onComplete();
+            }
+        }).skip(2).take(1).map(new Function<String, String>() {
+            @Override
+            public String apply(@NonNull String s) throws Exception {
+                return "map ---->" + s;
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread());
+        System.out.println("  mainId = " + Thread.currentThread().getId());
+        observable.subscribe(new DisposableObserver<String>() {
+            @Override
+            public void onNext(String s) {
+                System.out.println("create1 ---->" + s + "  subscribe threadId = " + Thread.currentThread().getId());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        observable.subscribe(new DisposableObserver<String>() {
+            @Override
+            public void onNext(String s) {
+                System.out.println("create2 ---->" + s + "  subscribe threadId = " + Thread.currentThread().getId());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+        observable.subscribe(new Consumer() {
+            @Override
+            public void accept(@NonNull Object o) throws Exception {
+                System.out.println("accept ---->" + o);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+
+            }
+        }, new Action() {
+            @Override
+            public void run() throws Exception {
+
+            }
+        });
+
+        Observable.create(new ObservableOnSubscribe<Map>() {
+            @Override
+            public void subscribe(ObservableEmitter<Map> e) throws Exception {
+                e.onNext(new HashMap() {
+                });
+            }
+        }).<Map>flatMap(new Function<Object, ObservableSource<HashMap>>() {
+            @Override
+            public ObservableSource<HashMap> apply(@NonNull Object o) throws Exception {
+                return Observable.just(new HashMap());
+            }
+        }).subscribe(new Consumer<Object>() {
+            @Override
+            public void accept(@NonNull Object s) throws Exception {
+                System.out.println("accept flatMap---->" + s);
+            }
+        });
+
+    }
+
+    public static void json() {
+        Map<String, Object> map1 = new TreeMap<>();
+        map1.put("a", "0");
+        map1.put("b", "1");
+        System.out.println(map1.toString());
     }
 
     public static class Mytest implements Iterable<Mytest> {
@@ -141,5 +342,79 @@ public class TestMain {
             }
         }
     }
+
+    public static class Food {
+    }
+
+    public static class Fruit extends Food {
+    }
+
+    public static class Apple extends Fruit {
+    }
+
+    public static class RedApple extends Apple {
+    }
+
+    public static void generic() {
+//        A<C, C> a = new A<>();
+//        TypeVariable[] types = a.getClass().getTypeParameters();
+//        for (TypeVariable type : types) {
+//            System.out.println(type);
+//        }
+//        Method[] methods = a.getClass().getDeclaredMethods();
+//        for (Method method : methods) {
+//            Type[] params = method.getGenericParameterTypes();
+//            for (Type type : params)
+//                System.out.println(type);
+////        }
+//       List list = new ArrayList<String>();
+//        list.add(null);
+//        getBridgeSupportType(new ArrayList<>());
+        try {
+            Constructor<A> c =  A.class.getConstructor(Integer.class);
+            System.out.println(c);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static class A<C, M> {
+
+        public A(String str){
+
+        }
+        public A(Integer str){
+
+        }
+        public  C fun() {
+            return (C)new String("");
+        }
+    }
+
+//    static class C {
+//        public void foo(Object a) {
+//        }
+//    }
+
+    static class C<A> {
+        public void foo(A a) {
+            System.out.println(a.getClass());
+        }
+    }
+
+    public static <T> boolean getBridgeSupportType( T obj) {
+//        if (obj == null) {
+//            return true;
+//        }
+//        System.out.println(obj.getClass());
+//        if (obj instanceof Map || obj instanceof List || obj instanceof String || obj instanceof Boolean || obj instanceof Number) {
+//            return true;
+//        }
+        return false;
+    }
+
+
+
+
 
 }

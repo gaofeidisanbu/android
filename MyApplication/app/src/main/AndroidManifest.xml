@@ -34,6 +34,7 @@
         <activity android:name="com.example.gaofei.myapplication.act.TestAct" />
         <activity android:name="com.example.gaofei.myapplication.act.AnnoAct" />
         <activity android:name="com.example.gaofei.myapplication.act.ScreenshotAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.LayoutAct" />
 
     </application>
 
