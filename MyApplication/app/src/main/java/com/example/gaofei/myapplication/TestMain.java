@@ -7,6 +7,7 @@ import android.webkit.URLUtil;
 
 import com.example.gaofei.myapplication.plugin.Test;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -42,18 +43,19 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class TestMain {
-    public static String BASE_H5_URL             = "https://h5.yangcong345.com";
+    public static String BASE_H5_URL = "https://h5.yangcong345.com";
     public static final String TAG = "TestMain";
-    public static       String URL_TEACHER_GUIDE    = BASE_H5_URL + "/teacherH5-login.html#/welcome?token=%s&deviceType=%s";
-    public static       String URL_FORGET_PSW       = BASE_H5_URL + "/mobile_forget_password.html";
+    public static String URL_TEACHER_GUIDE = BASE_H5_URL + "/teacherH5-login.html#/welcome?token=%s&deviceType=%s";
+    public static String URL_FORGET_PSW = BASE_H5_URL + "/mobile_forget_password.html";
+
     public static void main(String[] args) {
         try {
 //            rxjava();
-//            json();
+            json();
 //            generic();
-            addPubParam(URL_TEACHER_GUIDE);
-            addPubParam(URL_FORGET_PSW);
-            System.out.println(convertTime(747034096));
+//            addPubParam(URL_TEACHER_GUIDE);
+//            addPubParam(URL_FORGET_PSW);
+//            System.out.println(convertTime(747034096));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -63,12 +65,12 @@ public class TestMain {
 
     public static String addPubParam(String url) {
         String queryParam = "";
-            if (url.contains("?")) {
-                queryParam = "&appVersion=" + "1.1";
-            } else {
-                queryParam = "?appVersion=" + "1.1";
-            }
-            url += queryParam;
+        if (url.contains("?")) {
+            queryParam = "&appVersion=" + "1.1";
+        } else {
+            queryParam = "?appVersion=" + "1.1";
+        }
+        url += queryParam;
         System.out.println(url);
         return url;
     }
@@ -311,10 +313,26 @@ public class TestMain {
     }
 
     public static void json() {
-        Map<String, Object> map1 = new TreeMap<>();
-        map1.put("a", "0");
-        map1.put("b", "1");
-        System.out.println(map1.toString());
+        Gson gson = new GsonBuilder().create();
+        Map<String, Object> map = new HashMap<>();
+        map.put("aa", true);
+        map.put("bb", "\\cc");
+        Map<String, Object> map1 = new HashMap<>();
+        map1.put("c", "aa");
+        map.put("cc", map1);
+        String str = gson.toJson(map).toString();
+        System.out.println("before" + str);
+        String messageJSON = str
+                .replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"")
+                .replaceAll("\'", "\\\\\'").replaceAll("\n", "\\\\\n")
+                .replaceAll("\r", "\\\\\r").replaceAll("\f", "\\\\\f");
+        System.out.println("after" + messageJSON);
+
+        System.out.println("\\" + " " + "\""+ " " + "\\" + " "+ "\\\\");
+        String sr  = "{\"data\":1,\"value\":\" \\\\\\\\ \"}";
+        System.out.println(sr);
+        str = sr.replaceAll("\\\\\\\\","\\\\");
+        System.out.println(str);
     }
 
     public static class Mytest implements Iterable<Mytest> {
@@ -371,7 +389,7 @@ public class TestMain {
 //        list.add(null);
 //        getBridgeSupportType(new ArrayList<>());
         try {
-            Constructor<A> c =  A.class.getConstructor(Integer.class);
+            Constructor<A> c = A.class.getConstructor(Integer.class);
             System.out.println(c);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -380,14 +398,16 @@ public class TestMain {
 
     static class A<C, M> {
 
-        public A(String str){
+        public A(String str) {
 
         }
-        public A(Integer str){
+
+        public A(Integer str) {
 
         }
-        public  C fun() {
-            return (C)new String("");
+
+        public C fun() {
+            return (C) new String("");
         }
     }
 
@@ -402,7 +422,7 @@ public class TestMain {
         }
     }
 
-    public static <T> boolean getBridgeSupportType( T obj) {
+    public static <T> boolean getBridgeSupportType(T obj) {
 //        if (obj == null) {
 //            return true;
 //        }
@@ -412,9 +432,6 @@ public class TestMain {
 //        }
         return false;
     }
-
-
-
 
 
 }

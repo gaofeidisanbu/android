@@ -1,5 +1,6 @@
 package com.example.gaofei.myapplication;
 
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -104,6 +105,11 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
                 mSwipeToLoadLayout.setRefreshing(false);
             }
         }, 700);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override

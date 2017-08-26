@@ -34,8 +34,9 @@ public class MyLinearLayout extends LinearLayout{
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        Log.d(TAG,"before onMeasure");
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        Log.d(TAG,"onMeasure");
+        Log.d(TAG,"after onMeasure");
     }
 
     @Override

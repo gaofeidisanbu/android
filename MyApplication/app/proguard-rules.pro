@@ -26,3 +26,6 @@
 #-keep class com.example.mylibrary.Test2{
 #    *;
 #}
+-keep class com.tencent.** {*;}
+-dontwarn com.tencent.**
+-dontwarn okio.*

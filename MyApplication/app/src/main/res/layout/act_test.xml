@@ -3,41 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/img_icon_anim"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:scaleType="centerCrop"
-        android:background="#ff6666"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/img_icon_anim_1"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_below="@+id/img_icon_anim"/>
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/img_icon_anim_2"
-        android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:layout_below="@+id/img_icon_anim_1"
-        app:lottie_fileName="S_Flower.json"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
     <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_below="@+id/img_icon_anim_2"
-        android:text="ddddddddd"/>
+        android:layout_marginTop="24dp"
+        android:textColor="@color/yc_blue5"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:layout_centerVertical="true"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignLeft="@+id/name"
+        android:layout_alignRight="@+id/name"
+        android:layout_centerVertical="true"
+        android:background="#ff6666"/>
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_bubble"
-        android:layout_below="@+id/text"
-        android:layout_width="25dp"
-        android:layout_height="32dp"
-        android:background="#FF7777"
-        android:layout_marginLeft="-5dp"/>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/button"

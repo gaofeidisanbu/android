@@ -1,9 +1,21 @@
 package com.example.gaofei.myapplication.act;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +27,7 @@ import com.airbnb.lottie.LottieDrawable;
 import com.airbnb.lottie.OnCompositionLoadedListener;
 import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
+import com.example.gaofei.myapplication.utils.CommonUtils;
 import com.example.gaofei.myapplication.utils.LogUtils;
 import com.example.gaofei.myapplication.utils.ToastManager;
 
@@ -33,22 +46,53 @@ public class TestAct extends BaseAct implements View.OnClickListener{
     public static String BASE_H5_URL             = "https://h5.yangcong345.com";
     public static       String URL_TEACHER_GUIDE    = BASE_H5_URL + "/teacherH5-login.html#/welcome?token=%s&deviceType=%s";
     public static       String URL_FORGET_PSW       = BASE_H5_URL + "/mobile_forget_password.html?version=4";
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_test);
-        mButton = (Button) findViewById(R.id.button);
-        mButton.setOnClickListener(this);
-        mLottieAnimationView = (LottieAnimationView) findViewById(R.id.img_icon_anim);
-        lottie_bubble = (LottieAnimationView) findViewById(R.id.lottie_bubble);
-        mTextView = (TextView) findViewById(R.id.text);
-        addPubParam(URL_TEACHER_GUIDE);
-        addPubParam(URL_FORGET_PSW);
-        try {
-            URL url = new URL(URL_TEACHER_GUIDE);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+        mTextView = (TextView) findViewById(R.id.name);
+        String name = "198元/原价258元";
+        int index = name.indexOf("/");
+        int count = name.length();
+        if (index > 0 && index < count - 1) {
+            SpannableStringBuilder builder = new SpannableStringBuilder(name);
+            ForegroundColorSpan colorSpan1 = new ForegroundColorSpan(getResources().getColor(R.color.yc_gray7));
+            builder.setSpan(colorSpan1, 0, index + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            StyleSpan styleBold = new StyleSpan(Typeface.NORMAL);
+            builder.setSpan(styleBold, 0, index + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+
+
+
+//            StrikethroughSpan strike = new StrikethroughSpan();
+//            TextPaint textPaint = new TextPaint();
+//            textPaint.setColor(Color.parseColor("#ff6666"));
+//            textPaint.linkColor = Color.parseColor("#ff6666");
+//            textPaint.bgColor = Color.parseColor("#ff6666");
+//            strike.updateDrawState(textPaint);
+
+
+            builder.setSpan(new StrikethroughSpan(){
+                @Override
+                public void updateDrawState(TextPaint ds) {
+                    super.updateDrawState(ds);
+                    ds.setColor(Color.parseColor("#ff6666"));
+//                    ds.baselineShift = Color.parseColor("#ff6666");
+//                    ds.bgColor = Color.parseColor("#ff6666");
+                    ds.setStrikeThruText(true);
+                }
+            }, index + 1, count, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            AbsoluteSizeSpan absoluteSizeSpan1 = new AbsoluteSizeSpan(CommonUtils.dip2px(this,20));
+            builder.setSpan(absoluteSizeSpan1, 0, index + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            AbsoluteSizeSpan  absoluteSizeSpan2 = new AbsoluteSizeSpan(CommonUtils.dip2px(this,15));
+            builder.setSpan(absoluteSizeSpan2, index + 1, count, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            StyleSpan styleNormal = new StyleSpan(Typeface.NORMAL);
+            builder.setSpan(styleNormal, index + 1, count, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            ForegroundColorSpan colorSpan2 = new ForegroundColorSpan(getResources().getColor(R.color.yc_gray3));
+            builder.setSpan(colorSpan2, index + 1, count, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+            mTextView.setText(builder);
+        } else {
+            mTextView.setText(name);
         }
     }
 
@@ -64,26 +108,14 @@ public class TestAct extends BaseAct implements View.OnClickListener{
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.button:
-                final LottieDrawable drawable = new LottieDrawable();
-                drawable.loop(true);
-                LottieComposition.Factory.fromAssetFileName(this, "Button_A.json", new OnCompositionLoadedListener() {
-                    @Override
-                    public void onCompositionLoaded(@Nullable LottieComposition composition) {
-                        Log.d(TAG,"width = "+composition.getBounds().width()+" height = "+composition.getBounds().height());
-                        drawable.setComposition(composition);
-                        drawable.playAnimation();
-                        mLottieAnimationView.setImageDrawable(drawable);
-//                        mTextView.setBackgroundDrawable(drawable);
-
-                    }
-                });
-//                mLottieAnimationView.setScale(0.5f);
-//                mLottieAnimationView.setAnimation("data1.json");
-//                mLottieAnimationView.loop(true);
-//                mLottieAnimationView.playAnimation();
                  break;
         }
     }

@@ -258,12 +258,15 @@ public class WVJBWebViewClient extends WebViewClient {
             webView.evaluateJavascript(script, new ValueCallback<String>() {
                 @Override
                 public void onReceiveValue(String value) {
+                    Log.i(kTag, "onReceiveValue value： " + value);
                     if (callback != null) {
                         if (value != null && value.startsWith("\"")
                                 && value.endsWith("\"")) {
                             value = value.substring(1, value.length() - 1)
-                                    .replaceAll("\\\\", "");
+                                    .replaceAll("\\\\", ",");
                         }
+                        Log.i(kTag, "onReceiveValue after value： " + value);
+
                         callback.onReceiveValue(value);
                     }
                 }

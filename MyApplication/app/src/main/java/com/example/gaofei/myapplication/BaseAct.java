@@ -29,7 +29,7 @@ public class BaseAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mClassName = getClass().getSimpleName();
         TAG = COMMON_TAG + mClassName;
-        LogUtils.d(TAG, "------- onCreate");
+        LogUtils.d(TAG, "------- onCreate savedInstanceState =  "+(savedInstanceState != null?savedInstanceState.toString():"null"));
         initActionBar();
     }
 
