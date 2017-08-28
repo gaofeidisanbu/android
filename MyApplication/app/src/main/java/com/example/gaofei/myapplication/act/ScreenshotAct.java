@@ -44,7 +44,7 @@ public class ScreenshotAct extends BaseAct{
         }
     }
 
-    public static void json() throws JSONException {
+    public  void json() throws JSONException {
         Map<String,Object> map = new HashMap<>();
         map.put("aaa","bb");
         User user = new User();

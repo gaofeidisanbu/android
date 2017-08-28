@@ -96,7 +96,7 @@ public class TestAct extends BaseAct implements View.OnClickListener{
         }
     }
 
-    public static String addPubParam(String url){
+    public  String addPubParam(String url){
         if(!TextUtils.isEmpty(url)){
             Uri.Builder builder = Uri.parse(url).buildUpon();
             builder.appendQueryParameter("appVersion", "1.1.1");
