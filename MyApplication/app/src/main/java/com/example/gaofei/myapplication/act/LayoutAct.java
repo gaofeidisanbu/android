@@ -39,6 +39,7 @@ public class LayoutAct extends BaseAct {
             @Override
             public void onClick(View v) {
                 mProgress.setProgress(0,50,true);
+                throw new IllegalArgumentException();
             }
         });
     }

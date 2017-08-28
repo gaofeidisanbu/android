@@ -27,10 +27,15 @@ public class BaseAct extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LogUtils.d(getTAG(), "------- onCreate savedInstanceState =  "+(savedInstanceState != null?savedInstanceState.toString():"null"));
+        initActionBar();
+    }
+
+    private String getTAG(){
         mClassName = getClass().getSimpleName();
         TAG = COMMON_TAG + mClassName;
-        LogUtils.d(TAG, "------- onCreate savedInstanceState =  "+(savedInstanceState != null?savedInstanceState.toString():"null"));
-        initActionBar();
+        return TAG;
     }
 
     protected void initActionBar() {
@@ -49,56 +54,56 @@ public class BaseAct extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        LogUtils.d(TAG, "------- onRestoreInstanceState ---------> " + GFPreferenceManager.getStringValue(TAG + "aa", "----")+" hashCode = "+hashCode());
+        LogUtils.d(getTAG(), "------- onRestoreInstanceState ---------> " + GFPreferenceManager.getStringValue(getTAG() + "aa", "----")+" hashCode = "+hashCode());
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        LogUtils.d(TAG, "------- onRestart");
+        LogUtils.d(getTAG(), "------- onRestart");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        LogUtils.d(TAG, "------- onStart");
+        LogUtils.d(getTAG(), "------- onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtils.d(TAG, "------- onResume");
+        LogUtils.d(getTAG(), "------- onResume");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        LogUtils.d(TAG, "------- onNewIntent");
+        LogUtils.d(getTAG(), "------- onNewIntent");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        LogUtils.d(TAG, "------- onPause");
+        LogUtils.d(getTAG(), "------- onPause");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        GFPreferenceManager.putString(TAG + "aa", "onSaveInstanceState = " + hashCode());
-        LogUtils.d(TAG, "------- onSaveInstanceState");
+        GFPreferenceManager.putString(getTAG() + "aa", "onSaveInstanceState = " + hashCode());
+        LogUtils.d(getTAG(), "------- onSaveInstanceState");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        LogUtils.d(TAG, "------- onStop");
+        LogUtils.d(getTAG(), "------- onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogUtils.d(TAG, "------- onDestroy");
+        LogUtils.d(getTAG(), "------- onDestroy");
     }
 
     @Override
