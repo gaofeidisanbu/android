@@ -1,13 +1,16 @@
 package com.example.gaofei.myapplication.act;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.view.common.SpecialProgressBar;
+import com.example.gaofei.myapplication.fra.BaseDialogFragment;
 
 /**
  * Created by gaofei on 2017/8/10.
@@ -38,8 +41,11 @@ public class LayoutAct extends BaseAct {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mProgress.setProgress(0,50,true);
-                throw new IllegalArgumentException();
+//                mProgress.setProgress(0,50,true);
+//                BaseDialogFragment dialogFragment =  BaseDialogFragment.newInstance("test","cotent","确定","取消",null);
+//                dialogFragment.show(getSupportFragmentManager(),"d");
+                Intent intent = new Intent(LayoutAct.this,ScreenshotAct.class);
+                startActivity(intent);
             }
         });
     }
