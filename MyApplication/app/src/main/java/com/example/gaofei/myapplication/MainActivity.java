@@ -1,6 +1,5 @@
 package com.example.gaofei.myapplication;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -12,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.gaofei.myapplication.act.AnnoAct;
+import com.example.gaofei.myapplication.act.BroadcastReceiverAct;
 import com.example.gaofei.myapplication.act.ExceptionAct;
 import com.example.gaofei.myapplication.act.KeyboardAct;
 import com.example.gaofei.myapplication.act.LayoutAct;
@@ -25,7 +25,8 @@ import com.example.gaofei.myapplication.act.holder.ViewHolderHandler;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnRefreshListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout;
-import com.example.gaofei.myapplication.utils.CommonUtils;
+import com.example.mylibrary.base.BaseAct;
+import com.example.mylibrary.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +37,9 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     /**
      * 增加一个测试类，需要同时在2个数组增加
      */
-    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class, WebviewActivity.class,AnnoAct.class,ScreenshotAct.class,LayoutAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView","注解","截屏","layout"};
+    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
+            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class, BroadcastReceiverAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView", "注解", "截屏", "layout", "广播"};
     private Handler mHandler = new Handler();
 
     @Override
@@ -93,7 +95,7 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     public void click(View view, ViewHolderHandler.Item item) {
         MainViewHolder.MyObject myObject = (MainViewHolder.MyObject) item.object;
         Intent intent = new Intent(MainActivity.this, classArr[myObject.type]);
-        intent.putExtra(TITLE,buttonArr[myObject.type]);
+        intent.putExtra(TITLE, buttonArr[myObject.type]);
         startActivity(intent);
     }
 

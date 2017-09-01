@@ -8,12 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.adapter.RecyclerViewAdapter;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.OnRefreshListener;
 import com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout;
+import com.example.mylibrary.base.BaseAct;
 
 import java.util.ArrayList;
 import java.util.List;

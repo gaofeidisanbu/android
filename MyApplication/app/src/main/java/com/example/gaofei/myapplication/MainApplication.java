@@ -20,7 +20,7 @@ public class MainApplication extends Application{
     public void onCreate() {
         super.onCreate();
         context = this;
-        Log.d("MainApplication","------->onCreate");
+        Log.d("ProjectApplication","------->onCreate");
         Stetho.initialize(
                 Stetho.newInitializerBuilder(this)
                         .enableDumpapp(

@@ -7,10 +7,10 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.view.common.SpecialProgressBar;
 import com.example.gaofei.myapplication.fra.BaseDialogFragment;
+import com.example.mylibrary.base.BaseAct;
 
 /**
  * Created by gaofei on 2017/8/10.

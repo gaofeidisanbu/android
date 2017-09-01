@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
+import com.example.mylibrary.base.BaseAct;
 
 /**
  * Created by gaofei on 2017/6/15.

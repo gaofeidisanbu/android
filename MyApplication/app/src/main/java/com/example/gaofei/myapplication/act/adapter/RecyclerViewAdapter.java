@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.gaofei.myapplication.R;
-import com.example.gaofei.myapplication.utils.CommonUtils;
-import com.example.gaofei.myapplication.utils.LogUtils;
-import com.example.mylibrary.Test2;
+import com.example.mylibrary.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;

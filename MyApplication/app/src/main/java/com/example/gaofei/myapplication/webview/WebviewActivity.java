@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
 import com.example.gaofei.myapplication.act.ExceptionAct;
+import com.example.mylibrary.base.BaseAct;
 import com.tencent.smtt.export.external.interfaces.WebResourceError;
 import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.export.external.interfaces.WebResourceResponse;

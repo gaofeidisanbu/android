@@ -10,8 +10,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
+import com.example.mylibrary.base.BaseAct;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -31,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by gaofei on 2017/7/10.
  */
 
-public class ScreenshotAct extends BaseAct{
+public class ScreenshotAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.gaofei.myapplication.R;
-import com.example.gaofei.myapplication.utils.LogUtils;
+import com.example.mylibrary.utils.LogUtils;
 
 /**
  * Created by Aspsine on 2015/8/13.

@@ -1,12 +1,9 @@
 package com.example.gaofei.myapplication.act;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -22,17 +19,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.airbnb.lottie.LottieComposition;
-import com.airbnb.lottie.LottieDrawable;
-import com.airbnb.lottie.OnCompositionLoadedListener;
-import com.example.gaofei.myapplication.BaseAct;
 import com.example.gaofei.myapplication.R;
-import com.example.gaofei.myapplication.utils.CommonUtils;
-import com.example.gaofei.myapplication.utils.LogUtils;
-import com.example.gaofei.myapplication.utils.ToastManager;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.example.mylibrary.base.BaseAct;
+import com.example.mylibrary.utils.CommonUtils;
 
 /**
  * Created by gaofei on 2017/6/29.

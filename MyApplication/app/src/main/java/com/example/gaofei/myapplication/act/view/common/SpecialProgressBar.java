@@ -18,7 +18,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.example.gaofei.myapplication.R;
-import com.example.gaofei.myapplication.utils.CommonUtils;
+import com.example.mylibrary.utils.CommonUtils;
 
 
 /**

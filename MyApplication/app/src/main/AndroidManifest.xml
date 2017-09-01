@@ -35,7 +35,13 @@
         <activity android:name="com.example.gaofei.myapplication.act.AnnoAct" />
         <activity android:name="com.example.gaofei.myapplication.act.ScreenshotAct" />
         <activity android:name="com.example.gaofei.myapplication.act.LayoutAct" />
+        <activity android:name="com.example.gaofei.myapplication.act.BroadcastReceiverAct" />
 
+        <receiver android:name=".broadcast.BroadcastReceiverTest" >
+            <intent-filter>
+                <action android:name="android.intent.action_Broadcast_Receiver_Test"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
