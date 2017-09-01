@@ -11,7 +11,7 @@
     tools:layout_editor_absoluteY="81dp">
 
     <TextView
-        android:id="@+id/a"
+        android:id="@+id/a1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -30,14 +30,14 @@
         tools:layout_editor_absoluteX="308dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout
+    <com.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#e8e8e8"
         android:layout_weight="1">
 
-        <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeRefreshHeaderLayout
+        <com.gaofei.app.act.view.swipetoloadlayout.SwipeRefreshHeaderLayout
             android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
@@ -48,11 +48,11 @@
             android:layout_height="wrap_content"
             />
 
-        <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeLoadMoreFooterLayout
+        <com.gaofei.app.act.view.swipetoloadlayout..SwipeLoadMoreFooterLayout
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
-    </com.example.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout>
+    </com.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout>
 
 
 </LinearLayout>

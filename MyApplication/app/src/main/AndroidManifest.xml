@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.gaofei.app">
+    package="com.gaofei.app">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -12,32 +12,32 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <application
-        android:name="com.example.gaofei.app.AppApplication"
+        android:name="com.gaofei.app.AppApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:name">
-        <activity android:name="com.example.gaofei.app.MainActivity">
+        <activity android:name="com.gaofei.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.gaofei.app.act.SkipAct"/>
-        <activity android:name="com.example.gaofei.app.act.ExceptionAct" />
-        <activity android:name="com.example.gaofei.app.webview.WebviewActivity" />
-        <activity android:name="com.example.gaofei.app.act.RecyclerSwipeAct" />
-        <activity android:name="com.example.gaofei.app.act.KeyboardAct" />
-        <activity android:name="com.example.gaofei.app.act.TestAct" />
-        <activity android:name="com.example.gaofei.app.act.AnnoAct" />
-        <activity android:name="com.example.gaofei.app.act.ScreenshotAct" />
-        <activity android:name="com.example.gaofei.app.act.LayoutAct" />
-        <activity android:name="com.example.gaofei.app.act.BroadcastReceiverAct" />
+        <activity android:name="com.gaofei.app.act.SkipAct"/>
+        <activity android:name="com.gaofei.app.act.ExceptionAct" />
+        <activity android:name="com.gaofei.app.webview.WebviewActivity" />
+        <activity android:name="com.gaofei.app.act.RecyclerSwipeAct" />
+        <activity android:name="com.gaofei.app.act.KeyboardAct" />
+        <activity android:name="com.gaofei.app.act.TestAct" />
+        <activity android:name="com.gaofei.app.act.AnnoAct" />
+        <activity android:name="com.gaofei.app.act.ScreenshotAct" />
+        <activity android:name="com.gaofei.app.act.LayoutAct" />
+        <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
 
-        <receiver android:name="com.example.gaofei.app.broadcast.BroadcastReceiverTest" >
+        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>
                 <action android:name="android.intent.action_Broadcast_Receiver_Test"/>
             </intent-filter>
