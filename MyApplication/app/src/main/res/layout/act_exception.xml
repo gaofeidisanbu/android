@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:background="#ffcccc"
     android:layout_height="wrap_content">
-    <com.example.gaofei.myapplication.widget.MyView
+    <com.example.gaofei.app.widget.MyView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

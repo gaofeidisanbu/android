@@ -11,13 +11,13 @@
         android:layout_height="40dp"
         android:background="#f6f6f6" />
 
-    <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout
+    <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeRefreshHeaderLayout
+        <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeRefreshHeaderLayout
             android:id="@+id/swipe_refresh_header"
             android:layout_width="match_parent"
             android:layout_height="80dp" />
@@ -28,11 +28,11 @@
             android:layout_height="match_parent"
             android:background="#e6e6e6"/>
 
-        <com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeLoadMoreFooterLayout
+        <com.example.gaofei.app.act.view.swipetoloadlayout.SwipeLoadMoreFooterLayout
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
             android:layout_height="80dp" />
-    </com.example.gaofei.myapplication.act.view.swipetoloadlayout.SwipeToLoadLayout>
+    </com.example.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout>
 
     <Button
         android:id="@+id/button"

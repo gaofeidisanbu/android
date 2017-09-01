@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.example.gaofei.myapplication.act.view.common.SpecialProgressBar
+    <com.example.gaofei.app.act.view.common.SpecialProgressBar
         android:id="@+id/progress"
         android:layout_width="80dp"
         android:layout_height="10dp"

@@ -6,7 +6,7 @@
     android:orientation="horizontal"
     android:paddingBottom="12dp">
 
-    <com.example.gaofei.myapplication.act.view.common.ContentLoadingProgressBar
+    <com.example.gaofei.app.act.view.common.ContentLoadingProgressBar
         android:id="@+id/loading"
         style="?android:progressBarStyleInverse"
         android:layout_width="20dp"
