@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app.R;
+import com.gaofei.library.base.BaseAct;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

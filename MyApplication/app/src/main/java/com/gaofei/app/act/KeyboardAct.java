@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app.R;
+import com.gaofei.library.base.BaseAct;
 
 /**
  * Created by gaofei on 2017/6/15.

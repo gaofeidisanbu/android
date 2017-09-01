@@ -6,9 +6,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app.Instance;
 import com.gaofei.app.R;
+import com.gaofei.library.base.BaseAct;
 
 /**
  * Created by gaofei on 2017/5/17.

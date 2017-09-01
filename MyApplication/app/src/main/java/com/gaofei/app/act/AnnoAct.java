@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app.plugin.Test;
+import com.gaofei.library.base.BaseAct;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

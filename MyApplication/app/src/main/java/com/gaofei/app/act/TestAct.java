@@ -19,9 +19,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.mylibrary.base.BaseAct;
-import com.example.mylibrary.utils.CommonUtils;
 import com.gaofei.app.R;
+import com.gaofei.library.base.BaseAct;
+import com.gaofei.library.utils.CommonUtils;
 
 /**
  * Created by gaofei on 2017/6/29.

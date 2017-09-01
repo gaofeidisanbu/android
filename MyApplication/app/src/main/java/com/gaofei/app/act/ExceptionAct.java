@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app.R;
+import com.gaofei.library.base.BaseAct;
 
 /**
  * Created by gaofei on 2017/6/20.
