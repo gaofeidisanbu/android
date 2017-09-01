@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             />
 
-        <com.gaofei.app.act.view.swipetoloadlayout..SwipeLoadMoreFooterLayout
+        <com.gaofei.app.act.view.swipetoloadlayout.SwipeLoadMoreFooterLayout
             android:id="@+id/swipe_load_more_footer"
             android:layout_width="match_parent"
             android:layout_height="40dp" />
