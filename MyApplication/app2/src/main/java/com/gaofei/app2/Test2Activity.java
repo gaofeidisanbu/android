@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.mylibrary.Add;
-import com.example.mylibrary.base.BaseAct;
 import com.gaofei.app2.databinding.ActivityMainBinding;
+import com.gaofei.library.Add;
+import com.gaofei.library.base.BaseAct;
 
 public class Test2Activity extends BaseAct {
 
