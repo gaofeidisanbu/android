@@ -52,9 +52,10 @@ public class ProjectApplication implements IApplicationInterface {
 
     private final List<ActivityInfo> mStack = new LinkedList<>();
 
-    private static class ActivityInfo {
+    public static class ActivityInfo {
         public String id;
-        public String activity;
+        public String activityStr;
+        public Activity activity;
         public List<ActivityState> states;
 
     }
@@ -74,8 +75,9 @@ public class ProjectApplication implements IApplicationInterface {
 
     public void ActivityOnCreate(Activity activity) {
         ActivityInfo activityInfo = new ActivityInfo();
+        activityInfo.activity = activity;
         activityInfo.id = activity.getClass().getName();
-        activityInfo.activity = activity.getClass().getSimpleName();
+        activityInfo.activityStr = activity.getClass().getSimpleName();
         List<ActivityState> states = new LinkedList<>();
         states.add(ActivityState.onCreate);
         activityInfo.states = states;
@@ -158,6 +160,7 @@ public class ProjectApplication implements IApplicationInterface {
         checkActivityExist(activity);
         for (ActivityInfo activityInfo : mStack) {
             if (TextUtils.equals(activity.getClass().getName(), activityInfo.id)) {
+                activityInfo.activity = null;
                 activityInfo.states.add(ActivityState.onDestroy);
             }
         }
@@ -205,6 +208,15 @@ public class ProjectApplication implements IApplicationInterface {
             index++;
         }
         LogUtils.d(sb.toString());
+    }
+
+    public ActivityInfo getActivityInfo(Class activity){
+        for (ActivityInfo activityInfo : mStack) {
+            if (TextUtils.equals(activity.getName(), activityInfo.id)) {
+                return activityInfo;
+            }
+        }
+        return null;
     }
 
 }

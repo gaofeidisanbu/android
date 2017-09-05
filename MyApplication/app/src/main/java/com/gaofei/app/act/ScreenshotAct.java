@@ -1,10 +1,13 @@
 package com.gaofei.app.act;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.View;
 
 import com.gaofei.app.R;
+import com.gaofei.library.ProjectApplication;
 import com.gaofei.library.base.BaseAct;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,11 +28,20 @@ public class ScreenshotAct extends BaseAct {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_screen_shot);
         Log.d(TAG+"ccad",Thread.currentThread().getId()+"");
-        try {
-            json();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        findViewById(R.id.text1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProjectApplication.ActivityInfo activity = ProjectApplication.getInstance().getActivityInfo(LayoutAct.class);
+                if(activity != null && activity.activity != null){
+                    activity.activity.finish();
+                }
+            }
+        });
+//        try {
+//            json();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public  void json() throws JSONException {
