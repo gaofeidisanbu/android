@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:name">
-        <activity android:name="com.gaofei.app.MainActivity">
+        <activity android:name="com.gaofei.app.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,6 +36,7 @@
         <activity android:name="com.gaofei.app.act.ScreenshotAct" />
         <activity android:name="com.gaofei.app.act.LayoutAct" />
         <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
+        <activity android:name="com.gaofei.app.act.SetUpAct" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>

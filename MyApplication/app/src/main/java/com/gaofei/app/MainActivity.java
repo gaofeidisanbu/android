@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.gaofei.app.act.AnnoAct;
@@ -17,6 +20,7 @@ import com.gaofei.app.act.KeyboardAct;
 import com.gaofei.app.act.LayoutAct;
 import com.gaofei.app.act.RecyclerSwipeAct;
 import com.gaofei.app.act.ScreenshotAct;
+import com.gaofei.app.act.SetUpAct;
 import com.gaofei.app.act.TestAct;
 import com.gaofei.app.act.adapter.BaseRecyclerAdapter;
 import com.gaofei.app.act.holder.MainViewHolder;
@@ -83,6 +87,22 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         mRecyclerView.addItemDecoration(new MyItemDecoration(this));
         mRecyclerView.setAdapter(myAdapter);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.setup, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.setup) {
+            SetUpAct.intentTo(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 

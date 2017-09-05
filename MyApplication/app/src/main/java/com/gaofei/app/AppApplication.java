@@ -1,10 +1,14 @@
 package com.gaofei.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
 import com.gaofei.library.base.ProjectProxy;
+
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
@@ -13,10 +17,6 @@ import com.gaofei.library.base.ProjectProxy;
 
 public class AppApplication extends Application {
     private static Context context;
-
-    public static Context getContext() {
-        return context;
-    }
 
     @Override
     public void onCreate() {

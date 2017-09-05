@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
 
+import com.gaofei.library.ProjectApplication;
 import com.gaofei.library.utils.GFPreferenceManager;
 import com.gaofei.library.utils.LogUtils;
 
@@ -25,10 +26,11 @@ public class BaseAct extends AppCompatActivity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ProjectApplication.getInstance().ActivityOnCreate(this);
         mClassName = getClass().getSimpleName();
         TAG = COMMON_TAG + mClassName;
-        LogUtils.d(TAG, "------- onCreate savedInstanceState =  " + (savedInstanceState != null ? savedInstanceState.toString() : "null") );
-        LogUtils.d(TAG, " processId = "+android.os.Process.myPid()+" threadId = "+Thread.currentThread().getId());
+        LogUtils.d(TAG, "------- onCreate savedInstanceState =  " + (savedInstanceState != null ? savedInstanceState.toString() : "null"));
+        LogUtils.d(TAG, " processId = " + android.os.Process.myPid() + " threadId = " + Thread.currentThread().getId());
         initActionBar();
     }
 
@@ -48,42 +50,49 @@ public class BaseAct extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        ProjectApplication.getInstance().ActivityOnRestoreInstanceState(this);
         LogUtils.d(TAG, "------- onRestoreInstanceState ---------> " + GFPreferenceManager.getStringValue(TAG + "aa", "----") + " hashCode = " + hashCode());
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+        ProjectApplication.getInstance().ActivityOnRestart(this);
         LogUtils.d(TAG, "------- onRestart");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        ProjectApplication.getInstance().ActivityOnStart(this);
         LogUtils.d(TAG, "------- onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        ProjectApplication.getInstance().ActivityOnResume(this);
         LogUtils.d(TAG, "------- onResume");
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        ProjectApplication.getInstance().ActivityOnNewIntent(this);
         LogUtils.d(TAG, "------- onNewIntent");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        ProjectApplication.getInstance().ActivityOnPause(this);
         LogUtils.d(TAG, "------- onPause");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        ProjectApplication.getInstance().ActivityOnSaveInstanceState(this);
         GFPreferenceManager.putString(TAG + "aa", "onSaveInstanceState = " + hashCode());
         LogUtils.d(TAG, "------- onSaveInstanceState");
     }
@@ -91,12 +100,14 @@ public class BaseAct extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        ProjectApplication.getInstance().ActivityOnStop(this);
         LogUtils.d(TAG, "------- onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        ProjectApplication.getInstance().ActivityOnDestroy(this);
         LogUtils.d(TAG, "------- onDestroy");
     }
 
@@ -112,5 +123,11 @@ public class BaseAct extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        ProjectApplication.getInstance().ActivityFinalize(this);
     }
 }
