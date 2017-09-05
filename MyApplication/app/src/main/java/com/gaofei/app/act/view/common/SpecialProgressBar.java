@@ -17,8 +17,8 @@ import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.mylibrary.utils.CommonUtils;
 import com.gaofei.app.R;
+import com.gaofei.library.utils.CommonUtils;
 
 
 /**

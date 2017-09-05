@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.mylibrary.utils.CommonUtils;
 import com.gaofei.app.R;
+import com.gaofei.library.utils.CommonUtils;
 
 import java.util.ArrayList;
 import java.util.List;

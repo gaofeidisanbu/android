@@ -4,7 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.mylibrary.base.ProjectProxy;
+import com.gaofei.library.base.ProjectProxy;
+
 
 /**
  * Created by gaofei on 2017/5/26.

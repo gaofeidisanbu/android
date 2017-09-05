@@ -3,7 +3,7 @@ package com.gaofei.app.act;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.example.mylibrary.base.BaseAct;
+import com.gaofei.library.base.BaseAct;
 
 
 /**
