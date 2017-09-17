@@ -39,7 +39,7 @@ public class TestMain {
     public static void main(String[] args) {
         try {
 //            rxjava();
-            json();
+//            json();
 //            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);

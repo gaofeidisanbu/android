@@ -44,6 +44,7 @@ public class ProcessAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        LogUtils.d(MainActivity.process );
         ActProcessBinding binding = DataBindingUtil.setContentView(this, R.layout.act_process);
         BaseRecyclerAdapter adapter = new BaseRecyclerAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -51,7 +52,7 @@ public class ProcessAct extends BaseAct {
         adapter.setOnBaseAdapterListener(new BaseRecyclerAdapter.OnBaseAdapterListener() {
             @Override
             public void click(View view, ViewHolderHandler.Item item) {
-
+                throw new IllegalArgumentException();
             }
         });
         adapter.addList(getListData());

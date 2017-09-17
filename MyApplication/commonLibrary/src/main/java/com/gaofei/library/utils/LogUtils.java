@@ -2,6 +2,10 @@ package com.gaofei.library.utils;
 
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 //import com.google.common.base.CharMatcher;
 //import com.google.common.base.Splitter;
 //import com.google.gson.Gson;
@@ -12,7 +16,7 @@ import android.util.Log;
  * Date: 16/5/25
  */
 public class LogUtils {
-    public static final String TAG = "gaofeilog";
+    public static final String TAG = "gflog";
     private static final boolean ENABLED = true;
 //    private static final Gson sGson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -142,26 +146,27 @@ public class LogUtils {
     }
 
     private static String generateTrace() {
-//        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-//        String trace = stackTrace[5].toString();
-//
-//        int begin = trace.indexOf('(');
-//        int end = trace.indexOf(')');
-//        String file = trace.substring(begin, end + 1);
-//        List<String> names = Splitter.on('.').splitToList(trace.substring(0, begin));
-//        int size = names.size();
-//        trace = names.get(size - 2) + "." + names.get(size - 1) + file;
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        String trace = stackTrace[5].toString();
 
-        return "";
+        int begin = trace.indexOf('(');
+        int end = trace.indexOf(')');
+        String file = trace.substring(begin, end + 1);
+        trace = trace.substring(0, begin);
+        String[] names = trace.split("\\.");
+        int size = names.length;
+        trace = names[size - 2] + "." + names[size - 1] + file;
+
+        return trace;
     }
 
     private static String generateMessage(Object object) {
         String message = String.valueOf(object);
-//        message = CharMatcher.anyOf("\r\n").replaceFrom(message, " ");
-//
-//        if (message.length() >= MESSAGE_MAX_LEN) {
-//            message = message.substring(0, MESSAGE_MAX_LEN) + "§";
-//        }
+        message = message.replace("\r\n"," ");
+
+        if (message.length() >= MESSAGE_MAX_LEN) {
+            message = message.substring(0, MESSAGE_MAX_LEN) + "§";
+        }
 
         return message;
     }

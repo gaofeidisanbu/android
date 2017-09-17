@@ -35,10 +35,10 @@
         <activity android:name="com.gaofei.app.act.TestAct" />
         <activity android:name="com.gaofei.app.act.AnnoAct" />
         <activity android:name="com.gaofei.app.act.ScreenshotAct" />
-        <activity android:name="com.gaofei.app.act.LayoutAct" android:launchMode="singleTask" android:process=":process"/>
+        <activity android:name="com.gaofei.app.act.LayoutAct" android:launchMode="singleTask"/>
         <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
         <activity android:name="com.gaofei.app.act.SetUpAct" />
-        <activity android:name="com.gaofei.app.act.ProcessAct" />
+        <activity android:name="com.gaofei.app.act.ProcessAct"  android:process=":process" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>

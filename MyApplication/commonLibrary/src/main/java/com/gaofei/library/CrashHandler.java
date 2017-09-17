@@ -1,5 +1,7 @@
 package com.gaofei.library;
 
+import android.os.Process;
+
 import com.gaofei.library.utils.LogUtils;
 
 /**

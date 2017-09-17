@@ -36,7 +36,6 @@ public class LayoutAct extends BaseAct {
 //                }
 //            }
 //        });
-        LogUtils.d(MainActivity.process);
         mProgress = (SpecialProgressBar) findViewById(R.id.progress);
         mProgress.setProgress(0,50,true);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
