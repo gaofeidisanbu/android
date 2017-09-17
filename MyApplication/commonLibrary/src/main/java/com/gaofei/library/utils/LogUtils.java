@@ -12,7 +12,7 @@ import android.util.Log;
  * Date: 16/5/25
  */
 public class LogUtils {
-    public static final String TAG = "LOG_TAG";
+    public static final String TAG = "gaofeilog";
     private static final boolean ENABLED = true;
 //    private static final Gson sGson = new GsonBuilder().setPrettyPrinting().create();
 

@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/text1"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:background="#ff6666" />
-    </LinearLayout>
+        android:layout_height="match_parent">
+        <fragment
+            android:id="@+id/screen_capture_fra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.gaofei.app.fra.ScreenCaptureFragment"/>
+    </FrameLayout>
 </layout>

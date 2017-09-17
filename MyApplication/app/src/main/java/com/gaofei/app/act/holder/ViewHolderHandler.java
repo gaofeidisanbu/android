@@ -12,7 +12,7 @@ import com.gaofei.app.act.adapter.BaseRecyclerAdapter;
 
 public class ViewHolderHandler {
 
-    public static int[] layout = {R.layout.recycler_view_item_main,R.layout.recycler_view_item_main};
+    public static int[] layout = {R.layout.recycler_view_item_main,R.layout.recycler_view_item_main,R.layout.recycler_view_item_main};
 
     public static class Item {
         // 一种类型对应一种样式
@@ -22,7 +22,8 @@ public class ViewHolderHandler {
 
     public enum ItemType {
         RECYCLERITEMMAIN,
-        RECYCLER_SETUP;
+        RECYCLER_SETUP,
+        RECYCLER_PROCESS,
 
     }
 
@@ -39,6 +40,11 @@ public class ViewHolderHandler {
         ordinal = ItemType.RECYCLER_SETUP.ordinal();
         if (viewType == ordinal) {
             return new SetUpHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, null), onListener);
+        }
+
+        ordinal = ItemType.RECYCLER_PROCESS.ordinal();
+        if (viewType == ordinal) {
+            return new ProcessHolder(LayoutInflater.from(parent.getContext()).inflate(layoutId, null), onListener);
         }
         return null;
     }

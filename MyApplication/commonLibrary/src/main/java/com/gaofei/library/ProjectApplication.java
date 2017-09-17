@@ -3,10 +3,12 @@ package com.gaofei.library;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Process;
 import android.text.TextUtils;
 
 import com.facebook.stetho.Stetho;
 import com.gaofei.library.base.IApplicationInterface;
+import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
 
 import java.util.LinkedList;
@@ -32,6 +34,11 @@ public class ProjectApplication implements IApplicationInterface {
 
     @Override
     public void onCreate() {
+        if(CommonUtils.isMainAppProgress(getContext())){
+            LogUtils.d(" main pid "+Process.myPid());
+        }else {
+            LogUtils.d(" no main pid "+Process.myPid());
+        }
         Stetho.initialize(
                 Stetho.newInitializerBuilder(mApplication)
                         .enableDumpapp(
@@ -39,6 +46,9 @@ public class ProjectApplication implements IApplicationInterface {
                         .enableWebKitInspector(
                                 Stetho.defaultInspectorModulesProvider(mApplication))
                         .build());
+        Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
+        LogUtils.d(exceptionHandler.getClass().getName());
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(exceptionHandler));
     }
 
     public static Application getContext() {

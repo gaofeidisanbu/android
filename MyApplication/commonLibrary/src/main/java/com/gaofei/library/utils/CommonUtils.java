@@ -211,7 +211,7 @@ public class CommonUtils {
                 int pid = android.os.Process.myPid();
                 ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
                 for (ActivityManager.RunningAppProcessInfo appProcess : activityManager.getRunningAppProcesses()) {
-
+                    LogUtils.d("isMainAppProgress = "+appProcess.processName);
                     if (appProcess.pid == pid && TextUtils.equals(appProcess.processName, context.getPackageName())) {
                         appProgress = true;
                     }

@@ -27,62 +27,6 @@ public class ScreenshotAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_screen_shot);
-        Log.d(TAG+"ccad",Thread.currentThread().getId()+"");
-        findViewById(R.id.text1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProjectApplication.ActivityInfo activity = ProjectApplication.getInstance().getActivityInfo(LayoutAct.class);
-                if(activity != null && activity.activity != null){
-                    activity.activity.finish();
-                }
-            }
-        });
-//        try {
-//            json();
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
     }
 
-    public  void json() throws JSONException {
-        Map<String,Object> map = new HashMap<>();
-        map.put("aaa","bb");
-        User user = new User();
-        user.name = "高飞";
-        user.id = "1";
-//        map.put("user",user);
-        JSONObject jsonObject = new JSONObject(map);
-        jsonObject.put("user",user);
-        Log.d(TAG+"ccad"," map to jsonObject = "+jsonObject.toString());
-
-        Map<String,Object> map1 = new HashMap<>();
-        map1.put("aaa","bb");
-        map1.put("map1",jsonObject);
-        JSONObject jsonObject1 = new JSONObject(map1);
-        Log.d(TAG+"ccad"," put jsonObject to map "+jsonObject1.toString());
-
-
-        Map<String,Object> map2 = new HashMap<>();
-        map2.put("aaa","bb");
-        map2.put("map2",jsonObject.toString());
-        JSONObject jsonObject2 = new JSONObject(map2);
-        Log.d(TAG+"ccad","put jsonObject tostring to map"+jsonObject2.toString());
-
-        JSONObject jsonObject3 = new JSONObject(jsonObject1.toString());
-        Log.d(TAG+"ccad"," jsonObject3 = "+jsonObject3.get("map1").getClass().getName());
-
-        JSONObject jsonObject4 = new JSONObject(jsonObject2.toString());
-        Log.d(TAG+"ccad"," jsonObject4 = "+jsonObject4.get("map2").getClass().getName());
-
-        Gson json = new GsonBuilder().create();
-        Object object1 = json.fromJson(jsonObject3.get("map1").toString(),Object.class);
-        Log.d(TAG+"ccad"," object1 = "+object1.getClass().getName());
-        Object object2 = json.fromJson(jsonObject4.get("map2").toString(),Object.class);
-        Log.d(TAG+"ccad"," object2 = "+object2.getClass().getName()+" ccad = "+object2);
-    }
-
-    public static class User{
-        public String name;
-        public String id;
-    }
 }

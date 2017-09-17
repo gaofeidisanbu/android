@@ -4,6 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Constructor;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,10 +44,22 @@ public class TestMain {
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
+            testUrl();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
             System.out.println(e);
+        }
+    }
+
+    private static void testUrl() {
+        try {
+            String url = "http://10.8.8.8:5000/ladder/user/level?publisherId=1&semesterId=13&stageId=2&subjectId=1";
+            System.out.println(URLEncoder.encode(url));;
+            System.out.println(URLDecoder.decode(URLEncoder.encode(url)));
+            System.out.println(URLDecoder.decode("http%3A%2F%2F10.8.8.8%3A5000%2Fladder%2Fuser%2Flevel%3FpublisherId%3D1%26semesterId%3D13%26stageId%3D2%26subjectId%3D1"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

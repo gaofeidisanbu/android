@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
 
     <application
         android:name="com.gaofei.app.AppApplication"
@@ -34,9 +35,10 @@
         <activity android:name="com.gaofei.app.act.TestAct" />
         <activity android:name="com.gaofei.app.act.AnnoAct" />
         <activity android:name="com.gaofei.app.act.ScreenshotAct" />
-        <activity android:name="com.gaofei.app.act.LayoutAct" />
+        <activity android:name="com.gaofei.app.act.LayoutAct" android:launchMode="singleTask" android:process=":process"/>
         <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
         <activity android:name="com.gaofei.app.act.SetUpAct" />
+        <activity android:name="com.gaofei.app.act.ProcessAct" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>

@@ -30,7 +30,7 @@ public class BaseAct extends AppCompatActivity {
         mClassName = getClass().getSimpleName();
         TAG = COMMON_TAG + mClassName;
         LogUtils.d(TAG, "------- onCreate savedInstanceState =  " + (savedInstanceState != null ? savedInstanceState.toString() : "null"));
-        LogUtils.d(TAG, " processId = " + android.os.Process.myPid() + " threadId = " + Thread.currentThread().getId());
+        LogUtils.d(TAG, " processId = " + android.os.Process.myPid() + " threadId = " + Thread.currentThread().getId() + " taskId = "+getTaskId());
         initActionBar();
     }
 

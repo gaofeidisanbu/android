@@ -65,6 +65,7 @@
 		callbackButton.onclick = function(e) {
 			e.preventDefault()
 			log('JS calling handler "testObjcCallback"')
+			var base64 = "";
 			bridge.callHandler('testObjcCallback', {'foo': 'bar'}, function(response) {
 				log('JS got response', response)
 			})

@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import com.gaofei.app.MainActivity;
 import com.gaofei.app.R;
 import com.gaofei.app.act.view.common.SpecialProgressBar;
 import com.gaofei.library.base.BaseAct;
+import com.gaofei.library.utils.LogUtils;
 
 /**
  * Created by gaofei on 2017/8/10.
@@ -34,6 +36,7 @@ public class LayoutAct extends BaseAct {
 //                }
 //            }
 //        });
+        LogUtils.d(MainActivity.process);
         mProgress = (SpecialProgressBar) findViewById(R.id.progress);
         mProgress.setProgress(0,50,true);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
@@ -44,6 +47,7 @@ public class LayoutAct extends BaseAct {
 //                dialogFragment.show(getSupportFragmentManager(),"d");
                 Intent intent = new Intent(LayoutAct.this,ScreenshotAct.class);
                 startActivity(intent);
+                throw new  NullPointerException();
             }
         });
     }
