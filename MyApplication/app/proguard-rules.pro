@@ -29,3 +29,10 @@
 -keep class com.tencent.** {*;}
 -dontwarn com.tencent.**
 -dontwarn okio.*
+
+#@proguard_debug_start
+# ------------------ Keep LineNumbers and properties ---------------- #
+-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
+-renamesourcefileattribute TbsSdkJava
+-keepattributes SourceFile,LineNumberTable
+#@proguard_debug_end

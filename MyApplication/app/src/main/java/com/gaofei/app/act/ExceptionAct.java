@@ -20,7 +20,8 @@ public class ExceptionAct extends BaseAct {
             @Override
             public void onClick(View v) {
 //                try {
-                    fun(null);
+                ExceptionTest exception = new ExceptionTest();
+                exception.fun(null);
 //                }catch (Exception e){
 //                    e.printStackTrace();
 //                }
@@ -30,19 +31,27 @@ public class ExceptionAct extends BaseAct {
 
     }
 
-    public void fun(String s) {
-        try {
-            fun2(s);
-        }catch (Exception e){
-            e.printStackTrace();
-            RuntimeException exception = new RuntimeException("dddddddddddd");
-            exception.fillInStackTrace().initCause(e);
-            throw  exception;
+
+    public static class ExceptionTest {
+        public void fun3() {
+
         }
 
+        public static void fun(String s) {
+            try {
+                fun2(s);
+            } catch (Exception e) {
+                RuntimeException exception = new RuntimeException("dddddddddddd");
+                exception.fillInStackTrace().initCause(e);
+                throw exception;
+            }
+
+        }
+
+        public static void fun2(String s) {
+            s.toString();
+        }
     }
 
-    public void fun2(String s){
-       s.toString();
-    }
+
 }

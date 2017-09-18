@@ -18,6 +18,7 @@ import com.gaofei.app.act.BroadcastReceiverAct;
 import com.gaofei.app.act.ExceptionAct;
 import com.gaofei.app.act.KeyboardAct;
 import com.gaofei.app.act.LayoutAct;
+import com.gaofei.app.act.PermissionAct;
 import com.gaofei.app.act.ProcessAct;
 import com.gaofei.app.act.RecyclerSwipeAct;
 import com.gaofei.app.act.ScreenshotAct;
@@ -45,8 +46,8 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
      * 增加一个测试类，需要同时在2个数组增加
      */
     private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
-            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class, BroadcastReceiverAct.class,ProcessAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView", "注解", "截屏", "layout", "广播","进程信息"};
+            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class, BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView", "注解", "截屏", "layout", "广播","进程信息","权限"};
     private Handler mHandler = new Handler();
 
     @Override
