@@ -40,6 +40,7 @@
         <activity android:name="com.gaofei.app.act.SetUpAct" />
         <activity android:name="com.gaofei.app.act.ProcessAct"  android:process=":process" />
         <activity android:name="com.gaofei.app.act.PermissionAct" />
+        <activity android:name="com.gaofei.app.act.ReflectAct" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>
