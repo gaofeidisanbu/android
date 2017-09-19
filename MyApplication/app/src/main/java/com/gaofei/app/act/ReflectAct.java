@@ -87,8 +87,8 @@ public class ReflectAct extends BaseAct {
         StringBuilder sb = new StringBuilder();
         sb.append("n = ").append(reflectTimeInfo.n);
         sb.append(" getDeclaredMethods = ").append(reflectTimeInfo.reflectGetMethodsTime);
-        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithParamTime);
-        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithNoParamTime);
+//        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithParamTime);
+//        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithNoParamTime);
         sb.append(" invoke = ").append(reflectTimeInfo.reflectMethodInvokeTime);
         sb.append(" no invoke = ").append(reflectTimeInfo.noReflectMethodInvokeTime);
         sb.append(" 差 = ").append(reflectTimeInfo.reflectMethodInvokeTime - reflectTimeInfo.noReflectMethodInvokeTime);
