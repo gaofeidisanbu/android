@@ -87,8 +87,8 @@ public class ReflectAct extends BaseAct {
         StringBuilder sb = new StringBuilder();
         sb.append("n = ").append(reflectTimeInfo.n);
         sb.append(" getDeclaredMethods = ").append(reflectTimeInfo.reflectGetMethodsTime);
-//        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithParamTime);
-//        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithNoParamTime);
+        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithParamTime);
+        sb.append(" getDeclaredMethod = ").append(reflectTimeInfo.reflectGetMethodWithNoParamTime);
         sb.append(" invoke = ").append(reflectTimeInfo.reflectMethodInvokeTime);
         sb.append(" no invoke = ").append(reflectTimeInfo.noReflectMethodInvokeTime);
         sb.append(" 差 = ").append(reflectTimeInfo.reflectMethodInvokeTime - reflectTimeInfo.noReflectMethodInvokeTime);
@@ -100,6 +100,7 @@ public class ReflectAct extends BaseAct {
 
 
     private ReflectTimeInfo objectInstanceTest(int n) {
+        n = n * 100;
         ReflectTimeInfo reflectTimeInfo = new ReflectTimeInfo();
         reflectTimeInfo.n = n;
         Class clazz = null;
@@ -134,6 +135,7 @@ public class ReflectAct extends BaseAct {
     }
 
     private ReflectTimeInfo objectMethodTest(int n) {
+        n = n * 100;
         ReflectTimeInfo reflectTimeInfo = new ReflectTimeInfo();
         reflectTimeInfo.n = n;
         ReflectTest reflectTest = new ReflectTest();
