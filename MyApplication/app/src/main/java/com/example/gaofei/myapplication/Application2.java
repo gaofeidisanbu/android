@@ -14,5 +14,8 @@ public class Application2 {
         LogUtils.d("4");
         LogUtils.d("5");
         LogUtils.d("6");
+        LogUtils.d("7");
+        LogUtils.d("8");
+        LogUtils.d("9");
     }
 }
