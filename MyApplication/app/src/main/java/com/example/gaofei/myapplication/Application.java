@@ -9,5 +9,6 @@ import com.example.gaofei.myapplication.utils.LogUtils;
 public class Application {
     public void git(){
         LogUtils.d("1");
+        LogUtils.d("2");
     }
 }
