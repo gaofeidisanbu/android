@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.gaofei.myapplication.utils.LogUtils;
 import com.example.mylibrary.Test2;
 
 public class MainActivity extends BaseAct {
@@ -23,6 +24,10 @@ public class MainActivity extends BaseAct {
 
     private void initData() {
 
+    }
+
+    private void application(){
+        LogUtils.d("1");
     }
 
     private void initView() {
