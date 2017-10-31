@@ -10,5 +10,6 @@ public class Application {
     public void git(){
         LogUtils.d("1");
         LogUtils.d("2");
+        LogUtils.d("3");
     }
 }
