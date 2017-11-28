@@ -44,6 +44,7 @@ public class TestMain {
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
+            convertCount(13444);
             testUrl();
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,10 +53,37 @@ public class TestMain {
         }
     }
 
+    private static String convertCount(int friendCount) {
+        if (friendCount > 0) {
+            String friendCountStr = String.valueOf(friendCount);
+            int len = friendCountStr.length();
+            int flag = 3;
+            if (len > flag) {
+                String flagBeforeStr = friendCountStr.substring(0, len - flag);
+                int flagBefore = Integer.valueOf(flagBeforeStr);
+                System.out.println("flagBefore = " + flagBefore);
+                String indexFlagStr = friendCountStr.substring(len - flag, len - flag + 1);
+                System.out.println("indexFlagStr = " + indexFlagStr);
+                Float indexFlag = Float.valueOf(indexFlagStr);
+                if (indexFlag > 0) {
+                    flagBefore = flagBefore + 1;
+                }
+                String endStr = String.valueOf(flagBefore);
+                System.out.println("endStr = " + endStr);
+                String endStrLast = endStr.substring(endStr.length() - 1, endStr.length());
+                flagBeforeStr = String.format("%sw", flagBefore / 10f);
+                System.out.println("flagBeforeStr = " + flagBeforeStr);
+            }
+            return friendCountStr;
+        }
+        return "";
+    }
+
     private static void testUrl() {
         try {
             String url = "http://10.8.8.8:5000/ladder/user/level?publisherId=1&semesterId=13&stageId=2&subjectId=1";
-            System.out.println(URLEncoder.encode(url));;
+            System.out.println(URLEncoder.encode(url));
+            ;
             System.out.println(URLDecoder.decode(URLEncoder.encode(url)));
             System.out.println(URLDecoder.decode("http%3A%2F%2F10.8.8.8%3A5000%2Fladder%2Fuser%2Flevel%3FpublisherId%3D1%26semesterId%3D13%26stageId%3D2%26subjectId%3D1"));
         } catch (Exception e) {
@@ -102,7 +130,6 @@ public class TestMain {
             System.out.println("null");
         }
     }
-
 
 
     public static void fun3() {
@@ -289,10 +316,10 @@ public class TestMain {
                 .replaceAll("\r", "\\\\\r").replaceAll("\f", "\\\\\f");
         System.out.println("after" + messageJSON);
 
-        System.out.println("\\" + " " + "\""+ " " + "\\" + " "+ "\\\\");
-        String sr  = "{\"data\":1,\"value\":\" \\\\\\\\ \"}";
+        System.out.println("\\" + " " + "\"" + " " + "\\" + " " + "\\\\");
+        String sr = "{\"data\":1,\"value\":\" \\\\\\\\ \"}";
         System.out.println(sr);
-        str = sr.replaceAll("\\\\\\\\","\\\\");
+        str = sr.replaceAll("\\\\\\\\", "\\\\");
         System.out.println(str);
     }
 
@@ -393,7 +420,6 @@ public class TestMain {
 //        }
         return false;
     }
-
 
 
 }
