@@ -86,21 +86,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
-        @Override
-        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-            int childCount = parent.getChildCount();
-            int left = parent.getPaddingLeft();
-            int right = parent.getWidth() - parent.getPaddingRight();
-
-            for (int i = 0; i < childCount - 1; i++) {
-                if(i % 2 == 0){
-                    View view = parent.getChildAt(i);
-                    float top = view.getBottom();
-                    float bottom = view.getBottom() + dividerHeight;
-                    c.drawRect(left, top, right, bottom, dividerPaint);
-                }
-
-            }
-        }
+//        @Override
+//        public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//            int childCount = parent.getChildCount();
+//            int left = parent.getPaddingLeft();
+//            int right = parent.getWidth() - parent.getPaddingRight();
+//
+//            for (int i = 0; i < childCount - 1; i++) {
+//                if(i % 2 == 0){
+//                    View view = parent.getChildAt(i);
+//                    float top = view.getBottom();
+//                    float bottom = view.getBottom() + dividerHeight;
+//                    c.drawRect(left, top, right, bottom, dividerPaint);
+//                }
+//
+//            }
+//        }
     }
 }
