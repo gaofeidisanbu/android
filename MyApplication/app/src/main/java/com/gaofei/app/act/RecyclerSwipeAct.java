@@ -77,7 +77,7 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
             int bottom = lastVisibleView.getBottom() - recyclerView.getMeasuredHeight();
             TextView textView = (TextView) lastVisibleView.findViewById(R.id.text);
             LogUtils.d("gf bottom = " + bottom + " text = " + textView.getText() + " height = " + recyclerView.getMeasuredHeight());
-            if (bottom >= 0 && newState == RecyclerView.SCROLL_STATE_IDLE
+            if (bottom >= 0
                     && lastVisibleItemPosition == totalItemCount - 1
                     && visibleItemCount > 0) {
                 return true;
@@ -100,8 +100,9 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
             int bottom = lastVisibleView.getBottom() - recyclerView.getMeasuredHeight();
             TextView textView = (TextView) lastVisibleView.findViewById(R.id.text);
             LogUtils.d("gf bottom = " + bottom + " text = " + textView.getText() + " height = " + recyclerView.getMeasuredHeight());
-            if (bottom >= 0 && newState == RecyclerView.SCROLL_STATE_IDLE
-                    && lastVisibleItemPosition == totalItemCount - 1
+            LogUtils.d("gf lastVisibleItemPosition = " + lastVisibleItemPosition + " totalItemCount = " + totalItemCount );
+            if (bottom >= 0
+                    && lastVisibleItemPosition > totalItemCount - 5
                     && visibleItemCount > 0) {
                 return true;
             }
@@ -114,18 +115,18 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
 
 
 
-    int count = 0;
 
     private List<String> getData() {
         List<String> list = new ArrayList<>();
+        int count = mAdapter.getItemCount() + 1;
         for (int i = count; i < 10 + count; i++) {
             list.add(" i = " + i + " " + i + " " + i + " " + i + " " + i + " " + i + " " + i);
         }
-        count = list.size();
         return list;
     }
 
     private void request(final boolean isPullUp) {
+        LogUtils.d("isPullUp = "+isPullUp+" isCurrRequest = "+isCurrRequest);
         if (isCurrRequest) {
             if (isPullUp) {
                 mSwipeToLoadLayout.setLoadingMore(false);
