@@ -28,6 +28,7 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
     private RecyclerViewAdapter mAdapter;
     private SwipeToLoadLayout mSwipeToLoadLayout;
     private Handler mHandler = new Handler();
+    private boolean isCurrRequest = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,8 +46,9 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (isScrollVerticallyBottom(recyclerView, newState) && !mSwipeToLoadLayout.isLoadingMore()) {
-                    mSwipeToLoadLayout.setLoadingMore(true);
+                if (!isCurrRequest && !mSwipeToLoadLayout.isLoadingMore() && isAutoLoadMore(recyclerView, newState)) {
+//                    mSwipeToLoadLayout.setLoadingMore(true);
+                    request(false);
                 }
 //                LogUtils.d("gf onScrollStateChanged newState = " + newState);
             }
@@ -74,18 +76,43 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
             View lastVisibleView = lm.findViewByPosition(lastVisibleItemPosition);
             int bottom = lastVisibleView.getBottom() - recyclerView.getMeasuredHeight();
             TextView textView = (TextView) lastVisibleView.findViewById(R.id.text);
-            LogUtils.d("gf bottom = " + bottom+" text = "+textView.getText()+" height = "+recyclerView.getMeasuredHeight());
+            LogUtils.d("gf bottom = " + bottom + " text = " + textView.getText() + " height = " + recyclerView.getMeasuredHeight());
             if (bottom >= 0 && newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItemPosition == totalItemCount - 1
                     && visibleItemCount > 0) {
                 return true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             LogUtils.w(e);
 
         }
         return false;
     }
+
+
+    private static boolean isAutoLoadMore(RecyclerView recyclerView, int newState){
+        try {
+            LinearLayoutManager lm = (LinearLayoutManager) recyclerView.getLayoutManager();
+            int totalItemCount = recyclerView.getAdapter().getItemCount();
+            int lastVisibleItemPosition = lm.findLastVisibleItemPosition();
+            int visibleItemCount = recyclerView.getChildCount();
+            View lastVisibleView = lm.findViewByPosition(lastVisibleItemPosition);
+            int bottom = lastVisibleView.getBottom() - recyclerView.getMeasuredHeight();
+            TextView textView = (TextView) lastVisibleView.findViewById(R.id.text);
+            LogUtils.d("gf bottom = " + bottom + " text = " + textView.getText() + " height = " + recyclerView.getMeasuredHeight());
+            if (bottom >= 0 && newState == RecyclerView.SCROLL_STATE_IDLE
+                    && lastVisibleItemPosition == totalItemCount - 1
+                    && visibleItemCount > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            LogUtils.w(e);
+
+        }
+        return false;
+    }
+
+
 
     int count = 0;
 
@@ -98,6 +125,27 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
         return list;
     }
 
+    private void request(final boolean isPullUp) {
+        if (isCurrRequest) {
+            if (isPullUp) {
+                mSwipeToLoadLayout.setLoadingMore(false);
+            }
+            return;
+        }
+        isCurrRequest = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.add(getData());
+                if (isPullUp) {
+                    mSwipeToLoadLayout.setLoadingMore(false);
+                }
+                isCurrRequest = false;
+            }
+        }, 400);
+
+    }
+
     @Override
     public void onRefresh() {
         mHandler.postDelayed(new Runnable() {
@@ -106,18 +154,13 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
                 mSwipeToLoadLayout.setRefreshing(false);
 
             }
-        }, 700);
+        }, 300);
     }
+
 
     @Override
     public void onLoadMore() {
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mAdapter.add(getData());
-                mSwipeToLoadLayout.setLoadingMore(false);
-            }
-        }, 1000);
+        request(true);
     }
 
 }
