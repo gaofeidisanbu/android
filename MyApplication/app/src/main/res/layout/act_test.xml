@@ -2,37 +2,83 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <ScrollView
-        android:id="@+id/scrollView"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/yc_blue5"
+                    android:layout_marginTop="36dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/yc_red4" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/yc_red5" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/yc_red6" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/yc_red1" />
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusableInTouchMode="true"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:id="@+id/ll2"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@color/yc_red4" />
+                android:layout_height="56dp">
 
-
-                <WebView
-                    android:id="@+id/fl2"
+                <RelativeLayout
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="500dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:background="@color/yc_blue5" />
+                    android:layout_height="match_parent"
+                    android:background="#00ffd1cb" />
 
-            <TextView
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:src="@drawable/ic_arrow_back_dark" />
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/shadow"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@color/yc_gray5"/>
+                android:layout_height="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/app_bar_projection"
+                android:visibility="gone" />
+
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
 </layout>

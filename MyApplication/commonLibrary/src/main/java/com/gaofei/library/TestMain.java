@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -44,13 +45,37 @@ public class TestMain {
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
-            convertCount(13444);
-            testUrl();
+//            convertCount(13444);
+//            testUrl();
+            testRegex("13071135067");
+            testRegex("130711350671");
+            testRegex("10071135067");
+            getHandlerNickName("13071135067");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
             System.out.println(e);
         }
+    }
+
+    private static void testRegex(String phone) {
+        String phoneRegex = "^(?=\\d{11}$)^1(?:3\\d|4[57]|5[^4\\D]|66|7[^249\\D]|8\\d|9[89])\\d{8}$";
+        boolean is = Pattern.matches(phoneRegex, phone);
+        System.out.println("phone = "+phone+" is = "+is);
+    }
+
+    public static String getHandlerNickName(String nickName) {
+        String handlerName = nickName;
+        if (isChinaPhone(nickName)) {
+            handlerName = nickName.substring(0, 3) + "****" + nickName.substring(7, 11);
+        }
+        System.out.println("handlerName = "+handlerName);
+        return handlerName;
+    }
+
+    public static boolean isChinaPhone(String phoneStr) {
+        String phoneRegex = "^(?=\\d{11}$)^1(?:3\\d|4[57]|5[^4\\D]|66|7[^249\\D]|8\\d|9[89])\\d{8}$";
+        return Pattern.matches(phoneRegex, phoneStr);
     }
 
     private static String convertCount(int friendCount) {
