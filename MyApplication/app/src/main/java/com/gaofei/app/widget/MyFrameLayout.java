@@ -1,0 +1,46 @@
+package com.gaofei.app.widget;
+
+import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
+/**
+ * Created by gaofei on 07/12/2017.
+ */
+
+public class MyFrameLayout extends FrameLayout {
+    public MyFrameLayout(Context context) {
+        super(context);
+    }
+
+    public MyFrameLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public MyFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public MyFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onInterceptHoverEvent(MotionEvent event) {
+        return super.onInterceptHoverEvent(event);
+    }
+
+
+}

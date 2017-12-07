@@ -1,5 +1,6 @@
 package com.gaofei.library;
 
+import com.gaofei.library.utils.WebPageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -47,10 +48,11 @@ public class TestMain {
 //            System.out.println(convertTime(747034096));
 //            convertCount(13444);
 //            testUrl();
-            testRegex("13071135067");
-            testRegex("130711350671");
-            testRegex("10071135067");
-            getHandlerNickName("13071135067");
+//            testRegex("13071135067");
+//            testRegex("130711350671");
+//            testRegex("10071135067");
+//            getHandlerNickName("13071135067");
+            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -446,5 +448,7 @@ public class TestMain {
         return false;
     }
 
-
+    public static void url(String url){
+        System.out.println(WebPageUtils.addUrlPubParam(url));
+    }
 }

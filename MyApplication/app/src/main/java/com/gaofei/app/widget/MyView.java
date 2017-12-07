@@ -3,6 +3,8 @@ package com.gaofei.app.widget;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -50,4 +52,49 @@ public class MyView extends View{
 //        }
 //        return result;
 //    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i("HelloEventMultiPoint", "Total pointer count is " + event.getPointerCount());
+
+        String actionString = actionToString(event.getAction());
+        Log.i("HelloEventMultiPoint", "Main action is " + actionString);
+
+        int maskedAction = event.getActionMasked();
+        int pointId = event.getActionIndex();
+        Log.i("HelloEventMultiPoint", "Masked action is " + actionToString(maskedAction) + "\tpointId is " + pointId);
+        Log.i("HelloEventMultiPoint", "====================");
+        return true;
+    }
+
+    private String actionToString(int action) {
+        String actionString = null;
+        switch (action) {
+            case MotionEvent.ACTION_CANCEL:
+                actionString = "ACTION_CANCEL";
+                break;
+            case MotionEvent.ACTION_DOWN:
+                actionString = "ACTION_DOWN";
+                break;
+            case MotionEvent.ACTION_MOVE:
+                actionString = "ACTION_MOVE";
+                break;
+            case MotionEvent.ACTION_OUTSIDE:
+                actionString = "ACTION_OUTSIDE";
+                break;
+            case MotionEvent.ACTION_UP:
+                actionString = "ACTION_UP";
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                actionString = "ACTION_POINTER_DOWN";
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                actionString = "ACITON_POINTER_UP";
+                break;
+            default:
+                actionString = "" + action;
+        }
+
+        return actionString;
+    }
 }
