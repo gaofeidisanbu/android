@@ -37,8 +37,17 @@ public class MyFrameLayout extends FrameLayout {
         return super.dispatchTouchEvent(ev);
     }
 
+    int count = 1;
+
     @Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            count++;
+            if (count == 30) {
+                Log.i("HelloEventMultiPoint", "onInterceptTouchEvent");
+                return true;
+            }
+        }
         return super.onInterceptHoverEvent(event);
     }
 

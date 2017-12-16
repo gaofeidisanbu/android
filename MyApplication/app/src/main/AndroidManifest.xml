@@ -42,6 +42,7 @@
         <activity android:name="com.gaofei.app.act.PermissionAct" />
         <activity android:name="com.gaofei.app.act.ReflectAct" />
         <activity android:name="com.gaofei.app.act.TouchEventAct" />
+        <activity android:name="com.gaofei.app.act.ViewPagerAct" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>

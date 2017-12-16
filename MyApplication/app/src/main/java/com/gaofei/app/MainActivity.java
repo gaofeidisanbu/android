@@ -26,6 +26,7 @@ import com.gaofei.app.act.ScreenshotAct;
 import com.gaofei.app.act.SetUpAct;
 import com.gaofei.app.act.TestAct;
 import com.gaofei.app.act.TouchEventAct;
+import com.gaofei.app.act.ViewPagerAct;
 import com.gaofei.app.act.adapter.BaseRecyclerAdapter;
 import com.gaofei.app.act.holder.MainViewHolder;
 import com.gaofei.app.act.holder.ViewHolderHandler;
@@ -48,8 +49,11 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
      * 增加一个测试类，需要同时在2个数组增加
      */
     private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
-            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class, BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,TouchEventAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView", "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent"};
+            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class,
+            BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,
+            TouchEventAct.class,ViewPagerAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView",
+            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager"};
     private Handler mHandler = new Handler();
 
     @Override
