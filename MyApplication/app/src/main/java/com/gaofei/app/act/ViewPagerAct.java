@@ -38,10 +38,15 @@ public class ViewPagerAct extends BaseAct {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             TextView textView = new TextView(container.getContext());
-            textView.setBackgroundResource(position / 2 == 0 ? R.color.yc_red2 : R.color.yc_blue2);
+            textView.setBackgroundResource((position + 1) % 2 == 0 ? R.color.yc_red2 : R.color.yc_blue2);
             textView.setText(position + "");
             container.addView(textView);
             return textView;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
         }
 
         @Override
