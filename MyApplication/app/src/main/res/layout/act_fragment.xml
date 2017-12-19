@@ -13,16 +13,29 @@
             android:layout_height="0dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/add"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/yc_blue5"
             android:text="增加"/>
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/detach"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@color/yc_blue5"
             android:text="删除"/>
+
+        <Button
+            android:id="@+id/hide"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/yc_blue5"
+            android:text="隐藏"/>
+        <Button
+            android:id="@+id/show"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/yc_blue5"
+            android:text="展示"/>
     </LinearLayout>
 </layout>

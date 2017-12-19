@@ -19,7 +19,7 @@ import com.gaofei.library.utils.LogUtils;
 
 public class BaseAct extends AppCompatActivity {
     public String TAG;
-    private final static String COMMON_TAG = "GAOFEI:";
+    private final static String COMMON_TAG = "activity:";
     public static final String TITLE = "title";
     public String mClassName;
 

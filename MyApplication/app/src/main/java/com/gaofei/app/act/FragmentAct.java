@@ -22,25 +22,55 @@ import com.gaofei.library.base.BaseFragment;
 
 public class FragmentAct extends BaseAct {
     private ActFragmentBinding mBinding;
+    private MyFragmentFra mFragment = new MyFragmentFra();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_fragment);
-        mBinding.button.setOnClickListener(new View.OnClickListener() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment, mFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+//                fragmentTransaction.hide();
+//                fragmentTransaction.add()
+//                fragmentTransaction.commitAllowingStateLoss();
+//                fragmentTransaction.commitNowAllowingStateLoss();
+        mBinding.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragment, new MyFragmentFra());
-//                fragmentTransaction.hide();
-//                fragmentTransaction.add()
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
-//                fragmentTransaction.commitNow();
-//                fragmentTransaction.commitAllowingStateLoss();
-//                fragmentTransaction.commitNowAllowingStateLoss();
-                // 状态保存
+            }
+        });
+        mBinding.hide.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.hide(mFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+        mBinding.show.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.show(mFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
 
+        mBinding.detach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.detach(mFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
     }
@@ -59,6 +89,7 @@ public class FragmentAct extends BaseAct {
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+            super.onCreateView(inflater,container,savedInstanceState);
             FraMyFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.fra_my_fragment, container, false);
             return binding.getRoot();
         }
