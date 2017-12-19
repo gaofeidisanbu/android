@@ -22,13 +22,14 @@ import com.gaofei.library.base.BaseFragment;
 
 public class FragmentAct extends BaseAct {
     private ActFragmentBinding mBinding;
-    private MyFragmentFra mFragment = new MyFragmentFra();
+    private MyFragmentFra mFragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_fragment);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        mFragment = new MyFragmentFra();
         fragmentTransaction.replace(R.id.fragment, mFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -40,7 +41,8 @@ public class FragmentAct extends BaseAct {
             @Override
             public void onClick(View v) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragment, new MyFragmentFra());
+                mFragment = new MyFragmentFra();
+                fragmentTransaction.replace(R.id.fragment, mFragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
