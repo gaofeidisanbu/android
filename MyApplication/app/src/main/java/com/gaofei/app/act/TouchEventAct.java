@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTouchEventBinding;
 import com.gaofei.library.base.BaseAct;
-import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
 import com.gaofei.library.utils.ToastManager;
 
@@ -46,7 +45,7 @@ public class TouchEventAct extends BaseAct {
         super.onWindowFocusChanged(hasFocus);
         if(hasFocus){
             LogUtils.d("bottom = "+mBinding.view4.getBottom()+" top = "+mBinding.view4.getTop());
-            mBinding.ll2.scrollTo(20,-100);
+            mBinding.ll2.scrollTo(20,100);
         }
     }
 }
