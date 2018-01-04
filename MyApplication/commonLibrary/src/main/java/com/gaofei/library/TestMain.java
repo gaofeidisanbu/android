@@ -52,7 +52,9 @@ public class TestMain {
 //            testRegex("130711350671");
 //            testRegex("10071135067");
 //            getHandlerNickName("13071135067");
-            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
+//            getFillZeroStr(11,4);
+//            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
+            testTime();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -63,7 +65,7 @@ public class TestMain {
     private static void testRegex(String phone) {
         String phoneRegex = "^(?=\\d{11}$)^1(?:3\\d|4[57]|5[^4\\D]|66|7[^249\\D]|8\\d|9[89])\\d{8}$";
         boolean is = Pattern.matches(phoneRegex, phone);
-        System.out.println("phone = "+phone+" is = "+is);
+        System.out.println("phone = " + phone + " is = " + is);
     }
 
     public static String getHandlerNickName(String nickName) {
@@ -71,7 +73,7 @@ public class TestMain {
         if (isChinaPhone(nickName)) {
             handlerName = nickName.substring(0, 3) + "****" + nickName.substring(7, 11);
         }
-        System.out.println("handlerName = "+handlerName);
+        System.out.println("handlerName = " + handlerName);
         return handlerName;
     }
 
@@ -448,7 +450,35 @@ public class TestMain {
         return false;
     }
 
-    public static void url(String url){
+    public static void url(String url) {
         System.out.println(WebPageUtils.addUrlPubParam(url));
+    }
+
+    public static String getFillZeroStr(long num, int unit) {
+        StringBuilder newStr = new StringBuilder();
+        String str = num + "";
+        int len = str.length();
+        int diff = unit - len;
+        if (diff > 0) {
+            for (int i = 0; i < diff; i++) {
+                newStr.append(0);
+            }
+        }
+        newStr.append(str);
+        System.out.println(newStr.toString());
+        return newStr.toString();
+    }
+
+    private static void testTime() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("key", "a");
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000; i++) {
+            String str = (String) map.get("key");
+            if (str.equals("a")) {
+
+            }
+        }
+        System.out.println("time = " + (System.currentTimeMillis() - start));
     }
 }

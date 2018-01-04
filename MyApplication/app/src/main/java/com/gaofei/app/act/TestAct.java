@@ -42,69 +42,7 @@ public class TestAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
-        mBinding.shadow.setVisibility(View.INVISIBLE);
-        mBinding.toolbar.setAlpha(0);
-        mBinding.scrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int diff = CommonUtils.dip2px(TestAct.this, 15);
-                int currDirection = getDirection(scrollY, oldScrollY);
-                LogUtils.d("onScrollChange  scrollY = " + scrollY + " oldScrollY = " + oldScrollY + " currDirection = " + currDirection + " isToolBarShow = " + isToolBarShow);
-                if (currDirection == 1 && !isToolBarShow && scrollY > diff) {
-                    showAlphaAnimation(mBinding.toolbar, 0, 1, 700, isToolBarShow);
-                    isToolBarShow = true;
-                } else if (currDirection == -1 && isToolBarShow && scrollY < diff) {
-                    isToolBarShow = false;
-                    showAlphaAnimation(mBinding.toolbar, 1, 0, 500, isToolBarShow);
-                }
-
-            }
-        });
-
-        mBinding.toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlphaAnimation(mBinding.toolbar, 0, 1, 2000, isToolBarShow);
-            }
-        });
     }
 
-
-    private int getDirection(int scrollY, int oldScrollY) {
-        if (scrollY - oldScrollY > 0) {
-            return 1;
-        } else if (scrollY - oldScrollY == 0) {
-            return 0;
-        } else {
-            return -1;
-        }
-    }
-
-    private AlphaAnimation animation;
-    private ValueAnimator valueAnimator;
-
-    private void showAlphaAnimation(final View view, float start, float end, long duration, final boolean isShow) {
-        if (valueAnimator != null) {
-            valueAnimator.cancel();
-        } else {
-            valueAnimator = ValueAnimator.ofFloat();
-            valueAnimator.setDuration(duration);
-        }
-        valueAnimator.setFloatValues(start, end);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float currentValue = (float) animation.getAnimatedValue();
-                LogUtils.d("currentValue = " + currentValue);
-                view.setAlpha(currentValue);
-                if (isShow) {
-                    mBinding.shadow.setVisibility(View.VISIBLE);
-                } else {
-                    mBinding.shadow.setVisibility(View.INVISIBLE);
-                }
-            }
-        });
-        valueAnimator.start();
-    }
 
 }

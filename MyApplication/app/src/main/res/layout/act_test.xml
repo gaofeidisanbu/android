@@ -6,78 +6,51 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:background="@color/yc_blue5"
-                    android:layout_marginTop="36dp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/yc_red4" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/yc_red5" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/yc_red6" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/yc_red1" />
-            </LinearLayout>
-
-        </android.support.v4.widget.NestedScrollView>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
-
-                <RelativeLayout
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="#00ffd1cb" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:src="@drawable/ic_arrow_back_dark" />
-            </RelativeLayout>
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/background_thumbnail"/>
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/background_thumbnail"
+                    android:tint="@color/yc_gray2" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/shadow"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/app_bar_projection"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/head_cloth_thumbnail"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:layout_marginLeft="10dp"
+                    android:src="@mipmap/head_cloth_thumbnail"
+                    android:tint="@color/yc_gray2" />
+
+            </LinearLayout>
 
         </LinearLayout>
     </FrameLayout>

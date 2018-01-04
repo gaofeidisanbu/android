@@ -15,7 +15,7 @@ import com.gaofei.library.utils.LogUtils;
  */
 
 public class BaseFragment extends Fragment{
-    private final static String COMMON_TAG = "fragment:";
+    private final static String COMMON_TAG = "gf_fragment:";
     public String TAG;
     public String mClassName;
     @Override
