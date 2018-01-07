@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -470,15 +471,55 @@ public class TestMain {
     }
 
     private static void testTime() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("key", "a");
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000; i++) {
-            String str = (String) map.get("key");
-            if (str.equals("a")) {
+//        Arrays.asList( "a", "b", "d" ).forEach( e -> System.out.println( e ) );
+//        test(System.out.println(""));
+        System.out.print("fun1");
+        list list = new list();
+        list.forEach(new fun1() {
+            @Override
+            public void action(Object a) {
+                System.out.print("fun1");
+            }
+        });
 
+        list.forEac1h3( e -> System.out.print("forEac1h3"));
+        list.forEac1h( a ->  System.out.print("forEac1h"));
+    }
+
+    public static void test(fun fun){}
+
+    public static class list<T>{
+        private List<T> list = new ArrayList<>(3);
+        public  void forEach(fun1 a){
+            for (Object c : list){
+                a.action(c);
             }
         }
-        System.out.println("time = " + (System.currentTimeMillis() - start));
+
+        public  void forEac1h(fun<? super T> a){
+            for (T c : list){
+                a.action(c);
+            }
+        }
+
+        public  void forEac1h3(Consumer<? super T> a){
+            for (T c : list){
+                try {
+                    a.accept(c);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
+
+
+    @FunctionalInterface
+    public interface fun<T>{
+        void action(Object a);
+    }
+    public interface fun1{
+        void action(Object a);
+    }
+
 }
