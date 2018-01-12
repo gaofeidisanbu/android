@@ -16,7 +16,7 @@ android {
     compileSdkVersion 25
     defaultConfig {
         applicationId 'com.gaofei.app'
-        minSdkVersion 24
+        minSdkVersion 18
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

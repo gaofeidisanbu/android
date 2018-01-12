@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
@@ -473,37 +474,62 @@ public class TestMain {
     private static void testTime() {
 //        Arrays.asList( "a", "b", "d" ).forEach( e -> System.out.println( e ) );
 //        test(System.out.println(""));
-        System.out.print("fun1");
-        list list = new list();
-        list.forEach(new fun1() {
-            @Override
-            public void action(Object a) {
-                System.out.print("fun1");
-            }
-        });
+//        System.out.println("start");
+//        list list = new list();
+//        list.list.add("cc");
+//        list.forEach(new fun1() {
+//            @Override
+//            public void action(Object a) {
+//                System.out.println("fun1");
+//            }
+//        });
+//
+//        list.forEach1(e -> System.out.println("forEach1"));
+//        list.forEach2(a -> System.out.println("forEach2"));
+//        list.forEach3(()->System.out.println("forEach3"));
+//        list.test(new Consumer<Fruit>() {
+//            @Override
+//            public void accept(Fruit fruit) throws Exception {
+//
+//            }
+//        });
 
-        list.forEac1h3( e -> System.out.print("forEac1h3"));
-        list.forEac1h( a ->  System.out.print("forEac1h"));
+        List<? super Fruit> foods = new ArrayList<>();
+        foods.add(new Fruit());
+        Plate<Fruit> p =new Plate<>(new Apple());
+        System.out.println(p.getClass().getName());
+        String str = new String("");
+        System.out.println("str");
+
     }
 
-    public static void test(fun fun){}
+    static class Plate<T>{
+        private T item;
+        public Plate(T t){item=t;}
+        public void set(T t){item=t;}
+        public T get(){return item;}
+    }
 
-    public static class list<T>{
-        private List<T> list = new ArrayList<>(3);
-        public  void forEach(fun1 a){
-            for (Object c : list){
+    public static void test(fun fun) {
+    }
+
+    public static class list<T> {
+        public List<T> list = new ArrayList<>(3);
+
+        public void forEach(fun1 a) {
+            for (Object c : list) {
                 a.action(c);
             }
         }
 
-        public  void forEac1h(fun<? super T> a){
-            for (T c : list){
+        public void forEach1(fun<? super T> a) {
+            for (T c : list) {
                 a.action(c);
             }
         }
 
-        public  void forEac1h3(Consumer<? super T> a){
-            for (T c : list){
+        public void forEach2(Consumer<? super T> a) {
+            for (T c : list) {
                 try {
                     a.accept(c);
                 } catch (Exception e) {
@@ -511,15 +537,41 @@ public class TestMain {
                 }
             }
         }
+
+        public void forEach3(fun3 a) {
+            for (Object c : list) {
+                a.action();
+            }
+        }
+
+        public void test(Consumer<? super Fruit> a){
+
+        }
+
     }
+
+
+
 
 
     @FunctionalInterface
-    public interface fun<T>{
+    public interface fun<T> {
+        void action(T a);
+        default void  default1(){}
+    }
+
+    public interface fun1 {
         void action(Object a);
     }
-    public interface fun1{
-        void action(Object a);
+
+    @FunctionalInterface
+    public interface fun3 {
+        void action();
+    }
+
+    @FunctionalInterface
+    public interface fun4<Fruit> {
+        void action(Fruit a);
     }
 
 }
