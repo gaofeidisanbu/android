@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.gaofei.app.act.common.UserInfo" />
+        <variable
+            name="viewModel"
+            type="com.gaofei.app.act.DataBindingAct.DataBindingViewModel" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/pojoName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@{user.lastName}" />
+
+        <TextView
+            android:id="@+id/observableName1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@{viewModel.contact.name}" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_gravity="bottom"
+            android:text="测试" />
+    </LinearLayout>
+</layout>

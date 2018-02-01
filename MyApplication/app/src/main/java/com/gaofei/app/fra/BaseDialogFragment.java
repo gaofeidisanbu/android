@@ -3,14 +3,18 @@ package com.gaofei.app.fra;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.Window;
 
+import com.gaofei.app.MainActivity;
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.DialogCommonWith2ButtonBinding;
+import com.gaofei.library.utils.LogUtils;
 
 /**
  * Created by gaofei on 2017/8/28.
@@ -52,14 +56,13 @@ public class BaseDialogFragment extends DialogFragment implements View.OnClickLi
         binding.buttonPositive.setText(btnText2);
         binding.buttonNegative.setOnClickListener(this);
         binding.buttonPositive.setOnClickListener(this);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
 
         return dialog;
     }
 
     @Override
     public void onClick(View v) {
-        dismissAllowingStateLoss();
         switch (v.getId()){
             case R.id.button_negative:
                 if(listener != null){
@@ -70,7 +73,18 @@ public class BaseDialogFragment extends DialogFragment implements View.OnClickLi
                 if(listener != null){
                     listener.onClick(dialog,DialogInterface.BUTTON_POSITIVE);
                 }
+                Intent intent = new Intent(getContext(),MainActivity.class);
+                this.startActivity(intent);
+                this.dismiss();
+
                 break;
         }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        FragmentManager fragmentManager = getFragmentManager();
+        LogUtils.d(fragmentManager == null);
     }
 }

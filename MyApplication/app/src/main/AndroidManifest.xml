@@ -45,6 +45,7 @@
         <activity android:name="com.gaofei.app.act.ViewPagerAct" />
         <activity android:name="com.gaofei.app.act.FragmentAct" />
         <activity android:name="com.gaofei.app.act.EditTextAct" />
+        <activity android:name="com.gaofei.app.act.DataBindingAct" />
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
             <intent-filter>
