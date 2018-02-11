@@ -17,13 +17,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/pojoName"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@{user.lastName}" />
 
         <TextView
-            android:id="@+id/observableName1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="@{viewModel.contact.name}" />

@@ -48,7 +48,7 @@ public class TestMain {
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
-//            convertCount(13444);
+            System.out.println(convertCount(1909000));;
 //            testUrl();
 //            testRegex("13071135067");
 //            testRegex("130711350671");
@@ -84,32 +84,26 @@ public class TestMain {
         return Pattern.matches(phoneRegex, phoneStr);
     }
 
-    private static String convertCount(int friendCount) {
+    public static String convertCount(int friendCount) {
         if (friendCount > 0) {
             String friendCountStr = String.valueOf(friendCount);
             int len = friendCountStr.length();
-            int flag = 3;
+            int flag = 4;
             if (len > flag) {
                 String flagBeforeStr = friendCountStr.substring(0, len - flag);
-                int flagBefore = Integer.valueOf(flagBeforeStr);
-                System.out.println("flagBefore = " + flagBefore);
+                Float flagBefore = Float.valueOf(flagBeforeStr);
                 String indexFlagStr = friendCountStr.substring(len - flag, len - flag + 1);
-                System.out.println("indexFlagStr = " + indexFlagStr);
                 Float indexFlag = Float.valueOf(indexFlagStr);
                 if (indexFlag > 0) {
-                    flagBefore = flagBefore + 1;
+                    indexFlag = indexFlag + 1;
+                    flagBefore  = flagBefore + indexFlag / 10;
                 }
-                String endStr = String.valueOf(flagBefore);
-                System.out.println("endStr = " + endStr);
-                String endStrLast = endStr.substring(endStr.length() - 1, endStr.length());
-                flagBeforeStr = String.format("%sw", flagBefore / 10f);
-                System.out.println("flagBeforeStr = " + flagBeforeStr);
+                friendCountStr = String.format("%sw", flagBefore);
             }
             return friendCountStr;
         }
         return "";
     }
-
     private static void testUrl() {
         try {
             String url = "http://10.8.8.8:5000/ladder/user/level?publisherId=1&semesterId=13&stageId=2&subjectId=1";
@@ -549,6 +543,7 @@ public class TestMain {
         }
 
     }
+
 
 
 
