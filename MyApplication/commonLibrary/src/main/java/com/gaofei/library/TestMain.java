@@ -1,8 +1,12 @@
 package com.gaofei.library;
 
+import com.gaofei.library.utils.LogUtils;
 import com.gaofei.library.utils.WebPageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Constructor;
 import java.net.MalformedURLException;
@@ -48,7 +52,7 @@ public class TestMain {
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
-            System.out.println(convertCount(1909000));;
+//            System.out.println(convertCount(1909000));
 //            testUrl();
 //            testRegex("13071135067");
 //            testRegex("130711350671");
@@ -56,7 +60,8 @@ public class TestMain {
 //            getHandlerNickName("13071135067");
 //            getFillZeroStr(11,4);
 //            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
-            testTime();
+//            testTime();
+            testException();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -545,6 +550,33 @@ public class TestMain {
     }
 
 
+    public static void testException(){
+        try {
+            testException1(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void testException1(Object str) {
+        int i = 0;
+        System.out.println(i);
+        try {
+            testException2(null);
+        } catch (Exception e) {
+            RuntimeException exception = new RuntimeException();
+            exception.initCause(e);
+            throw exception;
+//            e.printStackTrace();
+//            LogUtils.e(e);
+        }
+    }
+
+
+
+    public static void testException2(String o) throws Exception{
+       throw  new Exception("------->");
+    }
 
 
 
