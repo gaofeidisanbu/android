@@ -59,14 +59,14 @@ public class BaseAct extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         ProjectApplication.getInstance().ActivityOnRestart(this);
-        LogUtils.d(TAG, "------- onRestart");
+//        LogUtils.d(TAG, "------- onRestart");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         ProjectApplication.getInstance().ActivityOnStart(this);
-        LogUtils.d(TAG, "------- onStart");
+//        LogUtils.d(TAG, "------- onStart");
     }
 
     @Override
@@ -87,7 +87,7 @@ public class BaseAct extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         ProjectApplication.getInstance().ActivityOnPause(this);
-        LogUtils.d(TAG, "------- onPause");
+//        LogUtils.d(TAG, "------- onPause");
     }
 
     @Override
@@ -102,7 +102,7 @@ public class BaseAct extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ProjectApplication.getInstance().ActivityOnStop(this);
-        LogUtils.d(TAG, "------- onStop");
+//        LogUtils.d(TAG, "------- onStop");
     }
 
     @Override

@@ -48,30 +48,38 @@ public class TestAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
+        mBinding.image1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestAct.this, TaskActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mBinding.image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(TestAct.this);
-                PendingIntent mPendingIntent = PendingIntent.getActivity(TestAct.this, 1, new Intent(), Notification.FLAG_AUTO_CANCEL);
-                mBuilder.setContentTitle("测试标题")
-                        .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.task_reward_coin))
-                        .setContentText("测试内容")
-//设置通知栏点击意图
-                        .setContentIntent(mPendingIntent)
-//通知首次出现在通知栏，带上升动画效果的
-                        .setTicker("测试通知来啦")
-//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                        .setWhen(System.currentTimeMillis())
-                        //设置该通知优先级
-                        .setPriority(Notification.PRIORITY_DEFAULT)
-//设置这个标志当用户单击面板就可以让通知将自动取消
-                        .setAutoCancel(true)
-//使用当前的用户默认设置
-                        .setDefaults(Notification.DEFAULT_VIBRATE)
-//设置通知小ICON(应用默认图标)
-                        .setSmallIcon(R.mipmap.ic_launcher);
-                mNotificationManager.notify(1, mBuilder.build());
+                Intent intent = new Intent(TestAct.this, TaskActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        mBinding.image3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestAct.this, TaskActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        mBinding.image4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TestAct.this, TaskActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
