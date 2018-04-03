@@ -1,26 +1,21 @@
 package com.gaofei.library;
 
-import com.gaofei.library.utils.LogUtils;
 import com.gaofei.library.utils.WebPageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Constructor;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import io.reactivex.Observable;
@@ -48,7 +43,7 @@ public class TestMain {
         try {
 //            rxjava();
 //            json();
-//            generic();
+            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
@@ -61,7 +56,7 @@ public class TestMain {
 //            getFillZeroStr(11,4);
 //            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
 //            testTime();
-            testException();
+//            testException();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -101,7 +96,7 @@ public class TestMain {
                 Float indexFlag = Float.valueOf(indexFlagStr);
                 if (indexFlag > 0) {
                     indexFlag = indexFlag + 1;
-                    flagBefore  = flagBefore + indexFlag / 10;
+                    flagBefore = flagBefore + indexFlag / 10;
                 }
                 friendCountStr = String.format("%sw", flagBefore);
             }
@@ -109,6 +104,7 @@ public class TestMain {
         }
         return "";
     }
+
     private static void testUrl() {
         try {
             String url = "http://10.8.8.8:5000/ladder/user/level?publisherId=1&semesterId=13&stageId=2&subjectId=1";
@@ -392,27 +388,30 @@ public class TestMain {
     }
 
     public static void generic() {
-//        A<C, C> a = new A<>();
-//        TypeVariable[] types = a.getClass().getTypeParameters();
-//        for (TypeVariable type : types) {
-//            System.out.println(type);
-//        }
-//        Method[] methods = a.getClass().getDeclaredMethods();
-//        for (Method method : methods) {
-//            Type[] params = method.getGenericParameterTypes();
+        A<C, C> a = new A<C, C>("");
+        TypeVariable[] types = a.getClass().getTypeParameters();
+        for (TypeVariable type : types) {
+            System.out.println(type);
+        }
+        Method[] methods = a.getClass().getDeclaredMethods();
+        for (Method method : methods) {
+            Type params = method.getGenericReturnType();
 //            for (Type type : params)
-//                System.out.println(type);
-////        }
-//       List list = new ArrayList<String>();
-//        list.add(null);
-//        getBridgeSupportType(new ArrayList<>());
+                System.out.println(params);
+        }
+        List list = new ArrayList<String>();
+        list.add(null);
+        getBridgeSupportType(new ArrayList<>());
         try {
             Constructor<A> c = A.class.getConstructor(Integer.class);
             System.out.println(c);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        Holder<User> holder = new Holder<>();
+        User user = holder.getTarget();
     }
+
 
     static class A<C, M> {
 
@@ -429,6 +428,23 @@ public class TestMain {
         }
     }
 
+
+
+    public static class Holder<T>{
+        private T t;
+        public void set(T t){
+
+        }
+
+        public T getTarget(){
+            return t;
+        }
+    }
+
+    public class User{
+
+    }
+
 //    static class C {
 //        public void foo(Object a) {
 //        }
@@ -441,13 +457,13 @@ public class TestMain {
     }
 
     public static <T> boolean getBridgeSupportType(T obj) {
-//        if (obj == null) {
-//            return true;
-//        }
-//        System.out.println(obj.getClass());
-//        if (obj instanceof Map || obj instanceof List || obj instanceof String || obj instanceof Boolean || obj instanceof Number) {
-//            return true;
-//        }
+        if (obj == null) {
+            return true;
+        }
+        System.out.println(obj.getClass());
+        if (obj instanceof Map || obj instanceof List || obj instanceof String || obj instanceof Boolean || obj instanceof Number) {
+            return true;
+        }
         return false;
     }
 
@@ -495,18 +511,27 @@ public class TestMain {
 
         List<? super Fruit> foods = new ArrayList<>();
         foods.add(new Fruit());
-        Plate<Fruit> p =new Plate<>(new Apple());
+        Plate<Fruit> p = new Plate<>(new Apple());
         System.out.println(p.getClass().getName());
         String str = new String("");
         System.out.println("str");
 
     }
 
-    static class Plate<T>{
+    static class Plate<T> {
         private T item;
-        public Plate(T t){item=t;}
-        public void set(T t){item=t;}
-        public T get(){return item;}
+
+        public Plate(T t) {
+            item = t;
+        }
+
+        public void set(T t) {
+            item = t;
+        }
+
+        public T get() {
+            return item;
+        }
     }
 
     public static void test(fun fun) {
@@ -543,14 +568,14 @@ public class TestMain {
             }
         }
 
-        public void test(Consumer<? super Fruit> a){
+        public void test(Consumer<? super Fruit> a) {
 
         }
 
     }
 
 
-    public static void testException(){
+    public static void testException() {
         try {
             testException1(null);
         } catch (Exception e) {
@@ -573,18 +598,17 @@ public class TestMain {
     }
 
 
-
-    public static void testException2(String o) throws Exception{
-       throw  new Exception("------->");
+    public static void testException2(String o) throws Exception {
+        throw new Exception("------->");
     }
-
-
 
 
     @FunctionalInterface
     public interface fun<T> {
         void action(T a);
-        default void  default1(){}
+
+        default void default1() {
+        }
     }
 
     public interface fun1 {
@@ -600,5 +624,6 @@ public class TestMain {
     public interface fun4<Fruit> {
         void action(Fruit a);
     }
+
 
 }
