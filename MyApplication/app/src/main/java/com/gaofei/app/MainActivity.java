@@ -47,16 +47,16 @@ import java.util.List;
 public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseAdapterListener, OnRefreshListener, OnLoadMoreListener {
     private RecyclerView mRecyclerView;
     private SwipeToLoadLayout mSwipeToLoadLayout;
-    public static  String process = "default";
+    public static String process = "default";
     /**
      * 增加一个测试类，需要同时在2个数组增加
      */
-    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class,
+    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
             WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class,
             BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,
-            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, TestAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "webView",
-            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "普通测试"};
+            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView",
+            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding"};
     private Handler mHandler = new Handler();
 
     @Override

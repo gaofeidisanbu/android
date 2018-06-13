@@ -25,14 +25,25 @@ public class ViewPagerAct extends BaseAct {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_view_pager);
         mBinding.pager.setAdapter(new MyPagerAdapter());
+        mBinding.tab.setupWithViewPager(mBinding.pager);
+        initTab();
 
+    }
+
+    private void initTab() {
+        for (int i = 0; i < 2; i++) {
+            TextView textWithHotView = new TextView(this);
+            textWithHotView.setText("gaofei");
+            mBinding.tab.getTabAt(i).setCustomView(textWithHotView);
+
+        }
     }
 
     class MyPagerAdapter extends PagerAdapter {
 
         @Override
         public int getCount() {
-            return 10;
+            return 2;
         }
 
         @Override
