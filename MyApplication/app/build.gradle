@@ -1,8 +1,15 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
 repositories {
     flatDir { dirs 'libs' }
     mavenCentral()
+}
+
+kapt {
+    generateStubs = true
 }
 
 android {
@@ -59,7 +66,10 @@ dependencies {
     implementation 'com.airbnb.android:lottie:2.1.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    kapt "com.android.databinding:compiler:2.3.0"
     compile project(':commonLibrary')
     implementation 'com.jaredrummler:android-processes:1.0.9'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_v"
 }
