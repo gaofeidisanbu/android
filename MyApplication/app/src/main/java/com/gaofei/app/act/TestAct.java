@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTestBinding;
+import com.gaofei.library.TestKotlin;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
@@ -48,6 +49,9 @@ public class TestAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
+        TestKotlin testKotlin = new TestKotlin();
+        testKotlin.test();
+
         mBinding.image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

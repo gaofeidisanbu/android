@@ -41,9 +41,9 @@ public class TestMain {
 
     public static void main(String[] args) {
         try {
-//            rxjava();
+            rxjava();
 //            json();
-            generic();
+//            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
@@ -57,11 +57,15 @@ public class TestMain {
 //            url("http://10.8.8.8/cosplay/index.html?from=my&gender=female&userId=5a0976fc4fc2ff3c75171628&channel=aa");
 //            testTime();
 //            testException();
+//            kotlin();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
             System.out.println(e);
         }
+    }
+
+    private static void kotlin() {
     }
 
     private static void testRegex(String phone) {
@@ -223,106 +227,26 @@ public class TestMain {
         List<String> list = new ArrayList<>();
         list.add("aa");
         list.add("bb");
-        Observable.fromIterable(list).subscribe(new DisposableObserver<String>() {
+
+        Observable.just("1","2").flatMap(new Function<String, ObservableSource<String>>() {
             @Override
-            public void onNext(String s) {
-                System.out.println("fromIterable = " + s);
+            public ObservableSource<String> apply(String s) throws Exception {
+                return Observable.just("11");
             }
-
+        }).subscribe(new Consumer<String>() {
             @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
+            public void accept(String s) throws Exception {
+                System.out.println(s);
             }
         });
-        Observable observable = Observable.create(new ObservableOnSubscribe<String>() {
+        Observable.just("1","2").map(new Function<String, Object>() {
             @Override
-            public void subscribe(ObservableEmitter<String> e) throws Exception {
-                System.out.println("subscribe ---->" + "  observable threadId= " + Thread.currentThread().getId());
-                e.onNext("aaa");
-                e.onNext("bbb");
-                e.onNext("ccc");
-                e.onNext("ddd");
-                e.onNext("eee");
-                e.onComplete();
+            public Object apply(String s) throws Exception {
+                return null;
             }
-        }).skip(2).take(1).map(new Function<String, String>() {
-            @Override
-            public String apply(@NonNull String s) throws Exception {
-                return "map ---->" + s;
-            }
-        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.newThread());
-        System.out.println("  mainId = " + Thread.currentThread().getId());
-        observable.subscribe(new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-                System.out.println("create1 ---->" + s + "  subscribe threadId = " + Thread.currentThread().getId());
-            }
+        }).subscribe();
 
-            @Override
-            public void onError(Throwable e) {
 
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-        observable.subscribe(new DisposableObserver<String>() {
-            @Override
-            public void onNext(String s) {
-                System.out.println("create2 ---->" + s + "  subscribe threadId = " + Thread.currentThread().getId());
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-        observable.subscribe(new Consumer() {
-            @Override
-            public void accept(@NonNull Object o) throws Exception {
-                System.out.println("accept ---->" + o);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(@NonNull Throwable throwable) throws Exception {
-
-            }
-        }, new Action() {
-            @Override
-            public void run() throws Exception {
-
-            }
-        });
-
-        Observable.create(new ObservableOnSubscribe<Map>() {
-            @Override
-            public void subscribe(ObservableEmitter<Map> e) throws Exception {
-                e.onNext(new HashMap() {
-                });
-            }
-        }).<Map>flatMap(new Function<Object, ObservableSource<HashMap>>() {
-            @Override
-            public ObservableSource<HashMap> apply(@NonNull Object o) throws Exception {
-                return Observable.just(new HashMap());
-            }
-        }).subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(@NonNull Object s) throws Exception {
-                System.out.println("accept flatMap---->" + s);
-            }
-        });
 
     }
 
