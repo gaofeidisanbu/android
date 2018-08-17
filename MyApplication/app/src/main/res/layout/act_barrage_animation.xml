@@ -17,6 +17,14 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
+        <FrameLayout
+            android:id="@+id/barrageFL"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="108dp">
+
+        </FrameLayout>
+
 
         <ImageView
             android:id="@+id/close_icon"

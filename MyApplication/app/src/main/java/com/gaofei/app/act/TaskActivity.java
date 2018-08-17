@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTaskBinding;
@@ -54,6 +56,9 @@ public class TaskActivity extends BaseAct {
                 startActivity(intent);
             }
         });
+
+        FrameLayout.LayoutParams itemLP = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, 22);
+        itemLP.gravity = Gravity.BOTTOM|Gravity.LEFT;
         mBinding.button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
