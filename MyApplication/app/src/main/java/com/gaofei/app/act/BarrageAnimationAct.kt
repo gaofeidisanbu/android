@@ -1,5 +1,6 @@
 package com.gaofei.app.act
 
+import android.animation.Animator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
@@ -39,13 +40,14 @@ class BarrageAnimationAct : BaseAct() {
     private var mUserItemRightMargin: Int = 0
     private var mUserItemRightAnimationMargin: Int = 0
     private var mUserItemSpace: Int = 0
-    private val mUserItemNum = 3
+    private val mUserItemNum = 4
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_barrage_animation)
         init()
         setBarrageVisible(false)
         img.setOnClickListener {
+            initUserData()
             setBarrageVisible(true)
             setBarrageBackground()
             startBarrageAnimation()
@@ -60,7 +62,6 @@ class BarrageAnimationAct : BaseAct() {
             stopBarrageAnimation()
             clearUserItemView()
         }
-        initUserData()
     }
 
     private fun clearUserItemView() {
@@ -97,9 +98,9 @@ class BarrageAnimationAct : BaseAct() {
         if (mUserList.size > 0) {
             val userData = mUserList.removeAt(0)
             attachUserItemView(userData)
-            mHandler.postDelayed({
-                processUserItemView()
-            }, 1000)
+//            mHandler.postDelayed({
+//                processUserItemView()
+//            }, 1000)
         }
     }
 
@@ -130,30 +131,52 @@ class BarrageAnimationAct : BaseAct() {
 
     }
 
-    private val mUserItemViewStartScale = 0.2f
-
 
     private fun executeUserItemAnimation(view: View) {
         view.scaleX = mUserItemViewStartScale
         view.scaleY = mUserItemViewStartScale
         view.alpha = 0f
-        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator.duration = 800
-        valueAnimator.addUpdateListener {
-            val value = it.animatedValue as Float
-            val currScale = getFirstUserItemViewScale(value)
-            val translationX = getFirstUserItemViewTranslateX(value)
-            val alpha = getFirstUserItemViewAlpha(value)
-            LogUtils.d("value = $value currScale = $currScale translationX = $translationX alpha = $alpha")
-            triggerOthersUserItemViewAnimation(value)
-            view.scaleX = currScale
-            view.scaleY = currScale
-            view.translationX = -translationX
-            view.alpha = alpha
+        mUserItemViewAnimator = ValueAnimator.ofFloat(0f, 1f)
+        LogUtils.d("executeUserItemAnimation")
+        mUserItemViewAnimator?.let {
+            it.duration = 800
+            it.removeAllListeners()
+            it.addUpdateListener {
+                val value = it.animatedValue as Float
+                val currScale = getFirstUserItemViewScale(value)
+                val translationX = getFirstUserItemViewTranslateX(value)
+                val alpha = getFirstUserItemViewAlpha(value)
+                LogUtils.d("value = $value currScale = $currScale translationX = $translationX alpha = $alpha")
+                triggerOthersUserItemViewAnimation(value)
+                view.scaleX = currScale
+                view.scaleY = currScale
+                view.translationX = -translationX
+                view.alpha = alpha
+            }
+            it.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
 
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                    LogUtils.d("aaaaaa onAnimationStart")
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                        recycleUserItemView()
+                    LogUtils.d("aaaaaa onAnimationEnd ${it.animatedValue}")
+//                    mHandler.postDelayed({
+                       processUserItemView()
+//                    },1000)
+
+
+                }
+
+            })
+            it.start()
         }
-
-        valueAnimator.start()
     }
 
 
@@ -161,33 +184,46 @@ class BarrageAnimationAct : BaseAct() {
         val size = mCurrItemViews.size
         var currIndex = size - 1
         while (currIndex >= 0) {
-            var view = mCurrItemViews.get(currIndex)
+            var view = mCurrItemViews[currIndex]
             if (currIndex == mUserItemNum - 1) {
                 view.alpha = getLastUserItemViewAlpha(value)
-                if (value == 1f) {
-//                    removeUserItemView(view)
-                }
             }
-//            if (currIndex != 0) {
+            if (currIndex != 0) {
                 view.translationY = getFirstUserItemViewTranslationY(currIndex, value)
-//            }
+            }
             currIndex--
         }
 
     }
 
-    private fun removeUserItemView(view: View) {
-        barrageFL.removeView(view)
-        recycleUserItemView(view)
+
+    private fun recycleUserItemView() {
+        val size = mCurrItemViews.size
+        val maxNum = mUserItemNum - 1
+        if (size >= maxNum) {
+            for (i in maxNum until size - 1) {
+                val view = mCurrItemViews.removeAt(i)
+                LogUtils.d("maxNum = $maxNum i = $i")
+                barrageFL?.let {
+                    barrageFL.removeView(view)
+                }
+                // 清除状态
+                view.translationY = 0f
+                cacheUserItemView(view)
+
+            }
+        }
 
     }
 
-    private fun recycleUserItemView(view: View) {
-        mUserItemCacheViews.add(view)
+    private fun cacheUserItemView(view: View) {
+        if (mUserItemCacheViews.size < mUserItemNum) {
+            mUserItemCacheViews.add(view)
+        }
     }
 
     private fun getFirstUserItemViewTranslationY(index: Int, value: Float): Float {
-        return -(index * (mUserItemHeight + mUserItemSpace) + value * (mUserItemHeight + mUserItemSpace))
+        return -((index - 1) * (mUserItemHeight + mUserItemSpace) + value * (mUserItemHeight + mUserItemSpace))
     }
 
     private fun getLastUserItemViewAlpha(value: Float): Float {
@@ -240,7 +276,9 @@ class BarrageAnimationAct : BaseAct() {
         return userItemView
     }
 
-    private var objectAnimatorClose: ObjectAnimator? = null
+    private val mUserItemViewStartScale = 0.2f
+    private var mUserItemViewAnimator: ValueAnimator? = null
+    private var mCloseViewAnimator: ObjectAnimator? = null
 
     private fun startBarrageAnimation() {
         startBarrageAnimationClose()
@@ -248,8 +286,8 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun startBarrageAnimationClose() {
-        objectAnimatorClose = ObjectAnimator.ofFloat(close_icon, "rotation", 0f, -90f)
-        objectAnimatorClose?.let {
+        mCloseViewAnimator = ObjectAnimator.ofFloat(close_icon, "rotation", 0f, -90f)
+        mCloseViewAnimator?.let {
             it.duration = 300
             it.interpolator = AccelerateInterpolator()
             it.start()
@@ -262,10 +300,10 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun stopBarrageAnimationClose() {
-        objectAnimatorClose?.let {
+        mCloseViewAnimator?.let {
             it.end()
         }
-        objectAnimatorClose = null
+        mCloseViewAnimator = null
     }
 
     private fun setBarrageVisible(isShowBarrage: Boolean) {

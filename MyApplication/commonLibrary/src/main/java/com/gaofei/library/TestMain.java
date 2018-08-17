@@ -29,6 +29,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+
 /**
  * Created by gaofei on 2017/7/7.
  */
@@ -224,31 +225,35 @@ public class TestMain {
     }
 
     public static void rxjava() {
-        List<String> list = new ArrayList<>();
+        List<String> list = new ArrayList<>(3);
         list.add("aa");
         list.add("bb");
+        list.add("bb");
+        list.add("bb");
+//
+//        Observable.just("1","2").flatMap(new Function<String, ObservableSource<String>>() {
+//            @Override
+//            public ObservableSource<String> apply(String s) throws Exception {
+//                return Observable.just("11");
+//            }
+//        }).subscribe(new Consumer<String>() {
+//            @Override
+//            public void accept(String s) throws Exception {
+//                System.out.println(s);
+//            }
+//        });
+//        Observable.just("1","2").map(new Function<String, Object>() {
+//            @Override
+//            public Object apply(String s) throws Exception {
+//                return null;
+//            }
+//        }).subscribe();
 
-        Observable.just("1","2").flatMap(new Function<String, ObservableSource<String>>() {
-            @Override
-            public ObservableSource<String> apply(String s) throws Exception {
-                return Observable.just("11");
-            }
-        }).subscribe(new Consumer<String>() {
-            @Override
-            public void accept(String s) throws Exception {
-                System.out.println(s);
-            }
-        });
-        Observable.just("1","2").map(new Function<String, Object>() {
-            @Override
-            public Object apply(String s) throws Exception {
-                return null;
-            }
-        }).subscribe();
-
-
+        System.out.print(list.size());
 
     }
+
+
 
     public static void json() {
         Gson gson = new GsonBuilder().create();
