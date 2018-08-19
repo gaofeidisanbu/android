@@ -79,7 +79,7 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun initUserData() {
-        Observable.just(0, 1, 2, 3, 4, 5, 6)
+        Observable.just(0, 1, 222222222222222222, 3, 4, 5, 6)
                 .map {
                     return@map UserItemData(mapOf(Pair("name", "魔法少女小圆-$it"), Pair("topicName", "QB是个骗子-$it")), it)
                 }
@@ -92,7 +92,7 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
-    data class UserItemData(val data: Map<String, String>, val index: Int)
+    data class UserItemData(val data: Map<String, String>, val index: Long)
 
     private fun processUserItemView() {
         if (mUserList.size > 0) {
@@ -109,8 +109,8 @@ class BarrageAnimationAct : BaseAct() {
         barrageFL?.let {
             val itemLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, mUserItemHeight)
             itemLP.gravity = Gravity.BOTTOM or Gravity.LEFT
-            itemLP.bottomMargin = CommonUtils.dip2px(this, 108f)
-            itemLP.marginStart = mUserItemRightMargin
+//            itemLP.bottomMargin = CommonUtils.dip2px(this, 108f)
+            itemLP.marginStart = mUserItemRightMargin + mUserItemRightAnimationMargin
             barrageFL.addView(view, itemLP)
         }
         setUserItemViewData(view, userData.data)
@@ -139,7 +139,7 @@ class BarrageAnimationAct : BaseAct() {
         mUserItemViewAnimator = ValueAnimator.ofFloat(0f, 1f)
         LogUtils.d("executeUserItemAnimation")
         mUserItemViewAnimator?.let {
-            it.duration = 800
+            it.duration = 600
             it.removeAllListeners()
             it.addUpdateListener {
                 val value = it.animatedValue as Float
@@ -148,6 +148,8 @@ class BarrageAnimationAct : BaseAct() {
                 val alpha = getFirstUserItemViewAlpha(value)
                 LogUtils.d("value = $value currScale = $currScale translationX = $translationX alpha = $alpha")
                 triggerOthersUserItemViewAnimation(value)
+                view.pivotX = view.width.toFloat()
+                view.pivotY = (mUserItemHeight / 2).toFloat()
                 view.scaleX = currScale
                 view.scaleY = currScale
                 view.translationX = -translationX
