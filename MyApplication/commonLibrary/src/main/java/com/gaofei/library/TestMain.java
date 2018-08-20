@@ -42,9 +42,9 @@ public class TestMain {
 
     public static void main(String[] args) {
         try {
-            rxjava();
+//            rxjava();
 //            json();
-//            generic();
+            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
@@ -317,28 +317,32 @@ public class TestMain {
     }
 
     public static void generic() {
-        A<C, C> a = new A<C, C>("");
-        TypeVariable[] types = a.getClass().getTypeParameters();
+//        A<C, C> a = new A<C, C>("");
+//        TypeVariable[] types = a.getClass().getTypeParameters();
+//        for (TypeVariable type : types) {
+//            System.out.println(type);
+//        }
+//        Method[] methods = a.getClass().getDeclaredMethods();
+//        for (Method method : methods) {
+//            Type params = method.getGenericReturnType();
+////            for (Type type : params)
+//                System.out.println(params);
+//        }
+//        List list = new ArrayList<String>();
+//        list.add(null);
+//        getBridgeSupportType(new ArrayList<>());
+//        try {
+//            Constructor<A> c = A.class.getConstructor(Integer.class);
+//            System.out.println(c);
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+        Holder<User> holder = new Holder<>();
+        User user = holder.getTarget();
+        TypeVariable[] types = holder.getClass().getTypeParameters();
         for (TypeVariable type : types) {
             System.out.println(type);
         }
-        Method[] methods = a.getClass().getDeclaredMethods();
-        for (Method method : methods) {
-            Type params = method.getGenericReturnType();
-//            for (Type type : params)
-                System.out.println(params);
-        }
-        List list = new ArrayList<String>();
-        list.add(null);
-        getBridgeSupportType(new ArrayList<>());
-        try {
-            Constructor<A> c = A.class.getConstructor(Integer.class);
-            System.out.println(c);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        Holder<User> holder = new Holder<>();
-        User user = holder.getTarget();
     }
 
 
@@ -359,13 +363,13 @@ public class TestMain {
 
 
 
-    public static class Holder<T>{
-        private T t;
-        public void set(T t){
+    public static class Holder<User>{
+        private User t;
+        public void set(User t){
 
         }
 
-        public T getTarget(){
+        public User getTarget(){
             return t;
         }
     }

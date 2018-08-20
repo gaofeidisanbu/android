@@ -2,9 +2,11 @@ package com.gaofei.app.act
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.animation.TypeEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -16,8 +18,10 @@ import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
+import android.widget.ImageView
 
 import com.gaofei.app.R
 import com.gaofei.library.base.BaseAct
@@ -27,12 +31,14 @@ import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.act_barrage_animation.*
 import kotlinx.android.synthetic.main.peer_pressure_user_item.view.*
+import java.util.*
+import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
 
 
 class BarrageAnimationAct : BaseAct() {
 
-    private val mUserList = ArrayList<UserItemData>()
+    private val mUserList = CopyOnWriteArrayList<UserItemData>()
     private val mUserItemCacheViews = ArrayList<View>(3)
     private val mCurrItemViews = ArrayList<View>()
     private val mHandler = Handler()
@@ -41,13 +47,15 @@ class BarrageAnimationAct : BaseAct() {
     private var mUserItemRightAnimationMargin: Int = 0
     private var mUserItemSpace: Int = 0
     private val mUserItemNum = 4
+    private var isShowBarrage = false
+    private var index = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_barrage_animation)
         init()
         setBarrageVisible(false)
         img.setOnClickListener {
-            initUserData()
+            //            initUserData()
             setBarrageVisible(true)
             setBarrageBackground()
             startBarrageAnimation()
@@ -62,6 +70,7 @@ class BarrageAnimationAct : BaseAct() {
             stopBarrageAnimation()
             clearUserItemView()
         }
+        initUserData()
     }
 
     private fun clearUserItemView() {
@@ -79,20 +88,32 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun initUserData() {
-        Observable.just(0, 1, 222222222222222222, 3, 4, 5, 6)
+        Observable.just(++index, ++index, ++index)
+//        Observable.just(++index, ++index, ++index, ++index, ++index, ++index, ++index)
                 .map {
                     return@map UserItemData(mapOf(Pair("name", "魔法少女小圆-$it"), Pair("topicName", "QB是个骗子-$it")), it)
                 }
                 .toList()
                 .subscribe(Consumer {
                     mUserList.addAll(it)
-//                    attachUserItemViewTest(mUserList.removeAt(0))
+                    notifyUserItemUpdate()
                 })
 
     }
 
+    fun pushMessage(messages: ArrayList<UserItemData>) {
+        messages.addAll(messages)
+        notifyUserItemUpdate()
+    }
 
-    data class UserItemData(val data: Map<String, String>, val index: Long)
+    private fun notifyUserItemUpdate() {
+        if (isShowBarrage) {
+            processUserItemView()
+        }
+    }
+
+
+    data class UserItemData(val data: Map<String, String>, val index: Int)
 
     private fun processUserItemView() {
         if (mUserList.size > 0) {
@@ -119,6 +140,9 @@ class BarrageAnimationAct : BaseAct() {
 
     private fun attachUserItemView(userData: UserItemData) {
         val view = getUserItemView()
+        view.setOnClickListener { v ->
+            doFavor(v, userData)
+        }
         barrageFL?.let {
             val itemLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, mUserItemHeight)
             itemLP.gravity = Gravity.BOTTOM or Gravity.LEFT
@@ -131,11 +155,99 @@ class BarrageAnimationAct : BaseAct() {
 
     }
 
+    private fun doFavor(view: View, userData: UserItemData) {
+        doFavorAnimation(view)
+    }
+
+    private val FAVOR_STARS = intArrayOf(R.drawable.icon_stars_blue, R.drawable.icon_stars_cyan, R.drawable.icon_stars_green, R.drawable.icon_stars_orange, R.drawable.icon_stars_yellow)
+
+    private fun getFavorStar(): Int {
+        val random = Random()
+        val randomValue = random.nextInt(FAVOR_STARS.size)
+        return FAVOR_STARS[randomValue]
+    }
+
+
+    private fun doFavorAnimation(view: View) {
+        val starView = View.inflate(this, R.layout.peer_pressure_user_favar_star, null) as ImageView
+        starView.setImageResource(getFavorStar())
+//        val viewLocation = IntArray(2)
+//        view.getLocationInWindow(viewLocation)
+        barrageFL?.let {
+            val starLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+            starView.x = view.x + view.width - CommonUtils.dip2px(view.context, 12f)
+            starView.y = view.y + CommonUtils.dip2px(view.context, 36f)
+            barrageFL.addView(starView, starLP)
+            val bezierEvaluator = BezierEvaluator(getControlPointF1(starView), getControlPointF2(starView))
+            val mBezierAnim = ValueAnimator.ofObject(bezierEvaluator,
+                    PointF(starView.x, starView.y),
+                    getStarPointFEnd(starView))
+            mBezierAnim.duration = 2500
+            mBezierAnim.interpolator = AccelerateDecelerateInterpolator()
+            mBezierAnim.addUpdateListener {
+                val pointF = it.animatedValue as PointF
+                starView.x = pointF.x
+                starView.y = pointF.y
+                LogUtils.d("doFavorAnimation x = ${starView.x} y = ${starView.y}")
+                starView.alpha = 1 - it.animatedFraction
+            }
+            mBezierAnim.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
+                }
+
+                override fun onAnimationEnd(animation: Animator?) {
+                }
+
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+            })
+            mBezierAnim.start()
+        }
+
+    }
+
+    private fun getControlPointF1(starView: ImageView): PointF {
+        val random = Random()
+        val x = starView.x + random.nextInt(CommonUtils.dip2px(this, 30f))
+        val y = starView.y - random.nextInt(CommonUtils.dip2px(this, 60f))
+        return PointF(x, y)
+    }
+
+    private fun getControlPointF2(starView: ImageView): PointF {
+        val random = Random()
+        val x = starView.x - random.nextInt(CommonUtils.dip2px(this, 40f))
+        val y = starView.y - random.nextInt(CommonUtils.dip2px(this, 90f))
+        return PointF(x, y)
+    }
+
+    private fun getStarPointFEnd(targetView: View): PointF {
+        val random = Random()
+        val screenWidth = getScreenWidth()
+        val screenHeight = getScreenHeight()
+        val pointFX = random.nextInt(CommonUtils.dip2px(this, screenWidth.toFloat()))
+        val targetY = targetView.y
+        val diff = screenHeight - targetY
+        var pointFY = 0
+        if (diff > 0) {
+            pointFY = random.nextInt((diff / 3).toInt())
+        }
+        LogUtils.d("pointFX = $pointFX pointFY = $pointFY")
+        return PointF(pointFX.toFloat(), pointFY.toFloat())
+    }
+
 
     private fun executeUserItemAnimation(view: View) {
         view.scaleX = mUserItemViewStartScale
         view.scaleY = mUserItemViewStartScale
         view.alpha = 0f
+//        if (mUserItemViewAnimator != null && mUserItemViewAnimator!!.isRunning) {
+//            LogUtils.d("running")
+//            return
+//        }
         mUserItemViewAnimator = ValueAnimator.ofFloat(0f, 1f)
         LogUtils.d("executeUserItemAnimation")
         mUserItemViewAnimator?.let {
@@ -167,10 +279,10 @@ class BarrageAnimationAct : BaseAct() {
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
-                        recycleUserItemView()
+                    recycleUserItemView()
                     LogUtils.d("aaaaaa onAnimationEnd ${it.animatedValue}")
 //                    mHandler.postDelayed({
-                       processUserItemView()
+                    processUserItemView()
 //                    },1000)
 
 
@@ -200,21 +312,22 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun recycleUserItemView() {
-        val size = mCurrItemViews.size
-        val maxNum = mUserItemNum - 1
-        if (size >= maxNum) {
-            for (i in maxNum until size - 1) {
-                val view = mCurrItemViews.removeAt(i)
-                LogUtils.d("maxNum = $maxNum i = $i")
-                barrageFL?.let {
-                    barrageFL.removeView(view)
-                }
-                // 清除状态
-                view.translationY = 0f
-                cacheUserItemView(view)
-
-            }
-        }
+//        val size = mCurrItemViews.size
+//        val maxNum = mUserItemNum - 1
+//        if (size >= maxNum) {
+//            for (i in maxNum until size - 1) {
+//                val view = mCurrItemViews.removeAt(i)
+//                LogUtils.d("maxNum = $maxNum i = $i")
+//                barrageFL?.let {
+//                    barrageFL.removeView(view)
+//                }
+//                // 清除状态
+//                view.translationY = 0f
+////                view.setOnClickListener(null)
+//                cacheUserItemView(view)
+//
+//            }
+//        }
 
     }
 
@@ -274,8 +387,7 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun createUserItemView(): View {
-        val userItemView = View.inflate(this, R.layout.peer_pressure_user_item, null);
-        return userItemView
+        return View.inflate(this, R.layout.peer_pressure_user_item, null)
     }
 
     private val mUserItemViewStartScale = 0.2f
@@ -299,6 +411,13 @@ class BarrageAnimationAct : BaseAct() {
 
     private fun stopBarrageAnimation() {
         stopBarrageAnimationClose()
+        stopBarrageAnimationUserItem()
+    }
+
+    private fun stopBarrageAnimationUserItem() {
+        mUserItemViewAnimator?.let {
+            it.end()
+        }
     }
 
     private fun stopBarrageAnimationClose() {
@@ -309,6 +428,7 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun setBarrageVisible(isShowBarrage: Boolean) {
+        this.isShowBarrage = isShowBarrage
         barrageRoot.visibility = if (isShowBarrage) View.VISIBLE else View.GONE
     }
 
@@ -364,4 +484,22 @@ class BarrageAnimationAct : BaseAct() {
         return outMetrics.heightPixels
     }
 
+}
+
+class BezierEvaluator(controP1: PointF, controP2: PointF) : TypeEvaluator<PointF> {
+    val mControlP1 = controP1
+    val mControlP2 = controP2
+    override fun evaluate(time: Float, start: PointF, end: PointF): PointF {
+        val timeLeft = 1.0f - time
+        val point = PointF()
+
+        point.x = timeLeft * timeLeft * timeLeft * (start.x) + 3 * timeLeft * timeLeft * time *
+                (mControlP1.x) + 3 * timeLeft * time *
+                time * (mControlP2.x) + time * time * time * (end.x)
+
+        point.y = timeLeft * timeLeft * timeLeft * (start.y) + 3 * timeLeft * timeLeft * time *
+                (mControlP1.y) + 3 * timeLeft * time *
+                time * (mControlP2.y) + time * time * time * (end.y)
+        return point
+    }
 }
