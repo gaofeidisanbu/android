@@ -180,7 +180,7 @@ class BarrageAnimationAct : BaseAct() {
             barrageFL.addView(starView, starLP)
             val bezierEvaluator = BezierEvaluator(getControlPointF1(starView), getControlPointF2(starView))
             val mBezierAnim = ValueAnimator.ofObject(bezierEvaluator,
-                    PointF(starView.x, starView.y),
+                    getStarPointFStart(starView),
                     getStarPointFEnd(starView))
             mBezierAnim.duration = 2500
             mBezierAnim.interpolator = AccelerateDecelerateInterpolator()
@@ -210,25 +210,32 @@ class BarrageAnimationAct : BaseAct() {
 
     }
 
+
     private fun getControlPointF1(starView: ImageView): PointF {
-        val random = Random()
-        val x = starView.x + random.nextInt(CommonUtils.dip2px(this, 30f))
-        val y = starView.y - random.nextInt(CommonUtils.dip2px(this, 60f))
-        return PointF(x, y)
+        val dp = CommonUtils.dip2px(this, 120f)
+        val x = starView.x + dp - (Math.random() * 2 * dp)
+        val y = starView.y - CommonUtils.dip2px(this, 40f)
+        return PointF(x.toFloat(), y)
     }
 
     private fun getControlPointF2(starView: ImageView): PointF {
-        val random = Random()
-        val x = starView.x - random.nextInt(CommonUtils.dip2px(this, 40f))
-        val y = starView.y - random.nextInt(CommonUtils.dip2px(this, 90f))
-        return PointF(x, y)
+        val dp = CommonUtils.dip2px(this, 80f)
+        val x = starView.x + dp - (Math.random() * 2 * dp)
+        val y = starView.y - 2 * CommonUtils.dip2px(this, 80f)
+        return PointF(x.toFloat(), y)
+    }
+
+    private fun getStarPointFStart(starView: ImageView): PointF {
+        val dp = CommonUtils.dip2px(this, 5f)
+        val pointFX = starView.x + dp - (Math.random() * 2 * dp)
+        return PointF(pointFX.toFloat(), starView.y)
     }
 
     private fun getStarPointFEnd(targetView: View): PointF {
         val random = Random()
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
-        val pointFX = random.nextInt(CommonUtils.dip2px(this, screenWidth.toFloat()))
+        val pointFX = targetView.x +   screenWidth - Math.random()* 2*screenWidth
         val targetY = targetView.y
         val diff = screenHeight - targetY
         var pointFY = 0
