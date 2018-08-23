@@ -28,6 +28,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.act_barrage_animation.*
 import kotlinx.android.synthetic.main.peer_pressure_user_item.view.*
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.collections.ArrayList
@@ -119,7 +120,42 @@ class BarrageAnimationAct : BaseAct() {
 //            mHandler.postDelayed({
 //                processUserItemView()
 //            }, 1000)
+        } else {
+            if (!mCurrItemViews.isEmpty()) {
+                var firstDuration = 600L
+                mCurrItemViews.reversed().forEachIndexed { index, view ->
+                    mHandler.postDelayed({
+                        firstDuration += 500L
+                        barrageEndDisappear(view, firstDuration)
+                    }, 200)
+                }
+            }
         }
+    }
+
+    private fun barrageEndDisappear(view: View, duration: Long) {
+        val alphaAnimation = ObjectAnimator.ofFloat(view, "alpha", 1f, 0f)
+        alphaAnimation.duration = duration
+        alphaAnimation.interpolator = AccelerateDecelerateInterpolator()
+        alphaAnimation.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(animation: Animator?) {
+            }
+
+            override fun onAnimationEnd(animation: Animator?) {
+                barrageFL?.let {
+                    barrageFL.removeView(view)
+                    mCurrItemViews.remove(view)
+                }
+            }
+
+            override fun onAnimationCancel(animation: Animator?) {
+            }
+
+            override fun onAnimationStart(animation: Animator?) {
+            }
+
+        })
+        alphaAnimation.start()
     }
 
     private fun attachUserItemViewTest(userData: UserItemData) {
@@ -194,6 +230,9 @@ class BarrageAnimationAct : BaseAct() {
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
+                    barrageFL?.let {
+                        it.removeView(starView)
+                    }
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {
@@ -338,22 +377,22 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun recycleUserItemView() {
-//        val size = mCurrItemViews.size
-//        val maxNum = mUserItemNum - 1
-//        if (size >= maxNum) {
-//            for (i in maxNum until size - 1) {
-//                val view = mCurrItemViews.removeAt(i)
-//                LogUtils.d("maxNum = $maxNum i = $i")
-//                barrageFL?.let {
-//                    barrageFL.removeView(view)
-//                }
-//                // 清除状态
-//                view.translationY = 0f
-////                view.setOnClickListener(null)
-//                cacheUserItemView(view)
-//
-//            }
-//        }
+        val size = mCurrItemViews.size
+        val maxNum = mUserItemNum - 1
+        if (size >= maxNum) {
+            for (i in maxNum until size - 1) {
+                val view = mCurrItemViews.removeAt(i)
+                LogUtils.d("maxNum = $maxNum i = $i")
+                barrageFL?.let {
+                    barrageFL.removeView(view)
+                }
+                // 清除状态
+                view.translationY = 0f
+//                view.setOnClickListener(null)
+                cacheUserItemView(view)
+
+            }
+        }
 
     }
 
