@@ -1,9 +1,6 @@
 package com.gaofei.app.act
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.animation.TypeEvaluator
-import android.animation.ValueAnimator
+import android.animation.*
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PointF
@@ -178,6 +175,7 @@ class BarrageAnimationAct : BaseAct() {
             starView.x = view.x + view.width - CommonUtils.dip2px(view.context, 12f)
             starView.y = view.y + CommonUtils.dip2px(view.context, 36f)
             barrageFL.addView(starView, starLP)
+            val animatorSet = AnimatorSet()
             val bezierEvaluator = BezierEvaluator(getControlPointF1(starView), getControlPointF2(starView))
             val mBezierAnim = ValueAnimator.ofObject(bezierEvaluator,
                     getStarPointFStart(starView),
@@ -205,7 +203,28 @@ class BarrageAnimationAct : BaseAct() {
                 }
 
             })
-            mBezierAnim.start()
+
+            val zoomAnimation = ValueAnimator.ofFloat(1f, 0.9f, 1f)
+            zoomAnimation.duration = 200
+            zoomAnimation.interpolator = AccelerateDecelerateInterpolator()
+            zoomAnimation.addUpdateListener {
+                view.scaleX = it.animatedValue as Float
+                view.scaleY = it.animatedValue as Float
+
+            }
+
+            starView.scaleX = 0.8f
+            starView.scaleY = 0.8f
+            val zoomAnimation2 = ValueAnimator.ofFloat(0.8f, 1f)
+            zoomAnimation2.duration = 100
+            zoomAnimation2.interpolator = AccelerateDecelerateInterpolator()
+            zoomAnimation2.addUpdateListener {
+                starView.scaleX = it.animatedValue as Float
+                starView.scaleY = it.animatedValue as Float
+
+            }
+            animatorSet.playTogether(mBezierAnim, zoomAnimation, zoomAnimation2)
+            animatorSet.start()
         }
 
     }
@@ -235,7 +254,7 @@ class BarrageAnimationAct : BaseAct() {
         val random = Random()
         val screenWidth = getScreenWidth()
         val screenHeight = getScreenHeight()
-        val pointFX = targetView.x +   screenWidth - Math.random()* 2*screenWidth
+        val pointFX = targetView.x + screenWidth - Math.random() * 2 * screenWidth
         val targetY = targetView.y
         val diff = screenHeight - targetY
         var pointFY = 0
@@ -399,7 +418,7 @@ class BarrageAnimationAct : BaseAct() {
 
     private val mUserItemViewStartScale = 0.2f
     private var mUserItemViewAnimator: ValueAnimator? = null
-    private var mCloseViewAnimator: ObjectAnimator? = null
+    private var mCloseViewAnimatorRotation: ObjectAnimator? = null
 
     private fun startBarrageAnimation() {
         startBarrageAnimationClose()
@@ -407,13 +426,23 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun startBarrageAnimationClose() {
-        mCloseViewAnimator = ObjectAnimator.ofFloat(close_icon, "rotation", 0f, -90f)
-        mCloseViewAnimator?.let {
-            it.duration = 300
-            it.interpolator = AccelerateInterpolator()
-            it.start()
-        }
+        val animatorSet = AnimatorSet()
+        val mCloseViewAnimatorRotation = ObjectAnimator.ofFloat(close_icon, "rotation", 0f, -90f)
+        val startScaleValue = 0.8f
+        close_icon.scaleX = startScaleValue
+        close_icon.scaleY = startScaleValue
+        val mCloseViewAnimatorZoom = ObjectAnimator.ofFloat(startScaleValue, 1f)
+        mCloseViewAnimatorZoom.addUpdateListener {
+            val animatedValue = it.animatedValue as Float
+            close_icon.scaleX = animatedValue
+            close_icon.scaleY = animatedValue
 
+        }
+        animatorSet.duration = 200
+        animatorSet.interpolator = AccelerateInterpolator()
+
+        animatorSet.playTogether(mCloseViewAnimatorRotation, mCloseViewAnimatorZoom)
+        animatorSet.start()
     }
 
     private fun stopBarrageAnimation() {
@@ -428,10 +457,10 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun stopBarrageAnimationClose() {
-        mCloseViewAnimator?.let {
+        mCloseViewAnimatorRotation?.let {
             it.end()
         }
-        mCloseViewAnimator = null
+        mCloseViewAnimatorRotation = null
     }
 
     private fun setBarrageVisible(isShowBarrage: Boolean) {
