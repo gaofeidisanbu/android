@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,6 +47,20 @@ import com.gaofei.library.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.internal.functions.Functions;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseAdapterListener, OnRefreshListener, OnLoadMoreListener {
     private RecyclerView mRecyclerView;
@@ -70,8 +87,25 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         initData();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
+        Flowable<String> f1 = Flowable.intervalRange(1, 10, 1, 1, TimeUnit.SECONDS).delay((t) ->
+                Flowable.timer(t % 3 + new Random().nextLong() % 3, TimeUnit.SECONDS))
+                .map(index -> index % 3 + "-f1-" + index);
+//        f1.buffer(5, TimeUnit.SECONDS).map(x -> "buffer-" + x).subscribe(System.out::println);
 
+//        f1.window(5, TimeUnit.SECONDS).map(x -> x.toList())
+//                .subscribe(x -> x.subscribe(System.out::println));
+//
+        Disposable b = f1.groupBy((x) -> x.split("-", 2)[0])
+                .subscribe(x -> x.toList().subscribe(System.out::println));
+        Map<String, List<String>> map = f1.toList().blockingGet().stream()
+                .collect(Collectors.groupingBy((x) -> x.split
+                        ("-", 2)[0]));
+        System.out.println(map);
+
+        while (!b.isDisposed()) {
+        }
     }
 
     private List<ViewHolderHandler.Item> getListData() {

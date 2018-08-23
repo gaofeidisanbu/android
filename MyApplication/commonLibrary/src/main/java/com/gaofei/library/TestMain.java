@@ -1,9 +1,17 @@
 package com.gaofei.library;
 
+import android.annotation.SuppressLint;
+
+import com.gaofei.library.utils.LogUtils;
 import com.gaofei.library.utils.WebPageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -16,16 +24,24 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.flowables.ConnectableFlowable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.internal.functions.Functions;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -224,32 +240,21 @@ public class TestMain {
         return false;
     }
 
-    public static void rxjava() {
-        List<String> list = new ArrayList<>(3);
-        list.add("aa");
-        list.add("bb");
-        list.add("bb");
-        list.add("bb");
-//
-//        Observable.just("1","2").flatMap(new Function<String, ObservableSource<String>>() {
-//            @Override
-//            public ObservableSource<String> apply(String s) throws Exception {
-//                return Observable.just("11");
-//            }
-//        }).subscribe(new Consumer<String>() {
-//            @Override
-//            public void accept(String s) throws Exception {
-//                System.out.println(s);
-//            }
-//        });
-//        Observable.just("1","2").map(new Function<String, Object>() {
-//            @Override
-//            public Object apply(String s) throws Exception {
-//                return null;
-//            }
-//        }).subscribe();
+    @SuppressLint("CheckResult")
+    public static void rxjava() throws Exception {
+        java.util.function.Function<String, Consumer<Object>> m = s -> v -> System.out
+                .println("[" + System.currentTimeMillis() / 100 + "] " + s + "-" + v);
+        ConnectableFlowable<Long> f1 = Flowable.intervalRange(1, 100, 0, 1, TimeUnit.SECONDS)
+                .onBackpressureBuffer().replay();
+        m.apply("").accept("start");
+        TimeUnit.SECONDS.sleep(5);
+        f1.connect();
+        TimeUnit.SECONDS.sleep(5);
+        f1.subscribe(m.apply("o1"));
 
-        System.out.print(list.size());
+        TimeUnit.SECONDS.sleep(5);
+        f1.subscribe(m.apply("o2"));
+        TimeUnit.SECONDS.sleep(20);
 
     }
 
@@ -317,33 +322,15 @@ public class TestMain {
     }
 
     public static void generic() {
-//        A<C, C> a = new A<C, C>("");
-//        TypeVariable[] types = a.getClass().getTypeParameters();
-//        for (TypeVariable type : types) {
-//            System.out.println(type);
-//        }
-//        Method[] methods = a.getClass().getDeclaredMethods();
-//        for (Method method : methods) {
-//            Type params = method.getGenericReturnType();
-////            for (Type type : params)
-//                System.out.println(params);
-//        }
-//        List list = new ArrayList<String>();
-//        list.add(null);
-//        getBridgeSupportType(new ArrayList<>());
-//        try {
-//            Constructor<A> c = A.class.getConstructor(Integer.class);
-//            System.out.println(c);
-//        } catch (NoSuchMethodException e) {
-//            e.printStackTrace();
-//        }
-        Holder<User> holder = new Holder<>();
-        User user = holder.getTarget();
-        TypeVariable[] types = holder.getClass().getTypeParameters();
-        for (TypeVariable type : types) {
-            System.out.println(type);
+    }
+
+    public static class Temp{
+        public  A<String, User> get() {
+            return null;
         }
     }
+
+
 
 
     static class A<C, M> {
