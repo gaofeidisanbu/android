@@ -22,7 +22,15 @@
             android:background="#b3000000"/>
 
         <FrameLayout
-            android:id="@+id/barrageFL"
+            android:id="@+id/barrageViewParent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="108dp">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/barrageStarParent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="108dp">
