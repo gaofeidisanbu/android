@@ -57,6 +57,7 @@ class BarrageAnimationAct : BaseAct() {
         init()
         setBarrageRootViewVisible(false)
         img.setOnClickListener {
+            initBarrageData()
             setBarrageRootViewVisible(true)
             setBarrageRootViewBackground()
             processBarrageViewLoader()
@@ -145,12 +146,8 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
-    private fun startBarrageCloseAnimation() {
-        startBarrageAnimationClose()
-        processBarrageViewLoader()
-    }
 
-    private fun startBarrageAnimationClose() {
+    private fun startBarrageCloseAnimation() {
         if (mCloseAnimatorSet != null) {
             mCloseAnimatorSet?.end()
         }
@@ -201,10 +198,10 @@ class BarrageAnimationAct : BaseAct() {
             doFavorBarrage(v, barrageData)
         }
         barrageViewParent?.let {
-            val barrageLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, mBarrageViewHeight)
-            barrageLP.gravity = Gravity.BOTTOM or Gravity.LEFT
-            barrageLP.marginStart = mBarrageViewToParentLeftMarginAnimationStart
-            it.addView(barrageView, barrageLP)
+            val barrageViewLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, mBarrageViewHeight)
+            barrageViewLP.gravity = Gravity.BOTTOM or Gravity.LEFT
+            barrageViewLP.marginStart = mBarrageViewToParentLeftMarginAnimationStart
+            it.addView(barrageView, barrageViewLP)
             addBarrageViewToList(barrageView)
             executeBarrageViewAnimation(barrageView)
         }
@@ -212,10 +209,10 @@ class BarrageAnimationAct : BaseAct() {
 
     }
 
-    private fun executeBarrageViewAnimation(view: View) {
-        view.scaleX = mBarrageViewInitialScale
-        view.scaleY = mBarrageViewInitialScale
-        view.alpha = 0f
+    private fun executeBarrageViewAnimation(barrageView: View) {
+        barrageView.scaleX = mBarrageViewInitialScale
+        barrageView.scaleY = mBarrageViewInitialScale
+        barrageView.alpha = 0f
         mBarrageViewStartAnimator = ValueAnimator.ofFloat(0f, 1f)
         mBarrageViewStartAnimator?.let {
             it.duration = 600
@@ -225,12 +222,12 @@ class BarrageAnimationAct : BaseAct() {
                 val currScale = getBarrageViewScale(animatedValue)
                 val translationX = getBarrageViewTranslateX(animatedValue)
                 val alpha = getBarrageViewAlpha(animatedValue)
-                view.pivotX = view.width.toFloat()
-                view.pivotY = (mBarrageViewHeight / 2).toFloat()
-                view.scaleX = currScale
-                view.scaleY = currScale
-                view.translationX = -translationX
-                view.alpha = alpha
+                barrageView.pivotX = barrageView.width.toFloat()
+                barrageView.pivotY = (mBarrageViewHeight / 2).toFloat()
+                barrageView.scaleX = currScale
+                barrageView.scaleY = currScale
+                barrageView.translationX = -translationX
+                barrageView.alpha = alpha
                 triggerOtherBarrageViewAnimation(animatedValue)
             }
             it.addListener(object : Animator.AnimatorListener {
@@ -262,7 +259,7 @@ class BarrageAnimationAct : BaseAct() {
         val size = mCurrBarrageViews.size
         var currIndex = size - 1
         while (currIndex >= 0) {
-            var barrageView = mCurrBarrageViews[currIndex]
+            val barrageView = mCurrBarrageViews[currIndex]
             // 最后一个item消失
             if (currIndex == mBarrageViewMaxNum - 1) {
                 barrageView.alpha = getLastBarrageViewAlpha(animatedValue)
@@ -288,7 +285,7 @@ class BarrageAnimationAct : BaseAct() {
                 override fun onAnimationEnd(animation: Animator?) {
                     barrageViewParent?.let {
                         it.removeView(view)
-                        mCurrBarrageViews?.let {
+                        mCurrBarrageViews.let {
                             mCurrBarrageViews.remove(view)
                         }
 
@@ -389,25 +386,17 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun stopBarrageCloseAnimation() {
-        mCloseAnimatorSet?.let {
-            it.end()
-        }
+        mCloseAnimatorSet?.end()
         mCloseAnimatorSet = null
     }
 
 
     private fun clearAllBarrageViewAndAnimation() {
-        mBarrageViewStartAnimator?.let {
-            it.end()
-        }
+        mBarrageViewStartAnimator?.end()
         mBarrageViewStartAnimator = null
-        mBarrageViewDisappearAlphaAnimation?.let {
-            it.end()
-        }
+        mBarrageViewDisappearAlphaAnimation?.end()
         mBarrageViewDisappearAlphaAnimation = null
-        barrageViewParent?.let {
-            barrageViewParent.removeAllViews()
-        }
+        barrageViewParent?.removeAllViews()
     }
 
 
@@ -443,9 +432,7 @@ class BarrageAnimationAct : BaseAct() {
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
-                    barrageStarParent?.let {
-                        it.removeView(starView)
-                    }
+                    barrageStarParent?.removeView(starView)
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {
@@ -527,13 +514,9 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun clearAllStarViewAndAnimation() {
-        mDoFavorAnimatorSet?.let {
-            it.end()
-        }
+        mDoFavorAnimatorSet?.end()
         mDoFavorAnimatorSet = null
-        barrageStarParent?.let {
-            it.removeAllViews()
-        }
+        barrageStarParent?.removeAllViews()
     }
 
 
