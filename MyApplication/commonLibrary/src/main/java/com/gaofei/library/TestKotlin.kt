@@ -1,5 +1,7 @@
 package com.gaofei.library
 
+import com.gaofei.library.utils.LogUtils
+
 fun main(args: Array<String>) {
     recycleUserItemView()
 }
@@ -13,15 +15,15 @@ private fun recycleUserItemView() {
 }
 
 class TestKotlin {
-    fun test() {
-        print("fuck")
-        print("fuck")
-        print("fuck")
-        print("fuck")
-    }
 
     fun main(args: Array<String>) {
-        print("")
+        val size = 10
+        val maxNum = 4
+        if (size > maxNum) {
+            for (i in size - 1 downTo  maxNum) {
+                LogUtils.d("maxNum = $maxNum i = $i")
+            }
+        }
 
     }
 

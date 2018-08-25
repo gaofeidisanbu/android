@@ -50,7 +50,7 @@ public class TestAct extends BaseAct {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
         TestKotlin testKotlin = new TestKotlin();
-        testKotlin.test();
+        testKotlin.main(new String[]{});
 
         mBinding.image1.setOnClickListener(new View.OnClickListener() {
             @Override

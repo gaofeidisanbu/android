@@ -242,19 +242,6 @@ public class TestMain {
 
     @SuppressLint("CheckResult")
     public static void rxjava() throws Exception {
-        java.util.function.Function<String, Consumer<Object>> m = s -> v -> System.out
-                .println("[" + System.currentTimeMillis() / 100 + "] " + s + "-" + v);
-        ConnectableFlowable<Long> f1 = Flowable.intervalRange(1, 100, 0, 1, TimeUnit.SECONDS)
-                .onBackpressureBuffer().replay();
-        m.apply("").accept("start");
-        TimeUnit.SECONDS.sleep(5);
-        f1.connect();
-        TimeUnit.SECONDS.sleep(5);
-        f1.subscribe(m.apply("o1"));
-
-        TimeUnit.SECONDS.sleep(5);
-        f1.subscribe(m.apply("o2"));
-        TimeUnit.SECONDS.sleep(20);
 
     }
 

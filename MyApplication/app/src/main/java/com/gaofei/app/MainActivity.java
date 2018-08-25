@@ -41,6 +41,7 @@ import com.gaofei.app.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.gaofei.app.act.view.swipetoloadlayout.OnRefreshListener;
 import com.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout;
 import com.gaofei.app.webview.WebviewActivity;
+import com.gaofei.library.TestKotlinKt;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;

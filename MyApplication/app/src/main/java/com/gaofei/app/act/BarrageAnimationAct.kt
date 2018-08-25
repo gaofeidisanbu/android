@@ -38,7 +38,10 @@ import kotlin.collections.ArrayList
 class BarrageAnimationAct : BaseAct() {
     private val mFavorStarImages = intArrayOf(R.drawable.icon_stars_blue, R.drawable.icon_stars_cyan, R.drawable.icon_stars_green, R.drawable.icon_stars_orange, R.drawable.icon_stars_yellow)
     private val mBarrageData = CopyOnWriteArrayList<BarrageData>()
-    private val mCacheBarrageViews = ArrayList<View>(3)
+    private val mBarrageViewMaxCacheNum = 4
+    private val mCacheBarrageViews = ArrayList<View>(mBarrageViewMaxCacheNum)
+    private val mStarViewMaxCacheNum = 10
+    private val mCacheStarViews = ArrayList<View>(mStarViewMaxCacheNum)
     private val mCurrBarrageViews = ArrayList<View>()
     private val mHandler = Handler()
     private var mBarrageViewHeight: Int = 0
@@ -47,7 +50,6 @@ class BarrageAnimationAct : BaseAct() {
     private var mStarViewWH: Int = 0
     private var mStarViewEndAnimationToTopDistane: Int = 0
     private var mBarrageViewToTopMargin: Int = 0
-    private val mBarrageViewMaxNum = 4
     private var isShowBarrageRootView = false
     private var index = 0
     private val mBarrageViewInitialScale = 0.2f
@@ -92,8 +94,7 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun initBarrageData() {
-        Observable.just(++index)
-//        Observable.just(++index, ++index, ++index, ++index, ++index, ++index, ++index)
+        Observable.just(++index, ++index, ++index, ++index, ++index, ++index, ++index)
                 .map {
                     return@map BarrageData(mapOf(Pair("name", "魔法少女小圆-$it"), Pair("topicName", "QB是个骗子-$it")), it)
                 }
@@ -171,7 +172,7 @@ class BarrageAnimationAct : BaseAct() {
         }
         mCloseAnimatorSet?.let {
             it.duration = 200
-            it.interpolator = AccelerateInterpolator()
+            it.interpolator = AccelerateDecelerateInterpolator()
             it.playTogether(mCloseViewAnimatorRotation, mCloseViewAnimatorZoom)
             it.start()
         }
@@ -189,7 +190,7 @@ class BarrageAnimationAct : BaseAct() {
                 mCurrBarrageViews.reversed().forEachIndexed { index, view ->
                     mHandler.postDelayed({
                         firstDuration += 500L
-//                        barrageViewAnimationDisappear(view, firstDuration)
+                        barrageViewAnimationDisappear(view, firstDuration)
                     }, 200)
                 }
             }
@@ -265,7 +266,7 @@ class BarrageAnimationAct : BaseAct() {
         while (currIndex >= 0) {
             val barrageView = mCurrBarrageViews[currIndex]
             // 最后一个item消失
-            if (currIndex == mBarrageViewMaxNum - 1) {
+            if (currIndex == mBarrageViewMaxCacheNum - 1) {
                 barrageView.alpha = getLastBarrageViewAlpha(animatedValue)
             }
             //除第一个item之外，做y轴位移动画
@@ -310,7 +311,7 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun cacheBarrageView(barrageView: View) {
-        if (mCacheBarrageViews.size < mBarrageViewMaxNum) {
+        if (mCacheBarrageViews.size < mBarrageViewMaxCacheNum) {
             mCacheBarrageViews.add(barrageView)
         }
     }
@@ -369,9 +370,9 @@ class BarrageAnimationAct : BaseAct() {
 
     private fun recycleBarrageView() {
         val size = mCurrBarrageViews.size
-        val maxNum = mBarrageViewMaxNum - 1
-        if (size >= maxNum) {
-            for (i in maxNum until size - 1) {
+        val maxNum = mBarrageViewMaxCacheNum - 1
+        if (size > maxNum) {
+            for (i in size - 1 downTo maxNum) {
                 val view = mCurrBarrageViews.removeAt(i)
                 LogUtils.d("maxNum = $maxNum i = $i")
                 barrageViewParent?.let {
@@ -400,6 +401,8 @@ class BarrageAnimationAct : BaseAct() {
         mBarrageViewDisappearAlphaAnimation?.end()
         mBarrageViewDisappearAlphaAnimation = null
         barrageViewParent?.removeAllViews()
+        mCurrBarrageViews.clear()
+        mCacheBarrageViews.clear()
     }
 
 
@@ -409,7 +412,7 @@ class BarrageAnimationAct : BaseAct() {
 
 
     private fun doFavorAnimation(barrageView: View) {
-        val starView = View.inflate(this, R.layout.peer_pressure_barrage_favar_star, null) as ImageView
+        val starView = obtainStarView() as ImageView
         starView.setImageResource(getDoFavorStar())
         barrageStarParent?.let {
             val starViewLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
@@ -443,6 +446,7 @@ class BarrageAnimationAct : BaseAct() {
 
                 override fun onAnimationEnd(animation: Animator?) {
                     barrageStarParent?.removeView(starView)
+                    recycleStarView(starView)
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {
@@ -481,6 +485,7 @@ class BarrageAnimationAct : BaseAct() {
 
     }
 
+
     private fun getDoFavorStar(): Int {
         val random = Random()
         val randomValue = random.nextInt(mFavorStarImages.size)
@@ -500,12 +505,11 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
-
     private fun getStarViewControlPointF1(starView: ImageView, isLeftOffset: Boolean): PointF {
         val dp = CommonUtils.dip2px(this, 60f)
         val x = starView.x + dp * (if (isLeftOffset) -1 else 1)
         val y = starView.y - (starView.y - mStarViewEndAnimationToTopDistane) / 3
-        addControlPointFView( PointF(x, y), "c1")
+//        addControlPointFView( PointF(x, y), "c1")
         return PointF(x, y)
     }
 
@@ -513,7 +517,7 @@ class BarrageAnimationAct : BaseAct() {
         val dp = CommonUtils.dip2px(this, 120f)
         val x = starView.x - dp * (if (isLeftOffset) -1 else 1)
         val y = starView.y - 2 * (starView.y - mStarViewEndAnimationToTopDistane) / 3
-        addControlPointFView( PointF(x, y), "c2")
+//        addControlPointFView( PointF(x, y), "c2")
         return PointF(x, y)
     }
 
@@ -532,7 +536,7 @@ class BarrageAnimationAct : BaseAct() {
     private fun getStarViewPointFStart(starView: ImageView): PointF {
         val pointFX = starView.x
         val pointFY = starView.y
-        addControlPointFView( PointF(pointFX, pointFY), "st")
+//        addControlPointFView( PointF(pointFX, pointFY), "st")
         return PointF(pointFX, pointFY)
     }
 
@@ -545,15 +549,31 @@ class BarrageAnimationAct : BaseAct() {
             var pointFY = mStarViewEndAnimationToTopDistane
             pointF.x = pointFX.toFloat()
             pointF.y = pointFY.toFloat()
-            addControlPointFView( pointF, "en")
+//            addControlPointFView( pointF, "en")
         }
         return pointF
+    }
+
+
+    private fun obtainStarView(): View {
+        return if (!mCacheStarViews.isEmpty()) {
+            mCacheStarViews.removeAt(0)
+        } else {
+            View.inflate(this, R.layout.peer_pressure_barrage_favar_star, null)
+        }
+    }
+
+    private fun recycleStarView(starView: ImageView) {
+        if (mCacheStarViews.size < mStarViewMaxCacheNum) {
+            mCacheStarViews.add(starView)
+        }
     }
 
     private fun clearAllStarViewAndAnimation() {
         mDoFavorAnimatorSet?.end()
         mDoFavorAnimatorSet = null
         barrageStarParent?.removeAllViews()
+        mCacheStarViews.clear()
     }
 
 
