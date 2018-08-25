@@ -429,7 +429,7 @@ class BarrageAnimationAct : BaseAct() {
                     starViewPointFEnd)
 
             mStarViewBezierAnim.duration = 2500
-            mStarViewBezierAnim.interpolator = AccelerateDecelerateInterpolator()
+            mStarViewBezierAnim.interpolator = AccelerateInterpolator()
             mStarViewBezierAnim.addUpdateListener {
                 val pointF = it.animatedValue as PointF
                 starView.x = pointF.x
@@ -466,7 +466,7 @@ class BarrageAnimationAct : BaseAct() {
             starView.scaleY = 0.8f
             val starViewZoomAnimation = ValueAnimator.ofFloat(0.8f, 1f)
             starViewZoomAnimation.duration = 100
-            starViewZoomAnimation.interpolator = AccelerateDecelerateInterpolator()
+            starViewZoomAnimation.interpolator = AccelerateInterpolator()
             starViewZoomAnimation.addUpdateListener {
                 starView.scaleX = it.animatedValue as Float
                 starView.scaleY = it.animatedValue as Float
@@ -500,20 +500,21 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
+
     private fun getStarViewControlPointF1(starView: ImageView, isLeftOffset: Boolean): PointF {
-        val dp = CommonUtils.dip2px(this, 100f)
+        val dp = CommonUtils.dip2px(this, 60f)
         val x = starView.x + dp * (if (isLeftOffset) -1 else 1)
         val y = starView.y - (starView.y - mStarViewEndAnimationToTopDistane) / 3
-        addControlPointFView(PointF(x.toFloat(), y), "c1")
-        return PointF(x.toFloat(), y)
+        addControlPointFView( PointF(x, y), "c1")
+        return PointF(x, y)
     }
 
     private fun getStarViewControlPointF2(starView: ImageView, isLeftOffset: Boolean): PointF {
-        val dp = CommonUtils.dip2px(this, 80f)
+        val dp = CommonUtils.dip2px(this, 120f)
         val x = starView.x - dp * (if (isLeftOffset) -1 else 1)
         val y = starView.y - 2 * (starView.y - mStarViewEndAnimationToTopDistane) / 3
-        addControlPointFView(PointF(x.toFloat(), y), "c2")
-        return PointF(x.toFloat(), y)
+        addControlPointFView( PointF(x, y), "c2")
+        return PointF(x, y)
     }
 
 
@@ -531,8 +532,8 @@ class BarrageAnimationAct : BaseAct() {
     private fun getStarViewPointFStart(starView: ImageView): PointF {
         val pointFX = starView.x
         val pointFY = starView.y
-        addControlPointFView(PointF(pointFX, pointFY), "st")
-        return PointF(pointFX, starView.y)
+        addControlPointFView( PointF(pointFX, pointFY), "st")
+        return PointF(pointFX, pointFY)
     }
 
     private fun getStarViewPointFEnd(starView: View): PointF {
@@ -544,7 +545,7 @@ class BarrageAnimationAct : BaseAct() {
             var pointFY = mStarViewEndAnimationToTopDistane
             pointF.x = pointFX.toFloat()
             pointF.y = pointFY.toFloat()
-            addControlPointFView(pointF, "en")
+            addControlPointFView( pointF, "en")
         }
         return pointF
     }
