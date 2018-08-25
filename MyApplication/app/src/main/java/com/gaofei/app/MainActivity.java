@@ -87,25 +87,7 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         initData();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initData() {
-        Flowable<String> f1 = Flowable.intervalRange(1, 10, 1, 1, TimeUnit.SECONDS).delay((t) ->
-                Flowable.timer(t % 3 + new Random().nextLong() % 3, TimeUnit.SECONDS))
-                .map(index -> index % 3 + "-f1-" + index);
-//        f1.buffer(5, TimeUnit.SECONDS).map(x -> "buffer-" + x).subscribe(System.out::println);
-
-//        f1.window(5, TimeUnit.SECONDS).map(x -> x.toList())
-//                .subscribe(x -> x.subscribe(System.out::println));
-//
-        Disposable b = f1.groupBy((x) -> x.split("-", 2)[0])
-                .subscribe(x -> x.toList().subscribe(System.out::println));
-        Map<String, List<String>> map = f1.toList().blockingGet().stream()
-                .collect(Collectors.groupingBy((x) -> x.split
-                        ("-", 2)[0]));
-        System.out.println(map);
-
-        while (!b.isDisposed()) {
-        }
     }
 
     private List<ViewHolderHandler.Item> getListData() {

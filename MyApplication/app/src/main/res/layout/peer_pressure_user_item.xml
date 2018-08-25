@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="64dp"
+    android:minWidth="64dp"
     android:background="@drawable/peer_pressure_user_item_bg"
     android:paddingRight="32dp">
 

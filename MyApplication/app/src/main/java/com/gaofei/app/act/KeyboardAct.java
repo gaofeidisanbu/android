@@ -1,6 +1,7 @@
 package com.gaofei.app.act;
 
 import android.app.Activity;
+import android.content.pm.ApplicationInfo;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,12 @@ import android.view.ViewTreeObserver;
 
 import com.gaofei.app.R;
 import com.gaofei.library.base.BaseAct;
+import com.gaofei.library.utils.LogUtils;
+import com.gaofei.library.utils.ToastManager;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.zip.ZipFile;
 
 /**
  * Created by gaofei on 2017/6/15.
@@ -22,18 +29,62 @@ public class KeyboardAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_keyboard);
+        ToastManager.show("aaaaa49");
+        int aa = 100;
+        Log.d("aa", "aa = +"+aa);
 
         KeyboardHandler.setKeyboardListener(this, new KeyboardHandler.onKeyboardListener() {
             @Override
             public void onShowKeyboard(int keyboardHeight) {
-                Log.d(TAG,"onShowKeyboard keyboardHeight = "+keyboardHeight);
+                Log.d(TAG, "onShowKeyboard keyboardHeight = " + keyboardHeight);
+                Log.d(TAG, "onShowKeyboard keyboardHeight3 = " + keyboardHeight);
             }
 
             @Override
             public void onHideKeboard() {
-                Log.d(TAG,"onHideKeboard");
+                Log.d(TAG, "onHideKeboard");
             }
         });
+
+        ApplicationInfo applicationInfo = getApplicationContext().getApplicationInfo();
+        Log.d("", applicationInfo + "");
+        String str = applicationInfo.dataDir;
+        File file = new File("/data/app");
+        delete(file);
+        String apkPath = applicationInfo.sourceDir; //base.apk
+        try {
+            ZipFile apk = new ZipFile(apkPath);
+            Log.d("","apk = "+apk);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        fun();
+
+    }
+
+    private void fun() {
+
+    }
+
+
+    private void delete(File file) {
+        if (file != null && file.isDirectory() && file.listFiles() != null) {
+            for (File file1 : file.listFiles()) {
+                if (file1 != null && file1.isDirectory()) {
+                    delete(file1);
+                } else {
+                    boolean is = file1.delete();
+                    LogUtils.d("delete file1 = " + file1.toString() + " is = " + is);
+                }
+
+            }
+        } else {
+            if (file.isFile()){
+
+                boolean is =  file.delete();
+                LogUtils.d("delete file1 = " + file.toString() + " is = " + is);
+            }
+        }
     }
 
 
@@ -80,13 +131,13 @@ public class KeyboardAct extends BaseAct {
                             mOnKeyboardListener.onShowKeyboard(contentSourceHeight - currContentHeight);
                         }
                     }
-                    if(isShowKeyboard && currContentHeight == contentSourceHeight){
+                    if (isShowKeyboard && currContentHeight == contentSourceHeight) {
                         isShowKeyboard = false;
                         if (mOnKeyboardListener != null) {
                             mOnKeyboardListener.onHideKeboard();
                         }
                     }
-                Log.d(TAG,"screenHeight = "+screenHeight+" statusHeight = "+statusHeight+" virtualeyboardHeight = "+virtualeyboardHeight+" contentSourceHeight = "+contentSourceHeight);
+                    Log.d(TAG, "screenHeight = " + screenHeight + " statusHeight = " + statusHeight + " virtualeyboardHeight = " + virtualeyboardHeight + " contentSourceHeight = " + contentSourceHeight);
                 }
             });
         }

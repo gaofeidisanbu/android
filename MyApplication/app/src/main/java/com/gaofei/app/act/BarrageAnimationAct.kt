@@ -3,6 +3,7 @@ package com.gaofei.app.act
 import android.animation.*
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.PointF
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
@@ -19,6 +20,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 
 import com.gaofei.app.R
 import com.gaofei.library.base.BaseAct
@@ -42,6 +44,8 @@ class BarrageAnimationAct : BaseAct() {
     private var mBarrageViewHeight: Int = 0
     private var mBarrageViewToParentLeftMarginAnimationStart: Int = 0
     private var mBarrageViewToParentLeftMarginAnimationEnd: Int = 0
+    private var mStarViewWH: Int = 0
+    private var mStarViewEndAnimationToTopDistane: Int = 0
     private var mBarrageViewToTopMargin: Int = 0
     private val mBarrageViewMaxNum = 4
     private var isShowBarrageRootView = false
@@ -57,7 +61,6 @@ class BarrageAnimationAct : BaseAct() {
         init()
         setBarrageRootViewVisible(false)
         img.setOnClickListener {
-            initBarrageData()
             setBarrageRootViewVisible(true)
             setBarrageRootViewBackground()
             processBarrageViewLoader()
@@ -84,10 +87,12 @@ class BarrageAnimationAct : BaseAct() {
         mBarrageViewToParentLeftMarginAnimationStart = CommonUtils.dip2px(this, 44f)
         mBarrageViewToParentLeftMarginAnimationEnd = CommonUtils.dip2px(this, 24f)
         mBarrageViewToTopMargin = CommonUtils.dip2px(this, 12f)
+        mStarViewWH = CommonUtils.dip2px(this, 20f)
+        mStarViewEndAnimationToTopDistane = CommonUtils.dip2px(this, 100f)
     }
 
     private fun initBarrageData() {
-        Observable.just(++index, ++index, ++index)
+        Observable.just(++index)
 //        Observable.just(++index, ++index, ++index, ++index, ++index, ++index, ++index)
                 .map {
                     return@map BarrageData(mapOf(Pair("name", "魔法少女小圆-$it"), Pair("topicName", "QB是个骗子-$it")), it)
@@ -146,7 +151,6 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
-
     private fun startBarrageCloseAnimation() {
         if (mCloseAnimatorSet != null) {
             mCloseAnimatorSet?.end()
@@ -185,7 +189,7 @@ class BarrageAnimationAct : BaseAct() {
                 mCurrBarrageViews.reversed().forEachIndexed { index, view ->
                     mHandler.postDelayed({
                         firstDuration += 500L
-                        barrageViewAnimationDisappear(view, firstDuration)
+//                        barrageViewAnimationDisappear(view, firstDuration)
                     }, 200)
                 }
             }
@@ -316,7 +320,6 @@ class BarrageAnimationAct : BaseAct() {
     }
 
     private fun getLastBarrageViewAlpha(animatedValue: Float): Float {
-
         return 1 - animatedValue
     }
 
@@ -410,14 +413,21 @@ class BarrageAnimationAct : BaseAct() {
         starView.setImageResource(getDoFavorStar())
         barrageStarParent?.let {
             val starViewLP = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-            starView.x = barrageView.x + barrageView.width - CommonUtils.dip2px(barrageView.context, 12f)
-            starView.y = barrageView.y + CommonUtils.dip2px(barrageView.context, 36f)
-            it.addView(starView, starViewLP)
+            val starViewInitialPosition = calculateStartViewPoint(barrageView, starView)
+            starView.x = starViewInitialPosition.x
+            starView.y = starViewInitialPosition.y
+            it.addView(starView, 0, starViewLP)
             mDoFavorAnimatorSet = AnimatorSet()
-            val starViewBezierEvaluator = BezierEvaluator(getStarViewControlPointF1(starView), getStarViewControlPointF2(starView))
+            val isLeftOffset = Math.random() <= 0.5
+            val starViewControlPointF1 = getStarViewControlPointF1(starView, isLeftOffset)
+            val starViewControlPointF2 = getStarViewControlPointF2(starView, isLeftOffset)
+            val starViewPointFStart = getStarViewPointFStart(starView)
+            val starViewPointFEnd = getStarViewPointFEnd(starView)
+            val starViewBezierEvaluator = BezierEvaluator(starViewControlPointF1, starViewControlPointF2)
             val mStarViewBezierAnim = ValueAnimator.ofObject(starViewBezierEvaluator,
-                    getStarViewPointFStart(starView),
-                    getStarViewPointFEnd(starView))
+                    starViewPointFStart,
+                    starViewPointFEnd)
+
             mStarViewBezierAnim.duration = 2500
             mStarViewBezierAnim.interpolator = AccelerateDecelerateInterpolator()
             mStarViewBezierAnim.addUpdateListener {
@@ -478,39 +488,65 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 
-    private fun getStarViewControlPointF1(starView: ImageView): PointF {
-        val dp = CommonUtils.dip2px(this, 120f)
-        val x = starView.x + dp - (Math.random() * 2 * dp)
-        val y = starView.y - CommonUtils.dip2px(this, 40f)
+    private fun calculateStartViewPoint(barrageView: View, starView: View): PointF {
+        val pointF = PointF(0f, 0f)
+        val xMaxLeftOffset = CommonUtils.dip2px(this, 60f)
+        val pointFXMax = barrageView.x + barrageView.width - mStarViewWH
+        val random = Random()
+        val xOffset = random.nextInt(xMaxLeftOffset)
+        pointF.x = pointFXMax - xOffset
+        pointF.y = barrageView.y + mStarViewWH
+        return pointF
+    }
+
+
+    private fun getStarViewControlPointF1(starView: ImageView, isLeftOffset: Boolean): PointF {
+        val dp = CommonUtils.dip2px(this, 100f)
+        val x = starView.x + dp * (if (isLeftOffset) -1 else 1)
+        val y = starView.y - (starView.y - mStarViewEndAnimationToTopDistane) / 3
+        addControlPointFView(PointF(x.toFloat(), y), "c1")
         return PointF(x.toFloat(), y)
     }
 
-    private fun getStarViewControlPointF2(starView: ImageView): PointF {
+    private fun getStarViewControlPointF2(starView: ImageView, isLeftOffset: Boolean): PointF {
         val dp = CommonUtils.dip2px(this, 80f)
-        val x = starView.x + dp - (Math.random() * 2 * dp)
-        val y = starView.y - 2 * CommonUtils.dip2px(this, 80f)
+        val x = starView.x - dp * (if (isLeftOffset) -1 else 1)
+        val y = starView.y - 2 * (starView.y - mStarViewEndAnimationToTopDistane) / 3
+        addControlPointFView(PointF(x.toFloat(), y), "c2")
         return PointF(x.toFloat(), y)
+    }
+
+
+    private fun addControlPointFView(controlPointF: PointF, text: String) {
+        val controlView = TextView(this)
+        controlView.setBackgroundColor(Color.RED)
+        controlView.text = text
+        val size = CommonUtils.dip2px(this, 20f)
+        val controlViewLP = FrameLayout.LayoutParams(size, size)
+        controlView.x = controlPointF.x
+        controlView.y = controlPointF.y
+        barrageStarParent?.addView(controlView, barrageStarParent.childCount, controlViewLP)
     }
 
     private fun getStarViewPointFStart(starView: ImageView): PointF {
-        val dp = CommonUtils.dip2px(this, 5f)
-        val pointFX = starView.x + dp - (Math.random() * 2 * dp)
-        return PointF(pointFX.toFloat(), starView.y)
+        val pointFX = starView.x
+        val pointFY = starView.y
+        addControlPointFView(PointF(pointFX, pointFY), "st")
+        return PointF(pointFX, starView.y)
     }
 
     private fun getStarViewPointFEnd(starView: View): PointF {
-        val random = Random()
-        val screenWidth = getScreenWidth()
-        val screenHeight = getScreenHeight()
-        val pointFX = starView.x + screenWidth - Math.random() * 2 * screenWidth
-        val targetY = starView.y
-        val diff = screenHeight - targetY
-        var pointFY = 0
-        if (diff > 0) {
-            pointFY = random.nextInt((diff / 3).toInt())
+        val pointF = PointF(0f, 0f)
+        val screenWith = getScreenWidth()
+        barrageStarParent?.let {
+            val random = Random()
+            val pointFX = screenWith / 3 + random.nextInt(screenWith / 3)
+            var pointFY = mStarViewEndAnimationToTopDistane
+            pointF.x = pointFX.toFloat()
+            pointF.y = pointFY.toFloat()
+            addControlPointFView(pointF, "en")
         }
-        LogUtils.d("pointFX = $pointFX pointFY = $pointFY")
-        return PointF(pointFX.toFloat(), pointFY.toFloat())
+        return pointF
     }
 
     private fun clearAllStarViewAndAnimation() {
@@ -547,7 +583,6 @@ class BarrageAnimationAct : BaseAct() {
     }
 
 }
-
 
 
 class BezierEvaluator(controlP1: PointF, controlP2: PointF) : TypeEvaluator<PointF> {
