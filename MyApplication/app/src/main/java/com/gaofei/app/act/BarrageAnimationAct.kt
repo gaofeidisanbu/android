@@ -48,7 +48,7 @@ class BarrageAnimationAct : BaseAct() {
     private var mBarrageViewToParentLeftMarginAnimationStart: Int = 0
     private var mBarrageViewToParentLeftMarginAnimationEnd: Int = 0
     private var mStarViewWH: Int = 0
-    private var mStarViewEndAnimationToTopDistane: Int = 0
+    private var mStarViewEndAnimationToTopDistance: Int = 0
     private var mBarrageViewToTopMargin: Int = 0
     private var isShowBarrageRootView = false
     private var index = 0
@@ -90,7 +90,7 @@ class BarrageAnimationAct : BaseAct() {
         mBarrageViewToParentLeftMarginAnimationEnd = CommonUtils.dip2px(this, 24f)
         mBarrageViewToTopMargin = CommonUtils.dip2px(this, 12f)
         mStarViewWH = CommonUtils.dip2px(this, 20f)
-        mStarViewEndAnimationToTopDistane = CommonUtils.dip2px(this, 100f)
+        mStarViewEndAnimationToTopDistance = CommonUtils.dip2px(this, 100f)
     }
 
     private fun initBarrageData() {
@@ -508,7 +508,7 @@ class BarrageAnimationAct : BaseAct() {
     private fun getStarViewControlPointF1(starView: ImageView, isLeftOffset: Boolean): PointF {
         val dp = CommonUtils.dip2px(this, 60f)
         val x = starView.x + dp * (if (isLeftOffset) -1 else 1)
-        val y = starView.y - (starView.y - mStarViewEndAnimationToTopDistane) / 3
+        val y = starView.y - (starView.y - mStarViewEndAnimationToTopDistance) / 3
 //        addControlPointFView( PointF(x, y), "c1")
         return PointF(x, y)
     }
@@ -516,7 +516,7 @@ class BarrageAnimationAct : BaseAct() {
     private fun getStarViewControlPointF2(starView: ImageView, isLeftOffset: Boolean): PointF {
         val dp = CommonUtils.dip2px(this, 120f)
         val x = starView.x - dp * (if (isLeftOffset) -1 else 1)
-        val y = starView.y - 2 * (starView.y - mStarViewEndAnimationToTopDistane) / 3
+        val y = starView.y - 2 * (starView.y - mStarViewEndAnimationToTopDistance) / 3
 //        addControlPointFView( PointF(x, y), "c2")
         return PointF(x, y)
     }
@@ -546,7 +546,7 @@ class BarrageAnimationAct : BaseAct() {
         barrageStarParent?.let {
             val random = Random()
             val pointFX = screenWith / 3 + random.nextInt(screenWith / 3)
-            var pointFY = mStarViewEndAnimationToTopDistane
+            var pointFY = mStarViewEndAnimationToTopDistance
             pointF.x = pointFX.toFloat()
             pointF.y = pointFY.toFloat()
 //            addControlPointFView( pointF, "en")
