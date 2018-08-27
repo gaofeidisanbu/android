@@ -16,21 +16,23 @@ public class Store {
         this.mProduct = new ArrayList<>();
     }
 
-    public void consume(String id) {
+    public void consume(String id, int consumeTotal) {
         synchronized (mProduct) {
-            while (true) {
+            int consumeNum = 0;
+            while (consumeNum < consumeTotal) {
                 if (mProduct.size() <= mMinProduct) {
-                    System.out.println(getCommonTag(0, id) + "产品低于：" + mMinProduct);
+                    System.out.println(getCommonTag(1, id) + "产品低于：" + mMinProduct);
                     mProduct.notifyAll();
                 }
-                if (mProduct.size() >= 0) {
+                if (mProduct.size() > 0) {
                     String product = mProduct.remove(0);
-                    System.out.println(getCommonTag(0, id) + "消费产品编号：product = " + product);
+                    consumeNum++;
+                    System.out.println(getCommonTag(1, id) + "消费产品编号： " + product);
                     try {
-                        Thread.sleep(2000);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        System.out.println(getCommonTag(0, id) + " sleep " + e.getMessage());
+                        System.out.println(getCommonTag(1, id) + " sleep " + e.getMessage());
                         break;
                     }
                 } else {
@@ -38,7 +40,7 @@ public class Store {
                         mProduct.wait();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                        System.out.println(getCommonTag(0, id) + " wait " + mIndex);
+                        System.out.println(getCommonTag(1, id) + " wait " + mIndex);
                         break;
                     }
                 }
@@ -55,22 +57,22 @@ public class Store {
             while (true) {
                 try {
                     if (mProduct.size() > mMaxProduct) {
-                        System.out.println(getCommonTag(1, id) + "产品高于：" + mMaxProduct);
+                        System.out.println(getCommonTag(0, id) + "产品高于：" + mMaxProduct);
                         mProduct.wait();
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println(getCommonTag(1, id) + " wait " + e.getMessage());
+                    System.out.println(getCommonTag(0, id) + " wait " + e.getMessage());
                     break;
                 }
-                System.out.println(getCommonTag(1, id) + "生产产品编号：" + mIndex);
+                System.out.println(getCommonTag(0, id) + "生产产品编号：" + mIndex);
                 mProduct.add(mIndex + "");
                 mIndex++;
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println(getCommonTag(1, id) + " sleep " + e.getMessage());
+                    System.out.println(getCommonTag(0, id) + " sleep " + e.getMessage());
                     break;
                 }
             }
@@ -94,7 +96,6 @@ public class Store {
         sb.append(" ");
         return sb.toString();
     }
-
 
 
 }

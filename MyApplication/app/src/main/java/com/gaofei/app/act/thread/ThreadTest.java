@@ -7,11 +7,11 @@ public class ThreadTest {
         new Thread(new Producer(store, "producer2")).start();
         new Thread(new Producer(store, "producer3")).start();
         new Thread(new Producer(store, "producer4")).start();
-        new Thread(new Consumer(store, "consumer1")).start();
-        new Thread(new Consumer(store, "consumer2")).start();
-        new Thread(new Consumer(store, "consumer3")).start();
-        new Thread(new Consumer(store, "consumer4")).start();
-        new Thread(new Consumer(store, "consumer5")).start();
+        new Thread(new Consumer(store, "consumer1", 2)).start();
+        new Thread(new Consumer(store, "consumer2", 1)).start();
+        new Thread(new Consumer(store, "consumer3", 3)).start();
+        new Thread(new Consumer(store, "consumer4", 4)).start();
+        new Thread(new Consumer(store, "consumer5", 10)).start();
     }
 
 }
