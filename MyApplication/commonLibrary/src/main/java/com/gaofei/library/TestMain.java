@@ -19,6 +19,7 @@ import java.lang.reflect.TypeVariable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -60,7 +61,7 @@ public class TestMain {
         try {
 //            rxjava();
 //            json();
-            generic();
+//            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
 //            addPubParam(URL_FORGET_PSW);
 //            System.out.println(convertTime(747034096));
@@ -75,6 +76,7 @@ public class TestMain {
 //            testTime();
 //            testException();
 //            kotlin();
+            new User().ff();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
@@ -246,7 +248,6 @@ public class TestMain {
     }
 
 
-
     public static void json() {
         Gson gson = new GsonBuilder().create();
         Map<String, Object> map = new HashMap<>();
@@ -311,19 +312,16 @@ public class TestMain {
     public static void generic() {
     }
 
-    public static class Temp{
-        public  A<String, User> get() {
+    public static class Temp {
+        public A<String, User> get() {
             return null;
         }
     }
 
 
-
-
     static class A<C, M> {
 
         public A(String str) {
-
         }
 
         public A(Integer str) {
@@ -336,26 +334,49 @@ public class TestMain {
     }
 
 
+    public static class Holder<T> {
+        private T t;
 
-    public static class Holder<User>{
-        private User t;
-        public void set(User t){
+        public void set(T t) {
+            Holder1 holder1 = new Holder1();
+            holder1.set(holder1.getTarget());
+        }
+
+        void f(HashMap map) {
+            List<?> flist =
+                    Arrays.asList(new Apple());
+            Apple a = (Apple) flist.get(0); // No warning
+            flist.contains(new Apple()); // Argument is ‘Object’
+            flist.indexOf(new Apple()); // Argument is ‘Object’
 
         }
 
-        public User getTarget(){
+        public T getTarget() {
             return t;
         }
     }
 
-    public class User{
-
+    public static class Holder1<T extends User> extends Holder<T> {
     }
 
-//    static class C {
-//        public void foo(Object a) {
-//        }
-//    }
+    public static class Holder2 extends Holder<User> {
+    }
+
+
+    public static class User {
+        public void ff() {
+            printClassGenericType(Holder1.class);
+            printClassGenericType(Holder2.class);
+        }
+    }
+
+    public static void printClassGenericType(Class clazz) {
+        TypeVariable[] typeVariables = clazz.getTypeParameters();
+        for (TypeVariable typeVariable : typeVariables) {
+            System.out.println(clazz.getName() + " -> typeParameters =  " + typeVariable.getName());
+        }
+        System.out.println(clazz.getName() + " -> genericSuperclass = " + clazz.getGenericSuperclass());
+    }
 
     static class C<A> {
         public void foo(A a) {
