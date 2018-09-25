@@ -17,7 +17,7 @@ android {
         config {
             keyAlias 'test'
             keyPassword '123456'
-            storeFile file('/Users/gaofei/android/MyApplication/app/test1.jks')
+            storeFile file('test1.jks')
             storePassword '123456'
         }
     }

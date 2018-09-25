@@ -297,17 +297,7 @@ public class TestMain {
         }
     }
 
-    public static class Food {
-    }
 
-    public static class Fruit extends Food {
-    }
-
-    public static class Apple extends Fruit {
-    }
-
-    public static class RedApple extends Apple {
-    }
 
     public static void generic() {
     }
@@ -525,9 +515,35 @@ public class TestMain {
         }
     }
 
+    // Java
+    public void demo(Source<Fruit> strs) {
+        Source<? extends Fruit> objects = strs;
+
+        // ……
+    }
+
+    // Java
+    interface Source<T> {
+        T nextT();
+    }
+
+
+
 
     public static void testException2(String o) throws Exception {
         throw new Exception("------->");
+    }
+
+    public static class Food {
+    }
+
+    public static class Fruit extends Food {
+    }
+
+    public static class Apple extends Fruit {
+    }
+
+    public static class RedApple extends Apple {
     }
 
 

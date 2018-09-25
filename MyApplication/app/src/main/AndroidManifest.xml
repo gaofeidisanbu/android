@@ -47,6 +47,7 @@
         <activity android:name="com.gaofei.app.act.EditTextAct" />
         <activity android:name="com.gaofei.app.act.DataBindingAct" />
         <activity android:name="com.gaofei.app.act.TaskActivity" />
+        <activity android:name=".CanvasActivity" />
         <activity android:name="com.gaofei.app.act.BarrageAnimationAct" android:theme="@style/AppTheme.NoActionBar"/>
 
         <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
