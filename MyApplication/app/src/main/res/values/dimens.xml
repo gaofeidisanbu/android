@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="task_treasure_box_icon_width">116dp</dimen>
-    <dimen name="task_treasure_box_icon_height">136dp</dimen>
+    <dimen name="task_treasure_box_icon_height">124dp</dimen>
 </resources>

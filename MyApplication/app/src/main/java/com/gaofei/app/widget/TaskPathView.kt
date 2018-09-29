@@ -64,16 +64,17 @@ class TaskPathView : FrameLayout {
         val dwidth = options.outWidth.toFloat()
         val dheight = options.outHeight.toFloat()
         val vwidth = mContext.getScreenWidth().toFloat()
-        return ViewInfo(dwidth, dheight, vwidth / dwidth)
+        val widthScale = vwidth / dwidth
+        return ViewInfo(dwidth, dheight, widthScale)
     }
 
     private fun initDraw() {
         setWillNotDraw(false)
-        this.mTaskTreasureBoxToCenterMargin = mContext.dip2px(43f).toFloat() * mViewInfo.scale
-        this.mTaskTreasureBoxToTreasureBoxMargin = mContext.dip2px(128f) * mViewInfo.scale
-        this.mTaskTreasureBoxRadius = mContext.dip2px(58f) * mViewInfo.scale
-        this.mTaskFirstTreasureBoxToParentTop = mContext.dip2px(96f) * mViewInfo.scale
-        this.mTaskPathWidth = mContext.dip2px(16f).toFloat() * mViewInfo.scale
+        this.mTaskTreasureBoxToCenterMargin = dip2px(43f).toFloat() * mViewInfo.scale
+        this.mTaskTreasureBoxToTreasureBoxMargin = dip2px(128f) * mViewInfo.scale
+        this.mTaskTreasureBoxRadius = dip2px(58f) * mViewInfo.scale
+        this.mTaskFirstTreasureBoxToParentTop = dip2px(96f) * mViewInfo.scale
+        this.mTaskPathWidth = dip2px(16f).toFloat() * mViewInfo.scale
         initPaint0()
         initPaint1()
         initPaint2()
@@ -133,7 +134,7 @@ class TaskPathView : FrameLayout {
         mPaint3 = Paint()
         mPaint3.style = Paint.Style.STROKE
         mPaint3.color = Color.parseColor("#FFFFFFFF")
-        mPaint3.strokeWidth = mContext.dip2px(5f).toFloat()
+        mPaint3.strokeWidth = dip2px(5f).toFloat()
         mPaint3.pathEffect = DashPathEffect(floatArrayOf(4f, 4f), 0f)
     }
 
@@ -246,7 +247,7 @@ class TaskPathView : FrameLayout {
     private fun drawTaskPath(canvas: Canvas, i: Int, value: Float) {
         val path1 = Path()
         val path2 = Path()
-        val circle1PointF = calculateTreasureBoxCircleLocationInfo( i).pointF
+        val circle1PointF = calculateTreasureBoxCircleLocationInfo(i).pointF
         path1.moveTo(circle1PointF.x, circle1PointF.y)
         path2.moveTo(circle1PointF.x, circle1PointF.y)
         val circle2PointF = calculateTreasureBoxCircleLocationInfo(i + 1).pointF
@@ -294,7 +295,7 @@ class TaskPathView : FrameLayout {
         return outMetrics.heightPixels
     }
 
-    fun Context.dip2px(dipValue: Float): Int {
+    fun dip2px(dipValue: Float): Int {
         val scale = 3f
         return (dipValue * scale + 0.5f).toInt()
     }

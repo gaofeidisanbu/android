@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="116dp"
-    android:layout_height="124dp">
+    android:layout_width="@dimen/task_treasure_box_icon_width"
+    android:layout_height="@dimen/task_treasure_box_icon_height">
 
     <View
         android:layout_width="116dp"
