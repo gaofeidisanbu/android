@@ -63,9 +63,9 @@ class TaskPathView : FrameLayout {
         BitmapFactory.decodeResource(mContext.resources, R.drawable.task_illus_bg, options)
         val dwidth = options.outWidth.toFloat()
         val dheight = options.outHeight.toFloat()
-        val vwidth = mContext.getScreenWidth().toFloat()
+        val vwidth = getViewWidth()
         val widthScale = vwidth / dwidth
-        return ViewInfo(dwidth, dheight, widthScale)
+        return ViewInfo(dwidth * widthScale, dheight * widthScale, widthScale)
     }
 
     private fun initDraw() {
@@ -266,21 +266,23 @@ class TaskPathView : FrameLayout {
     private fun calculateTreasureBoxCircleLocationInfo(index: Int): TreasureBoxLocationInfo {
         val isLeft = (index + 1) % 2 != 0
         val treasureBoxStartPointFXOffset = mTaskTreasureBoxToCenterMargin + mTaskTreasureBoxRadius
-        val treasureBoxStartPointFX = mContext.getScreenWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
+        val treasureBoxStartPointFX = getViewWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
         val treasureStartBoxPointFY = mTaskFirstTreasureBoxToParentTop + index * 2 * mTaskTreasureBoxRadius + index * mTaskTreasureBoxToTreasureBoxMargin + mTaskTreasureBoxRadius
         return TreasureBoxLocationInfo(PointF(treasureBoxStartPointFX, treasureStartBoxPointFY), treasureBoxStartPointFX - mTaskTreasureBoxRadius, treasureStartBoxPointFY - mTaskTreasureBoxRadius)
     }
+
+
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         return super.onTouchEvent(event)
     }
 
 
-    private fun Context.getScreenWidth(): Int {
-        val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    private fun getViewWidth(): Int {
+        val wm = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val outMetrics = DisplayMetrics()
         wm.defaultDisplay.getMetrics(outMetrics)
-        return outMetrics.widthPixels
+        return 720
     }
 
     /**
