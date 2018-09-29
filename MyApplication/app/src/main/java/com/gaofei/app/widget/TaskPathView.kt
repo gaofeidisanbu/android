@@ -7,30 +7,26 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.FrameLayout
 import com.gaofei.app.R
 import com.gaofei.library.utils.CommonUtils
-import com.gaofei.library.utils.LogUtils
-import kotlinx.coroutines.experimental.channels.NULL_VALUE
 
 
 class TaskPathView : FrameLayout {
-
-    private lateinit var mContext: Context
-    private var mTaskTreasureBoxToCenterMargin: Int = 0
-    private var mTaskTreasureBoxToTreasureBoxMargin: Int = 0
-    private var mTaskTreasureBoxRadius: Float = 0f
-    private var mTaskFirstTreasureBoxToParentTop: Int = 0
-    private var mTaskFirstTreasureBoxToParentBottom: Int = 0
     private val mTaskTreasureBoxCount = 4
+    private val mTreasureBoxIconViews = arrayOfNulls<ViewGroup>(mTaskTreasureBoxCount)
+    private lateinit var mContext: Context
+    private var mTaskTreasureBoxToCenterMargin: Float = 0f
+    private var mTaskTreasureBoxToTreasureBoxMargin: Float = 0f
+    private var mTaskTreasureBoxRadius: Float = 0f
+    private var mTaskFirstTreasureBoxToParentTop: Float = 0f
     private var mTaskPathWidth = 0f
+    private var mViewInfo = ViewInfo(0f, 0f, 1f)
+    private lateinit var mPaint0: Paint // 宝箱背景
     private lateinit var mPaint1: Paint // 宝箱
     private lateinit var mPaint2: Paint // 路径
     private lateinit var mPaint3: Paint // 虚线
-    private lateinit var mPath: Path
     private var mAnimatedValue: Float = 0f
     private var mmValueAnimator: ValueAnimator? = null
 
@@ -53,19 +49,73 @@ class TaskPathView : FrameLayout {
 
     private fun init(context: Context) {
         this.mContext = context
+        mViewInfo = calculateBackGroundScale()
+        initDraw()
+        initView()
+        layoutTreasureBoxIcon()
+    }
+
+    /**
+     */
+    private fun calculateBackGroundScale(): ViewInfo {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeResource(mContext.resources, R.drawable.task_illus_bg, options)
+        val dwidth = options.outWidth.toFloat()
+        val dheight = options.outHeight.toFloat()
+        val vwidth = mContext.getScreenWidth().toFloat()
+        return ViewInfo(dwidth, dheight, vwidth / dwidth)
+    }
+
+    private fun initDraw() {
         setWillNotDraw(false)
-        this.mTaskTreasureBoxToCenterMargin = mContext.dip2px(43f)
-        this.mTaskTreasureBoxToTreasureBoxMargin = mContext.dip2px(120f)
-        this.mTaskTreasureBoxRadius = mContext.dip2px(58f).toFloat()
-        this.mTaskFirstTreasureBoxToParentTop = mContext.dip2px(96f)
-        this.mTaskFirstTreasureBoxToParentBottom = mContext.dip2px(24f)
-        this.mTaskPathWidth = mContext.dip2px(16f).toFloat()
+        this.mTaskTreasureBoxToCenterMargin = mContext.dip2px(43f).toFloat() * mViewInfo.scale
+        this.mTaskTreasureBoxToTreasureBoxMargin = mContext.dip2px(128f) * mViewInfo.scale
+        this.mTaskTreasureBoxRadius = mContext.dip2px(58f) * mViewInfo.scale
+        this.mTaskFirstTreasureBoxToParentTop = mContext.dip2px(96f) * mViewInfo.scale
+        this.mTaskPathWidth = mContext.dip2px(16f).toFloat() * mViewInfo.scale
+        initPaint0()
         initPaint1()
         initPaint2()
         initPaint3()
-        mPath = Path()
     }
 
+
+    private fun initView() {
+        for (i in 0 until mTaskTreasureBoxCount) {
+            mTreasureBoxIconViews[i] = obtainTaskTreasureBoxIconView(null)
+        }
+    }
+
+    private fun obtainTaskTreasureBoxIconView(map: Map<String, Any>?): ViewGroup {
+        val taskTreasureBoxIconView = LayoutInflater.from(mContext).inflate(R.layout.task_treasure_box_icon, null) as ViewGroup
+        return taskTreasureBoxIconView
+    }
+
+
+    private fun layoutTreasureBoxIcon() {
+        for (i in 0 until mTaskTreasureBoxCount) {
+            val treasureBoxLocationInfo = calculateTreasureBoxCircleLocationInfo(i)
+            mTreasureBoxIconViews[i]?.let {
+                it.scaleX = mViewInfo.scale
+                it.scaleY = mViewInfo.scale
+                val width = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_width) * mViewInfo.scale
+                val height = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_height) * mViewInfo.scale
+                val lp = FrameLayout.LayoutParams(width.toInt(), height.toInt())
+                lp.leftMargin = treasureBoxLocationInfo.left.toInt()
+                lp.topMargin = treasureBoxLocationInfo.top.toInt()
+                this.addView(it, lp)
+            }
+
+        }
+    }
+
+
+    private fun initPaint0() {
+        mPaint0 = Paint()
+        mPaint0.style = Paint.Style.FILL
+        mPaint0.color = Color.parseColor("#FF2AA162")
+    }
 
     private fun initPaint1() {
         mPaint1 = Paint()
@@ -89,6 +139,7 @@ class TaskPathView : FrameLayout {
 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         setMeasuredDimension(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(calculateHeight(mTaskTreasureBoxCount), View.MeasureSpec.EXACTLY))
     }
 
@@ -105,7 +156,7 @@ class TaskPathView : FrameLayout {
                 }
             }
         }
-        mmValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
+        mmValueAnimator = ValueAnimator.ofFloat(0.6f, 1f, 2f, 3f, 4f)
         mmValueAnimator?.let {
             it.addUpdateListener {
                 mAnimatedValue = it.animatedValue as Float
@@ -117,21 +168,23 @@ class TaskPathView : FrameLayout {
     }
 
     private fun calculateHeight(count: Int): Int {
-        val totalCircleHeight = count * 2 * mTaskTreasureBoxRadius
-        var totalTaskTreasureBoxToTreasureBoxMargin = if (count > 0) {
-            (count - 1) * 2 * mTaskTreasureBoxToTreasureBoxMargin
-        } else {
-            0
+        return mViewInfo.height.toInt()
+    }
+
+
+    override fun dispatchDraw(canvas: Canvas?) {
+        super.dispatchDraw(canvas)
+        canvas?.let {
+            drawTask(it, mAnimatedValue, mTaskTreasureBoxCount)
         }
-        return (mTaskFirstTreasureBoxToParentTop + totalCircleHeight + totalTaskTreasureBoxToTreasureBoxMargin + mTaskFirstTreasureBoxToParentBottom).toInt()
+
     }
 
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        calculateBackGroundScale()
         drawTaskBackground(canvas)
-        drawTask(canvas, mAnimatedValue, mPath, mTaskTreasureBoxCount)
+        super.onDraw(canvas)
+
     }
 
 
@@ -142,51 +195,32 @@ class TaskPathView : FrameLayout {
         val options = BitmapFactory.Options()
         options.inScaled = false
         val bitmap = BitmapFactory.decodeResource(mContext.resources, R.drawable.task_illus_bg, options)
-        val dwidth = bitmap.width
-        val dheight = bitmap.height
-        val vwidth = width
-        var scale = calculateBackGroundScale()
-        var dx: Float = (vwidth - dwidth * scale) * 0.5f
         val matrix = Matrix()
-        matrix.postScale(scale, scale)
-        matrix.postTranslate(Math.round(dx).toFloat(), 0f)
+        matrix.postScale(mViewInfo.scale, mViewInfo.scale)
         canvas.drawBitmap(bitmap, matrix, mPaint1)
     }
 
-    /**
-     * 该方法在onDraw调用
-     */
-    private fun calculateBackGroundScale(): Float {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = true
-        val bitmap = BitmapFactory.decodeResource(mContext.resources, R.drawable.task_illus_bg, options)
-        val dwidth = options.outWidth
-        val dheight = options.outHeight
-        val vwidth = width
-        val vheight = height
-        return if (dwidth * vheight > vwidth * dheight) {
-            vheight / dheight.toFloat()
-        } else {
-            vwidth / dwidth.toFloat()
-        }
-    }
 
-
-    private fun drawTask(canvas: Canvas, value: Float, path: Path, count: Int) {
+    private fun drawTask(canvas: Canvas, value: Float, count: Int) {
         for (i in 0 until count) {
-            drawTaskPath(canvas, i, path, value)
+            drawTaskPath(canvas, i, value)
         }
 
         for (i in 0..count) {
-            drawTaskTreasureBox(canvas, i, path, value)
+//            drawTaskTreasureBox(canvas, i, value)
         }
-        canvas.drawPath(mPath, mPaint1)
     }
 
-    private fun drawTaskTreasureBox(canvas: Canvas, i: Int, path: Path, value: Float) {
+
+    private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
         val isLeft = (i + 1) % 2 != 0
-        val circlePointF = getTreasureBoxCirclePointF(isLeft, i)
-        path.addCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, Path.Direction.CCW)
+        val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
+        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
+        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
+        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
+    }
+
+    private fun drawTaskTreasureBoxDes(canvas: Canvas, i: Int, value: Float, circlePointF: PointF) {
         val roundRectRectFLeft = circlePointF.x - mTaskTreasureBoxRadius
         val roundRectHeight = CommonUtils.dip2px(mContext, 40f)
         val roundRectRectFTop = circlePointF.y + CommonUtils.dip2px(mContext, 30f)
@@ -195,19 +229,27 @@ class TaskPathView : FrameLayout {
         val roundRectRectF = RectF(roundRectRectFLeft, roundRectRectFTop, roundRectRectFRight, roundRectRectFBottom)
         val roundRectRX = roundRectHeight
         val roundRectRY = roundRectRX
+        val path = Path()
         path.addRoundRect(roundRectRectF, roundRectRX.toFloat(), roundRectRY.toFloat(), Path.Direction.CCW)
+    }
 
+    private fun drawTaskTreasureBoxIcon(canvas: Canvas, i: Int, value: Float, circlePointF: PointF) {
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        val bitmap = BitmapFactory.decodeResource(mContext.resources, R.drawable.task_box_lock_color, options)
+        val matrix = Matrix()
+        matrix.postScale(value, value)
+        canvas.drawBitmap(bitmap, matrix, mPaint1)
     }
 
 
-    private fun drawTaskPath(canvas: Canvas, i: Int, path: Path, value: Float) {
+    private fun drawTaskPath(canvas: Canvas, i: Int, value: Float) {
         val path1 = Path()
         val path2 = Path()
-        val isLeft = (i + 1) % 2 != 0
-        val circle1PointF = getTreasureBoxCirclePointF(isLeft, i)
+        val circle1PointF = calculateTreasureBoxCircleLocationInfo( i).pointF
         path1.moveTo(circle1PointF.x, circle1PointF.y)
         path2.moveTo(circle1PointF.x, circle1PointF.y)
-        val circle2PointF = getTreasureBoxCirclePointF(!isLeft, i + 1)
+        val circle2PointF = calculateTreasureBoxCircleLocationInfo(i + 1).pointF
         path1.lineTo(circle2PointF.x, circle2PointF.y)
         path2.lineTo(circle2PointF.x, circle2PointF.y)
         canvas.drawPath(path1, mPaint2)
@@ -220,11 +262,12 @@ class TaskPathView : FrameLayout {
     }
 
 
-    private fun getTreasureBoxCirclePointF(isLeft: Boolean, index: Int): PointF {
+    private fun calculateTreasureBoxCircleLocationInfo(index: Int): TreasureBoxLocationInfo {
+        val isLeft = (index + 1) % 2 != 0
         val treasureBoxStartPointFXOffset = mTaskTreasureBoxToCenterMargin + mTaskTreasureBoxRadius
         val treasureBoxStartPointFX = mContext.getScreenWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
         val treasureStartBoxPointFY = mTaskFirstTreasureBoxToParentTop + index * 2 * mTaskTreasureBoxRadius + index * mTaskTreasureBoxToTreasureBoxMargin + mTaskTreasureBoxRadius
-        return PointF(treasureBoxStartPointFX, treasureStartBoxPointFY)
+        return TreasureBoxLocationInfo(PointF(treasureBoxStartPointFX, treasureStartBoxPointFY), treasureBoxStartPointFX - mTaskTreasureBoxRadius, treasureStartBoxPointFY - mTaskTreasureBoxRadius)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -252,9 +295,14 @@ class TaskPathView : FrameLayout {
     }
 
     fun Context.dip2px(dipValue: Float): Int {
-        val scale = context.resources.displayMetrics.density
+        val scale = 3f
         return (dipValue * scale + 0.5f).toInt()
     }
 
+    data class ViewInfo(val width: Float, val height: Float,
+                        val scale: Float)
+
+    data class TreasureBoxLocationInfo(val pointF: PointF, val left: Float,
+                                       val top: Float)
 
 }
