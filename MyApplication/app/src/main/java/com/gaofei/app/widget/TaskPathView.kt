@@ -64,9 +64,9 @@ class TaskPathView : FrameLayout {
         val dwidth = options.outWidth.toFloat()
         val dheight = options.outHeight.toFloat()
         val vwidth = getViewWidth()
-        val dpScale =  mContext.resources.displayMetrics.densityDpi.toFloat() / 480f
+        val dpScale = mContext.resources.displayMetrics.densityDpi.toFloat() / 480f
         val widthScale = vwidth / (dpScale * dwidth)
-        return ViewInfo(dpScale * dwidth * widthScale, dpScale* dheight * widthScale, widthScale)
+        return ViewInfo(dpScale * dwidth * widthScale, dpScale * dheight * widthScale, widthScale)
     }
 
     private fun initDraw() {
@@ -102,16 +102,17 @@ class TaskPathView : FrameLayout {
                 val width = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_width)
                 val height = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_height)
                 val lp = FrameLayout.LayoutParams(width.toInt(), height.toInt())
-                lp.leftMargin = treasureBoxLocationInfo.left.toInt()
-                lp.topMargin = treasureBoxLocationInfo.top.toInt()
+                lp.leftMargin = (treasureBoxLocationInfo.left.toInt() + (width * mViewInfo.scale - width) / 2).toInt()
+                lp.topMargin = (treasureBoxLocationInfo.top.toInt() + (width * mViewInfo.scale - width) / 2).toInt()
+
                 this.addView(it, lp)
                 it.pivotX = width / 2
-                it.pivotY  = width / 2
+                it.pivotY = width / 2
                 it.scaleX = mViewInfo.scale
                 it.scaleY = mViewInfo.scale
-                val lp1 = FrameLayout.LayoutParams(20, 20)
+                val lp1 = FrameLayout.LayoutParams(50, 50)
                 lp1.leftMargin = (treasureBoxLocationInfo.left.toInt() + mTaskTreasureBoxRadius).toInt()
-                lp1.topMargin = (treasureBoxLocationInfo.top.toInt()+ mTaskTreasureBoxRadius).toInt()
+                lp1.topMargin = (treasureBoxLocationInfo.top.toInt() + mTaskTreasureBoxRadius).toInt()
                 val view = View(mContext)
                 view.setBackgroundColor(Color.RED)
                 this.addView(view, lp1)
@@ -119,8 +120,6 @@ class TaskPathView : FrameLayout {
 
         }
     }
-
-
 
 
     private fun initPaint0() {
@@ -281,7 +280,6 @@ class TaskPathView : FrameLayout {
         val treasureStartBoxPointFY = mTaskFirstTreasureBoxToParentTop + index * 2 * mTaskTreasureBoxRadius + index * mTaskTreasureBoxToTreasureBoxMargin + mTaskTreasureBoxRadius
         return TreasureBoxLocationInfo(PointF(treasureBoxStartPointFX, treasureStartBoxPointFY), treasureBoxStartPointFX - mTaskTreasureBoxRadius, treasureStartBoxPointFY - mTaskTreasureBoxRadius)
     }
-
 
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {

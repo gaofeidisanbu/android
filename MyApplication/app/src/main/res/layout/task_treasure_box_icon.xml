@@ -19,8 +19,8 @@
             android:background="@drawable/task_box_lock_color" />
 
         <View
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
             android:layout_gravity="center"
             android:background="@color/black" />
     </FrameLayout>
