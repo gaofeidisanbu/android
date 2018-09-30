@@ -64,8 +64,9 @@ class TaskPathView : FrameLayout {
         val dwidth = options.outWidth.toFloat()
         val dheight = options.outHeight.toFloat()
         val vwidth = getViewWidth()
-        val widthScale = vwidth / dwidth
-        return ViewInfo(dwidth * widthScale, dheight * widthScale, widthScale)
+        val dpScale =  mContext.resources.displayMetrics.densityDpi.toFloat() / 480f
+        val widthScale = vwidth / (dpScale * dwidth)
+        return ViewInfo(dpScale * dwidth * widthScale, dpScale* dheight * widthScale, widthScale)
     }
 
     private fun initDraw() {
@@ -98,18 +99,28 @@ class TaskPathView : FrameLayout {
         for (i in 0 until mTaskTreasureBoxCount) {
             val treasureBoxLocationInfo = calculateTreasureBoxCircleLocationInfo(i)
             mTreasureBoxIconViews[i]?.let {
-                it.scaleX = mViewInfo.scale
-                it.scaleY = mViewInfo.scale
-                val width = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_width) * mViewInfo.scale
-                val height = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_height) * mViewInfo.scale
+                val width = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_width)
+                val height = mContext.resources.getDimension(R.dimen.task_treasure_box_icon_height)
                 val lp = FrameLayout.LayoutParams(width.toInt(), height.toInt())
                 lp.leftMargin = treasureBoxLocationInfo.left.toInt()
                 lp.topMargin = treasureBoxLocationInfo.top.toInt()
                 this.addView(it, lp)
+                it.pivotX = width / 2
+                it.pivotY  = width / 2
+                it.scaleX = mViewInfo.scale
+                it.scaleY = mViewInfo.scale
+                val lp1 = FrameLayout.LayoutParams(20, 20)
+                lp1.leftMargin = (treasureBoxLocationInfo.left.toInt() + mTaskTreasureBoxRadius).toInt()
+                lp1.topMargin = (treasureBoxLocationInfo.top.toInt()+ mTaskTreasureBoxRadius).toInt()
+                val view = View(mContext)
+                view.setBackgroundColor(Color.RED)
+                this.addView(view, lp1)
             }
 
         }
     }
+
+
 
 
     private fun initPaint0() {
@@ -194,7 +205,7 @@ class TaskPathView : FrameLayout {
      */
     private fun drawTaskBackground(canvas: Canvas) {
         val options = BitmapFactory.Options()
-        options.inScaled = false
+        options.inScaled = true
         val bitmap = BitmapFactory.decodeResource(mContext.resources, R.drawable.task_illus_bg, options)
         val matrix = Matrix()
         matrix.postScale(mViewInfo.scale, mViewInfo.scale)
@@ -204,7 +215,7 @@ class TaskPathView : FrameLayout {
 
     private fun drawTask(canvas: Canvas, value: Float, count: Int) {
         for (i in 0 until count) {
-            drawTaskPath(canvas, i, value)
+//            drawTaskPath(canvas, i, value)
         }
 
         for (i in 0..count) {
@@ -282,7 +293,9 @@ class TaskPathView : FrameLayout {
         val wm = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         val outMetrics = DisplayMetrics()
         wm.defaultDisplay.getMetrics(outMetrics)
-        return 720
+        return outMetrics.widthPixels
+
+//        return 720
     }
 
     /**
@@ -298,7 +311,7 @@ class TaskPathView : FrameLayout {
     }
 
     fun dip2px(dipValue: Float): Int {
-        val scale = 3f
+        val scale = context.resources.displayMetrics.density
         return (dipValue * scale + 0.5f).toInt()
     }
 
