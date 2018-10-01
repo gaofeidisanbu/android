@@ -108,6 +108,10 @@ class TaskPathView : FrameLayout {
                 this.addView(it, lp)
                 it.pivotX = width / 2
                 it.pivotY = width / 2
+                treasureBoxLocationInfo.pivotX = it.pivotX
+                treasureBoxLocationInfo.pivotY = it.pivotY
+                treasureBoxLocationInfo.scale = mViewInfo.scale
+                it.setTag(R.id.task_treasure_box_tag_id, treasureBoxLocationInfo)
                 it.scaleX = mViewInfo.scale
                 it.scaleY = mViewInfo.scale
                 val lp1 = FrameLayout.LayoutParams(50, 50)
@@ -154,6 +158,11 @@ class TaskPathView : FrameLayout {
         setMeasuredDimension(widthMeasureSpec, View.MeasureSpec.makeMeasureSpec(calculateHeight(mTaskTreasureBoxCount), View.MeasureSpec.EXACTLY))
     }
 
+    private fun calculateHeight(count: Int): Int {
+        return mViewInfo.height.toInt()
+    }
+
+
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         startAnimator()
@@ -176,10 +185,6 @@ class TaskPathView : FrameLayout {
             it.duration = 2000
             it.start()
         }
-    }
-
-    private fun calculateHeight(count: Int): Int {
-        return mViewInfo.height.toInt()
     }
 
 
@@ -214,11 +219,11 @@ class TaskPathView : FrameLayout {
 
     private fun drawTask(canvas: Canvas, value: Float, count: Int) {
         for (i in 0 until count) {
-//            drawTaskPath(canvas, i, value)
+            drawTaskPath(canvas, i, value)
         }
 
         for (i in 0..count) {
-//            drawTaskTreasureBox(canvas, i, value)
+            drawTaskTreasureBox(canvas, i, value)
         }
     }
 
@@ -226,9 +231,21 @@ class TaskPathView : FrameLayout {
     private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
         val isLeft = (i + 1) % 2 != 0
         val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
-        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
-        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
-        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
+//        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
+//        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
+//        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
+        if (value > 0 && value <= 1f) {
+            mTreasureBoxIconViews[i]?.let {
+                val treasureBoxLocationInfo = it.getTag(R.id.task_treasure_box_tag_id) as TreasureBoxLocationInfo
+                it.pivotX = treasureBoxLocationInfo.pivotX
+                it.pivotY = treasureBoxLocationInfo.pivotY
+                val scale = treasureBoxLocationInfo.scale * value
+                it.scaleX = scale
+                it.scaleY = scale
+            }
+        }
+
+
     }
 
     private fun drawTaskTreasureBoxDes(canvas: Canvas, i: Int, value: Float, circlePointF: PointF) {
@@ -267,6 +284,16 @@ class TaskPathView : FrameLayout {
         canvas.drawPath(path2, mPaint3)
     }
 
+    class PathInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
+        init {
+
+        }
+
+//        fun getMovePointF(value: Float): PointF {
+//            val a = (startPointF.y - endPointF.y)/(startPointF.x - endPointF.x)
+//        }
+    }
+
     private fun getEndPointFY(value: Float): Float {
         val pointFY = mTaskFirstTreasureBoxToParentTop + mTaskTreasureBoxRadius + (mTaskTreasureBoxToTreasureBoxMargin + mTaskTreasureBoxRadius)
         return pointFY
@@ -278,7 +305,7 @@ class TaskPathView : FrameLayout {
         val treasureBoxStartPointFXOffset = mTaskTreasureBoxToCenterMargin + mTaskTreasureBoxRadius
         val treasureBoxStartPointFX = getViewWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
         val treasureStartBoxPointFY = mTaskFirstTreasureBoxToParentTop + index * 2 * mTaskTreasureBoxRadius + index * mTaskTreasureBoxToTreasureBoxMargin + mTaskTreasureBoxRadius
-        return TreasureBoxLocationInfo(PointF(treasureBoxStartPointFX, treasureStartBoxPointFY), treasureBoxStartPointFX - mTaskTreasureBoxRadius, treasureStartBoxPointFY - mTaskTreasureBoxRadius)
+        return TreasureBoxLocationInfo(PointF(treasureBoxStartPointFX, treasureStartBoxPointFY), treasureBoxStartPointFX - mTaskTreasureBoxRadius, treasureStartBoxPointFY - mTaskTreasureBoxRadius, 0f, 0f, 1f)
     }
 
 
@@ -317,6 +344,6 @@ class TaskPathView : FrameLayout {
                         val scale: Float)
 
     data class TreasureBoxLocationInfo(val pointF: PointF, val left: Float,
-                                       val top: Float)
+                                       val top: Float, var pivotX: Float, var pivotY: Float, var scale: Float)
 
 }
