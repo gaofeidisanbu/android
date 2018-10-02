@@ -235,15 +235,26 @@ class TaskPathView : FrameLayout {
 //        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
 //        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
 //        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
-        if (value > 0 && value <= 1f) {
+        if (value < values[i]) {
             mTreasureBoxIconViews[i]?.let {
-                val treasureBoxLocationInfo = it.getTag(R.id.task_treasure_box_tag_id) as TreasureBoxLocationInfo
-                it.pivotX = treasureBoxLocationInfo.pivotX
-                it.pivotY = treasureBoxLocationInfo.pivotY
-                val scale = treasureBoxLocationInfo.scale * value
-                it.scaleX = scale
-                it.scaleY = scale
+                it.visibility = View.INVISIBLE
             }
+            return
+        }
+        var v = value
+
+        if (v >= values[i + 1]) {
+            v = values[i + 1]
+        }
+        val t = (v - values[i]) / (values[i + 1] - values[i])
+        mTreasureBoxIconViews[i]?.let {
+            it.visibility = View.VISIBLE
+            val treasureBoxLocationInfo = it.getTag(R.id.task_treasure_box_tag_id) as TreasureBoxLocationInfo
+            it.pivotX = treasureBoxLocationInfo.pivotX
+            it.pivotY = treasureBoxLocationInfo.pivotY
+            val scale = treasureBoxLocationInfo.scale * t
+            it.scaleX = scale
+            it.scaleY = scale
         }
 
 
@@ -275,7 +286,7 @@ class TaskPathView : FrameLayout {
 
 
     private fun drawTaskPath(canvas: Canvas, i: Int, value: Float) {
-        if (value < values[i] ) {
+        if (value < values[i]) {
             return
         }
         val path1 = Path()
