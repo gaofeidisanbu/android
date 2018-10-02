@@ -176,13 +176,14 @@ class TaskPathView : FrameLayout {
                 }
             }
         }
-        mmValueAnimator = ValueAnimator.ofFloat(0.6f, 1f, 2f, 3f, 4f)
+
+        mmValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
         mmValueAnimator?.let {
             it.addUpdateListener {
                 mAnimatedValue = it.animatedValue as Float
                 invalidate()
             }
-            it.duration = 2000
+            it.duration = 10000
             it.start()
         }
     }
@@ -218,11 +219,11 @@ class TaskPathView : FrameLayout {
 
 
     private fun drawTask(canvas: Canvas, value: Float, count: Int) {
-        for (i in 0 until count) {
+        for (i in 0 until count - 1) {
             drawTaskPath(canvas, i, value)
         }
 
-        for (i in 0..count) {
+        for (i in 0 until count) {
             drawTaskTreasureBox(canvas, i, value)
         }
     }
@@ -270,28 +271,46 @@ class TaskPathView : FrameLayout {
         canvas.drawBitmap(bitmap, matrix, mPaint1)
     }
 
+    val values = arrayOf(0f, 1f, 2f, 3f, 4f, 5f)
+
 
     private fun drawTaskPath(canvas: Canvas, i: Int, value: Float) {
+        if (value < values[i] ) {
+            return
+        }
         val path1 = Path()
         val path2 = Path()
         val circle1PointF = calculateTreasureBoxCircleLocationInfo(i).pointF
         path1.moveTo(circle1PointF.x, circle1PointF.y)
         path2.moveTo(circle1PointF.x, circle1PointF.y)
         val circle2PointF = calculateTreasureBoxCircleLocationInfo(i + 1).pointF
-        path1.lineTo(circle2PointF.x, circle2PointF.y)
-        path2.lineTo(circle2PointF.x, circle2PointF.y)
+        val pathInfo = PathInfo(i, circle1PointF, circle2PointF)
+        val circlePointF = pathInfo.getMovePointF(value)
+        path1.lineTo(circlePointF.x, circlePointF.y)
+        path2.lineTo(circlePointF.x, circlePointF.y)
         canvas.drawPath(path1, mPaint2)
         canvas.drawPath(path2, mPaint3)
     }
 
-    class PathInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
+    inner class PathInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
         init {
 
         }
 
-//        fun getMovePointF(value: Float): PointF {
-//            val a = (startPointF.y - endPointF.y)/(startPointF.x - endPointF.x)
-//        }
+        fun getMovePointF(value: Float): PointF {
+            // y = ax+b
+            var v = value
+
+            if (v >= values[i + 1]) {
+                v = values[i + 1]
+            }
+            val t = (v - values[i]) / (values[i + 1] - values[i])
+            val a = (endPointF.y - startPointF.y) / (endPointF.x - startPointF.x)
+            val b = startPointF.y - a * startPointF.x
+            val x = startPointF.x + (endPointF.x - startPointF.x) * t
+            val y = a * x + b
+            return PointF(x, y)
+        }
     }
 
     private fun getEndPointFY(value: Float): Float {
