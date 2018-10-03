@@ -53,7 +53,9 @@ class TaskPathView : FrameLayout {
         initDraw()
         initView()
         layoutTreasureBoxIcon()
+        layoutCoinTask()
     }
+
 
     /**
      */
@@ -88,6 +90,56 @@ class TaskPathView : FrameLayout {
             mTreasureBoxIconViews[i] = obtainTaskTreasureBoxIconView(null)
         }
     }
+
+    private var isReceive = false
+    val mCoinTaskView = arrayOfNulls<ViewGroup>(4)
+    val mCoinTaskSize = arrayOf<Float>(48f, 48f, 60f, 48f)
+
+    private fun layoutCoinTask() {
+        if (!isReceive) {
+            for (i in 0 until mCoinTaskView.size) {
+                val coinTaskInfo = CoinTaskInfo(i, mCoinTaskSize[i], isReceive)
+                obtainCoinTaskView(coinTaskInfo)
+            }
+
+
+        }
+
+    }
+
+    private fun obtainCoinTaskView(coinTaskInfo: CoinTaskInfo): FrameLayout {
+        val newTaskCoinView = LayoutInflater.from(mContext).inflate(R.layout.layout_new_task_coin_task, null) as FrameLayout
+        val size = CommonUtils.dip2px(mContext, coinTaskInfo.size)
+        val newTaskCoinViewLP = FrameLayout.LayoutParams(size, size)
+        if (coinTaskInfo.i == 0) {
+            newTaskCoinViewLP.topMargin = CommonUtils.dip2px(mContext, 76f)
+            newTaskCoinViewLP.rightMargin = CommonUtils.dip2px(mContext, 60f)
+            newTaskCoinViewLP.gravity = Gravity.TOP or Gravity.RIGHT
+        }
+
+        if (coinTaskInfo.i == 1) {
+            newTaskCoinViewLP.topMargin = CommonUtils.dip2px(mContext, 236f)
+            newTaskCoinViewLP.leftMargin = CommonUtils.dip2px(mContext, 43f)
+            newTaskCoinViewLP.gravity = Gravity.TOP or Gravity.LEFT
+        }
+
+        if (coinTaskInfo.i == 2) {
+            newTaskCoinViewLP.topMargin = CommonUtils.dip2px(mContext, 290f)
+            newTaskCoinViewLP.rightMargin = CommonUtils.dip2px(mContext, 46f)
+            newTaskCoinViewLP.gravity = Gravity.TOP or Gravity.RIGHT
+        }
+
+        if (coinTaskInfo.i == 3) {
+            newTaskCoinViewLP.topMargin = CommonUtils.dip2px(mContext, 405f)
+            newTaskCoinViewLP.leftMargin = CommonUtils.dip2px(mContext, 133f)
+            newTaskCoinViewLP.gravity = Gravity.TOP or Gravity.LEFT
+        }
+        addView(newTaskCoinView, newTaskCoinViewLP)
+        return newTaskCoinView
+    }
+
+
+    class CoinTaskInfo( val i: Int, val size: Float, var isReceive: Boolean)
 
     private fun obtainTaskTreasureBoxIconView(map: Map<String, Any>?): ViewGroup {
         val taskTreasureBoxIconView = LayoutInflater.from(mContext).inflate(R.layout.task_treasure_box_icon, null) as ViewGroup
@@ -200,6 +252,9 @@ class TaskPathView : FrameLayout {
 
     override fun onDraw(canvas: Canvas) {
         drawTaskBackground(canvas)
+        for (i in 0 until mTaskTreasureBoxCount - 1) {
+            drawTaskPath(canvas, i, mAnimatedValue)
+        }
         super.onDraw(canvas)
 
     }
@@ -219,9 +274,7 @@ class TaskPathView : FrameLayout {
 
 
     private fun drawTask(canvas: Canvas, value: Float, count: Int) {
-        for (i in 0 until count - 1) {
-            drawTaskPath(canvas, i, value)
-        }
+
 
         for (i in 0 until count) {
             drawTaskTreasureBox(canvas, i, value)
@@ -242,7 +295,7 @@ class TaskPathView : FrameLayout {
             return
         }
         var v = value
-
+        v += 0.6f
         if (v >= values[i + 1]) {
             v = values[i + 1]
         }

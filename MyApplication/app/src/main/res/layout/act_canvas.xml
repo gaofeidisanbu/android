@@ -9,10 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.gaofei.app.widget.TaskPathView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="360dp"
+            android:layout_height="992dp"
+            android:background="@drawable/task_illus_bg">
 
-        </com.gaofei.app.widget.TaskPathView>
+
+        </android.support.constraint.ConstraintLayout>
     </RelativeLayout>
 </android.support.v4.widget.NestedScrollView>
