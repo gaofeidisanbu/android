@@ -1,20 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="360dp"
-            android:layout_height="992dp"
-            android:background="@drawable/task_illus_bg">
+        <com.gaofei.app.widget.TaskFrameLayout
+            android:id="@+id/fl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.gaofei.app.task.NewTaskTreasureBoxView
+                android:id="@+id/taskTreasureBoxView"
+                android:layout_width="@dimen/new_task_root_width"
+                android:layout_height="@dimen/new_task_root_height"
+                android:background="@drawable/task_illus_bg">
 
 
-        </android.support.constraint.ConstraintLayout>
-    </RelativeLayout>
-</android.support.v4.widget.NestedScrollView>
+                <include
+                    android:id="@+id/treasureBox1"
+                    layout="@layout/task_treasure_box_icon"
+                    android:layout_width="@dimen/task_treasure_box_icon_width"
+                    android:layout_height="124dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="42dp"
+                    android:layout_marginTop="96dp" />
+
+                <com.gaofei.app.widget.RoundLinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="28dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="294dp"
+                    android:background="@color/white"
+                    app:radius="14dp">
+
+                    <TextView
+                        android:layout_width="44dp"
+                        android:layout_height="match_parent"
+                        android:background="#FFFF5C17"
+                        android:gravity="center"
+                        android:text="限时"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/hour"
+                        android:layout_width="19dp"
+                        android:layout_height="18dp"
+                        android:layout_marginLeft="12dp"
+                        android:background="@drawable/new_task_duration_bg"
+                        android:gravity="center"
+                        android:text="48"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textColor="#FFFF5C17"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/minute"
+                        android:layout_width="19dp"
+                        android:layout_height="18dp"
+                        android:background="@drawable/new_task_duration_bg"
+                        android:gravity="center"
+                        android:text="48"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text=":"
+                        android:textColor="#FFFF5C17"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/second"
+                        android:layout_width="19dp"
+                        android:layout_height="18dp"
+                        android:layout_marginRight="12dp"
+                        android:background="@drawable/new_task_duration_bg"
+                        android:gravity="center"
+                        android:text="48"
+                        android:textColor="@color/white"
+                        android:textSize="14dp" />
+
+
+                </com.gaofei.app.widget.RoundLinearLayout>
+
+                <include
+                    android:id="@+id/treasureBox2"
+                    layout="@layout/task_treasure_box_icon"
+                    android:layout_width="116dp"
+                    android:layout_height="124dp"
+                    android:layout_below="@+id/treasureBox1"
+                    android:layout_marginLeft="42dp"
+                    android:layout_marginTop="120dp" />
+
+                <include
+                    android:id="@+id/treasureBox3"
+                    layout="@layout/task_treasure_box_icon"
+                    android:layout_width="116dp"
+                    android:layout_height="124dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/treasureBox2"
+                    android:layout_marginRight="42dp"
+                    android:layout_marginTop="120dp" />
+
+
+                <include
+                    android:id="@+id/treasureBox4"
+                    layout="@layout/task_treasure_box_icon"
+                    android:layout_width="116dp"
+                    android:layout_height="124dp"
+                    android:layout_below="@+id/treasureBox3"
+                    android:layout_marginLeft="42dp"
+                    android:layout_marginTop="120dp" />
+
+                <include
+                    android:id="@+id/coinTask1"
+                    layout="@layout/layout_new_task_coin_task_48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="60dp"
+                    android:layout_marginTop="76dp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/coinTask2"
+                    layout="@layout/layout_new_task_coin_task_48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="44dp"
+                    android:layout_marginTop="236dp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/coinTask3"
+                    layout="@layout/layout_new_task_coin_task_60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="46dp"
+                    android:layout_marginTop="300dp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/coinTask4"
+                    layout="@layout/layout_new_task_coin_task_48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="134dp"
+                    android:layout_marginTop="405dp"
+                    android:visibility="gone" />
+            </com.gaofei.app.task.NewTaskTreasureBoxView>
+        </com.gaofei.app.widget.TaskFrameLayout>
+    </android.support.v4.widget.NestedScrollView>
+</FrameLayout>

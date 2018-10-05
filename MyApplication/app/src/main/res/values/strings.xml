@@ -9,4 +9,5 @@
     <string name="refresh_data_loading_str" >正在刷新...</string>
     <string name="refresh_data_str" >下拉刷新数据</string>
     <string name="refresh_data_success_str" >刷新成功</string>
+    <string name="new_task_coin_task_coin_text">洋葱币 +%d</string>
 </resources>

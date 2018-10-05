@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#ffffff"/>
-<RelativeLayout
+<C
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_height="50dp"
             android:background="#ff6666"/>
     </RelativeLayout>
-</RelativeLayout>
+</C>
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"

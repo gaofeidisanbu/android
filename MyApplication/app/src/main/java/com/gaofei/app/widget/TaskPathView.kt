@@ -108,7 +108,7 @@ class TaskPathView : FrameLayout {
     }
 
     private fun obtainCoinTaskView(coinTaskInfo: CoinTaskInfo): FrameLayout {
-        val newTaskCoinView = LayoutInflater.from(mContext).inflate(R.layout.layout_new_task_coin_task, null) as FrameLayout
+        val newTaskCoinView = LayoutInflater.from(mContext).inflate(R.layout.layout_new_task_coin_task_48dp, null) as FrameLayout
         val size = CommonUtils.dip2px(mContext, coinTaskInfo.size)
         val newTaskCoinViewLP = FrameLayout.LayoutParams(size, size)
         if (coinTaskInfo.i == 0) {
@@ -284,7 +284,7 @@ class TaskPathView : FrameLayout {
 
     private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
         val isLeft = (i + 1) % 2 != 0
-        val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
+        val circlePointF = (i).pointF
 //        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
 //        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
 //        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
@@ -383,7 +383,7 @@ class TaskPathView : FrameLayout {
     }
 
 
-    private fun calculateTreasureBoxCircleLocationInfo(index: Int): TreasureBoxLocationInfo {
+    private fun calculateTreasureBoxCircleLocationInfo(index: calculateTreasureBoxCircleLocationInfoInt): TreasureBoxLocationInfo {
         val isLeft = (index + 1) % 2 != 0
         val treasureBoxStartPointFXOffset = mTaskTreasureBoxToCenterMargin + mTaskTreasureBoxRadius
         val treasureBoxStartPointFX = getViewWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
