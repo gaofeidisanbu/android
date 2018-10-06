@@ -22,12 +22,15 @@ class NewTaskTreasureBoxView : RelativeLayout {
     private lateinit var mCoinTaskViews: List<View>
     private lateinit var newTaskCoinTasks: List<NewTaskCoinTaskInfo>
     private lateinit var mTreasureBoxViews: List<View>
-    private lateinit var mNewTaskTreasureBoxInfoList: List<NewTaskTreasureBoxInfo>
+    private lateinit var mTreasureBoxInfoList: List<NewTaskTreasureBoxInfo>
+    private var mTreasureBoxPositionInfoList: ArrayList<TreasureBoxPositionInfo> = ArrayList(mTaskTreasureBoxCount)
     private var isShowCoinTask: Boolean = true
 
-    private lateinit var mPathPaint1: Paint
-    private lateinit var mPathPaint2: Paint
-    private var mTreasureBoxPathAnimatedValue: Float = 0f
+    private lateinit var mTreasureBoxRoutePaint1: Paint
+    private lateinit var mTreasureBoxRoutePaint2: Paint
+    private lateinit var mTreasureBoxRoutePath1: Path
+    private lateinit var mTreasureBoxRoutePath2: Path
+    private var mTreasureBoxRouteAnimatedValue: Float = 0f
     private var mTreasureBoxPathValueAnimator: ValueAnimator? = null
     val values = arrayOf(0f, 1f, 2f, 3f, 4f, 5f)
 
@@ -60,23 +63,30 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     private fun initAnimation() {
         setWillNotDraw(false)
-        initPathPaint1()
-        initPathPaint2()
+        initTreasureBoxRoutePaint1()
+        initTreasureBoxRoutePaint2()
+        initTreasureBoxRoutePath()
     }
 
-    private fun initPathPaint1() {
-        mPathPaint1 = Paint()
-        mPathPaint1.style = Paint.Style.STROKE
-        mPathPaint1.color = Color.parseColor("#FF2AA162")
-        mPathPaint1.strokeWidth = mContext.dip2px(12f).toFloat()
+
+    private fun initTreasureBoxRoutePaint1() {
+        mTreasureBoxRoutePaint1 = Paint()
+        mTreasureBoxRoutePaint1.style = Paint.Style.STROKE
+        mTreasureBoxRoutePaint1.color = Color.parseColor("#FF2AA162")
+        mTreasureBoxRoutePaint1.strokeWidth = mContext.dip2px(12f).toFloat()
     }
 
-    private fun initPathPaint2() {
-        mPathPaint2 = Paint()
-        mPathPaint2.style = Paint.Style.STROKE
-        mPathPaint2.color = Color.parseColor("#FFFFFFFF")
-        mPathPaint2.strokeWidth = mContext.dip2px(5f).toFloat()
-        mPathPaint2.pathEffect = DashPathEffect(floatArrayOf(4f, 4f), 0f)
+    private fun initTreasureBoxRoutePaint2() {
+        mTreasureBoxRoutePaint2 = Paint()
+        mTreasureBoxRoutePaint2.style = Paint.Style.STROKE
+        mTreasureBoxRoutePaint2.color = Color.parseColor("#FFFFFFFF")
+        mTreasureBoxRoutePaint2.strokeWidth = mContext.dip2px(5f).toFloat()
+        mTreasureBoxRoutePaint2.pathEffect = DashPathEffect(floatArrayOf(4f, 4f), 0f)
+    }
+
+    private fun initTreasureBoxRoutePath() {
+        mTreasureBoxRoutePath1 = Path()
+        mTreasureBoxRoutePath2 = Path()
     }
 
     override fun onFinishInflate() {
@@ -95,7 +105,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     fun bindData(newTaskCoinTasks: List<NewTaskCoinTaskInfo>, newTaskTreasureBoxInfoList: List<NewTaskTreasureBoxInfo>) {
-        this.mNewTaskTreasureBoxInfoList = newTaskTreasureBoxInfoList
+        this.mTreasureBoxInfoList = newTaskTreasureBoxInfoList
         this.newTaskCoinTasks = newTaskCoinTasks
         notifyUpdate()
     }
@@ -110,7 +120,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
             isCoinTaskFinished = isCoinTaskFinished and coinTaskInfo.isReceiveCoin
             updateCoinTaskView(mCoinTaskViews[index], coinTaskInfo)
         }
-        mNewTaskTreasureBoxInfoList.forEachIndexed { index, treasureBoxGroupTaskInfo ->
+        mTreasureBoxInfoList.forEachIndexed { index, treasureBoxGroupTaskInfo ->
             updateTreasureBoxTaskGroupView(mTreasureBoxViews[index], treasureBoxGroupTaskInfo)
         }
 
@@ -176,8 +186,9 @@ class NewTaskTreasureBoxView : RelativeLayout {
         mTreasureBoxPathValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
         mTreasureBoxPathValueAnimator?.let {
             it.addUpdateListener {
-                mTreasureBoxPathAnimatedValue = it.animatedValue as Float
-                updateTreasureBoxScale()
+                mTreasureBoxRouteAnimatedValue = it.animatedValue as Float
+                LogUtils.d("mTreasureBoxRouteAnimatedValue ${mTreasureBoxRouteAnimatedValue}")
+//                updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
                 invalidate()
             }
             it.duration = 10000
@@ -185,8 +196,30 @@ class NewTaskTreasureBoxView : RelativeLayout {
         }
     }
 
-    private fun updateTreasureBoxScale() {
+    private fun updateAllTreasureBoxScale(value: Float) {
+        mTreasureBoxViews.forEachIndexed { index, view ->
+            updateTreasureBoxScale(index, view, value)
+        }
+    }
 
+    private fun updateTreasureBoxScale(i: Int, view: View, value: Float) {
+        val treasureBoxPositionInfo = mTreasureBoxPositionInfoList[i]
+        if (value < values[i]) {
+            view.visibility = View.INVISIBLE
+            return
+        }
+        var v = value
+        v += 0.8f
+        if (v >= values[i + 1]) {
+            v = values[i + 1]
+        }
+        val t = (v - values[i]) / (values[i + 1] - values[i])
+        view.visibility = View.VISIBLE
+        view.pivotX = treasureBoxPositionInfo.pivotX
+        view.pivotY = treasureBoxPositionInfo.pivotY
+        val scale = mScale * t
+        view.scaleX = scale
+        view.scaleY = scale
     }
 
 
@@ -201,91 +234,93 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     }
 
-    override fun dispatchDraw(canvas: Canvas?) {
-        super.dispatchDraw(canvas)
-        canvas?.let {
-            drawTask(it, mTreasureBoxPathAnimatedValue, mTaskTreasureBoxCount)
-        }
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        super.onLayout(changed, l, t, r, b)
+        initAllTreasureBoxPositionInfo()
 
     }
 
-
-    override fun onDraw(canvas: Canvas) {
-        for (i in 0 until mTaskTreasureBoxCount - 1) {
-            drawTaskPath(canvas, i, mTreasureBoxPathAnimatedValue)
-        }
-
-        super.onDraw(canvas)
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
     }
 
 
-    private fun drawTask(canvas: Canvas, value: Float, count: Int) {
-        for (i in 0 until count) {
-            drawTaskTreasureBox(canvas, i, value)
-        }
-    }
-
-
-    private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
-        val isLeft = (i + 1) % 2 != 0
-        val treasureBoxLocationInfo = calculateTreasureBoxCircleLocationInfo(i)
-        val cx = treasureBoxLocationInfo.pointF.x
-        val cy = treasureBoxLocationInfo.pointF.y
-        canvas.drawCircle(cx, cy, 20f, mPathPaint2)
-        val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
-        if (value < values[i]) {
-            mTreasureBoxViews[i]?.let {
-                it.visibility = View.INVISIBLE
+    private fun initAllTreasureBoxPositionInfo() {
+        mTreasureBoxPositionInfoList.clear()
+        mTreasureBoxPositionInfoList?.let {
+            for (i in 0 until mTaskTreasureBoxCount) {
+                it.add(i, calculateTreasureBoxCirclePositionInfo(i))
             }
-            return
         }
-        var v = value
-        v += 0.6f
-        if (v >= values[i + 1]) {
-            v = values[i + 1]
-        }
-        val t = (v - values[i]) / (values[i + 1] - values[i])
-        mTreasureBoxViews[i]?.let {
-            it.visibility = View.VISIBLE
-            it.pivotX = treasureBoxLocationInfo.pivotX
-            it.pivotY = treasureBoxLocationInfo.pivotY
-            val scale = mScale * t
-            it.scaleX = scale
-            it.scaleY = scale
-        }
-
 
     }
 
-
-    private fun drawTaskPath(canvas: Canvas, i: Int, value: Float) {
-        if (value < values[i]) {
-            return
-        }
-        val path1 = Path()
-        val path2 = Path()
-        val circle1PointF = calculateTreasureBoxCircleLocationInfo(i).pointF
-        path1.moveTo(circle1PointF.x, circle1PointF.y)
-        path2.moveTo(circle1PointF.x, circle1PointF.y)
-        val circle2PointF = calculateTreasureBoxCircleLocationInfo(i + 1).pointF
-        val pathInfo = PathInfo(i, circle1PointF, circle2PointF)
-        val circlePointF = pathInfo.getMovePointF(value)
-        path1.lineTo(circlePointF.x, circlePointF.y)
-        path2.lineTo(circlePointF.x, circlePointF.y)
-        canvas.drawPath(path1, mPathPaint1)
-        canvas.drawPath(path2, mPathPaint2)
-    }
-
-    private fun calculateTreasureBoxCircleLocationInfo(i: Int): TreasureBoxLocationInfo {
+    private fun calculateTreasureBoxCirclePositionInfo(i: Int): TreasureBoxPositionInfo {
         val treasureBoxView = mTreasureBoxViews[i]
         val treasureBoxCircleView = treasureBoxView.circle
         val pivotX = treasureBoxCircleView.width.toFloat() / 2
         val pivotY = treasureBoxCircleView.height.toFloat() / 2
         val pointFX = treasureBoxView.left + pivotX
         val pointFY = treasureBoxView.top + pivotY
-        val density = context.getResources().getDisplayMetrics().density
-        LogUtils.d("calculateTreasureBoxCircleLocationInfo ${i} ${treasureBoxView.left / density} ${treasureBoxView.top / density} ${pivotX / density} ${pivotY / density}")
-        return TreasureBoxLocationInfo(PointF(pointFX, pointFY), pivotX, pivotY, 1f)
+        val density = context.resources.displayMetrics.density
+        LogUtils.d("calculateTreasureBoxCirclePositionInfo ${i} ${treasureBoxView.left / density} ${treasureBoxView.top / density} ${pivotX / density} ${pivotY / density}")
+        return TreasureBoxPositionInfo(PointF(pointFX, pointFY), pivotX, pivotY, 1f)
+    }
+
+
+    override fun dispatchDraw(canvas: Canvas?) {
+        super.dispatchDraw(canvas)
+        canvas?.let {
+            drawAllTreasureBoxCenterPoint(it, mTreasureBoxRouteAnimatedValue, mTaskTreasureBoxCount)
+            updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
+        }
+
+    }
+
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        for (i in 0 until mTaskTreasureBoxCount - 1) {
+            drawTreasureBoxRoute(canvas, i, mTreasureBoxRouteAnimatedValue)
+        }
+
+    }
+
+
+    private fun drawAllTreasureBoxCenterPoint(canvas: Canvas, value: Float, count: Int) {
+        for (i in 0 until count) {
+            drawTreasureBoxCenterPoint(canvas, i, value)
+        }
+    }
+
+
+    private fun drawTreasureBoxCenterPoint(canvas: Canvas, i: Int, value: Float) {
+        val treasureBoxLocationInfo = mTreasureBoxPositionInfoList[i]
+        val cx = treasureBoxLocationInfo.pointF.x
+        val cy = treasureBoxLocationInfo.pointF.y
+        canvas.drawCircle(cx, cy, 20f, mTreasureBoxRoutePaint2)
+
+
+    }
+
+
+    private fun drawTreasureBoxRoute(canvas: Canvas, i: Int, value: Float) {
+        if (value < values[i]) {
+            return
+        }
+        mTreasureBoxRoutePath1.reset()
+        mTreasureBoxRoutePath2.reset()
+        val circle1PointF = mTreasureBoxPositionInfoList[i].pointF
+        LogUtils.d("drawTreasureBoxRoute ${value} ${circle1PointF.x}")
+        mTreasureBoxRoutePath1.moveTo(circle1PointF.x, circle1PointF.y)
+        mTreasureBoxRoutePath2.moveTo(circle1PointF.x, circle1PointF.y)
+        val circle2PointF = mTreasureBoxPositionInfoList[i + 1].pointF
+        val pathInfo = TreasureBoxRouteInfo(i, circle1PointF, circle2PointF)
+        val circlePointF = pathInfo.getMovePointF(value)
+        mTreasureBoxRoutePath1.lineTo(circlePointF.x, circlePointF.y)
+        mTreasureBoxRoutePath2.lineTo(circlePointF.x, circlePointF.y)
+        canvas.drawPath(mTreasureBoxRoutePath1, mTreasureBoxRoutePaint1)
+        canvas.drawPath(mTreasureBoxRoutePath2, mTreasureBoxRoutePaint2)
     }
 
 
@@ -295,7 +330,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
 
-    inner class PathInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
+    inner class TreasureBoxRouteInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
         init {
 
         }
@@ -316,7 +351,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
         }
     }
 
-    data class TreasureBoxLocationInfo(val pointF: PointF, var pivotX: Float, var pivotY: Float, val scale: Float)
+    data class TreasureBoxPositionInfo(val pointF: PointF, var pivotX: Float, var pivotY: Float, val scale: Float)
 
 
 }
