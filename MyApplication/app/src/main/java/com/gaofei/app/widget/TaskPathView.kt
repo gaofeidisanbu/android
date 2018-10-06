@@ -284,7 +284,7 @@ class TaskPathView : FrameLayout {
 
     private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
         val isLeft = (i + 1) % 2 != 0
-        val circlePointF = (i).pointF
+        val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
 //        canvas.drawCircle(circlePointF.x, circlePointF.y, mTaskTreasureBoxRadius, mPaint0)
 //        drawTaskTreasureBoxIcon(canvas, i, value, circlePointF)
 //        drawTaskTreasureBoxDes(canvas, i, value, circlePointF)
@@ -383,7 +383,7 @@ class TaskPathView : FrameLayout {
     }
 
 
-    private fun calculateTreasureBoxCircleLocationInfo(index: calculateTreasureBoxCircleLocationInfoInt): TreasureBoxLocationInfo {
+    private fun calculateTreasureBoxCircleLocationInfo(index: Int): TreasureBoxLocationInfo {
         val isLeft = (index + 1) % 2 != 0
         val treasureBoxStartPointFXOffset = mTaskTreasureBoxToCenterMargin + mTaskTreasureBoxRadius
         val treasureBoxStartPointFX = getViewWidth() / 2 + if (isLeft) treasureBoxStartPointFXOffset else -treasureBoxStartPointFXOffset
