@@ -1,5 +1,6 @@
 package com.gaofei.app.task
 
+import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
@@ -31,7 +32,8 @@ class NewTaskTreasureBoxView : RelativeLayout {
     private lateinit var mTreasureBoxRoutePath1: Path
     private lateinit var mTreasureBoxRoutePath2: Path
     private var mTreasureBoxRouteAnimatedValue: Float = 0f
-    private var mTreasureBoxPathValueAnimator: ValueAnimator? = null
+    private var mTreasureBoxPathAnimator: ValueAnimator? = null
+    private var mCoinTaskAnimator: AnimatorSet? = null
     val values = arrayOf(0f, 1f, 2f, 3f, 4f, 5f)
 
     constructor(context: Context) : super(context) {
@@ -171,20 +173,40 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     private fun executeCoinTaskAnimation() {
+        val offset = mContext.dip2px(20f).toFloat()
+        mCoinTaskAnimator = AnimatorSet()
+        mCoinTaskAnimator?.let {
+            val coinTaskAnimatorRise = ValueAnimator.ofFloat(0f, offset)
+//            val coinTaskAnimatorFall = ValueAnimator.ofFloat(offset, 0f)
+            coinTaskAnimatorRise.addUpdateListener {
+                val value = it.animatedValue as Float
+                LogUtils.d("mCoinTaskAnimator ${value}")
+                updateAllCoinTaskTranslate(value)
+            }
+            coinTaskAnimatorRise.repeatCount = ValueAnimator.INFINITE
+            coinTaskAnimatorRise.repeatMode = ValueAnimator.REVERSE
+            coinTaskAnimatorRise.duration = 2000
+//            coinTaskAnimatorFall.addUpdateListener {
+//                val value = it.animatedValue as Float
+//                LogUtils.d("mCoinTaskAnimator ${value}")
+//                updateAllCoinTaskTranslate(value)
+//            }
+//            coinTaskAnimatorFall.duration = 2000
+//            coinTaskAnimatorFall.repeatCount = ValueAnimator.INFINITE
+            it.playSequentially(coinTaskAnimatorRise)
+            it.start()
+        }
+    }
 
+    private fun updateAllCoinTaskTranslate(value: Float) {
+        mCoinTaskViews.forEachIndexed { index, view ->
+            view.translationY = value
+        }
     }
 
     private fun executeTreasureBoxPathAnimation() {
-        if (mTreasureBoxPathValueAnimator != null) {
-            mTreasureBoxPathValueAnimator?.let {
-                if (it.isRunning) {
-                    mTreasureBoxPathValueAnimator?.cancel()
-                }
-            }
-        }
-
-        mTreasureBoxPathValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
-        mTreasureBoxPathValueAnimator?.let {
+        mTreasureBoxPathAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
+        mTreasureBoxPathAnimator?.let {
             it.addUpdateListener {
                 mTreasureBoxRouteAnimatedValue = it.animatedValue as Float
                 LogUtils.d("mTreasureBoxRouteAnimatedValue ${mTreasureBoxRouteAnimatedValue}")
@@ -224,8 +246,15 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     private fun clearExistAnimation() {
-        if (mTreasureBoxPathValueAnimator != null) {
-            mTreasureBoxPathValueAnimator?.let {
+        if (mCoinTaskAnimator != null) {
+            mCoinTaskAnimator?.let {
+                if (it.isRunning) {
+                    mCoinTaskAnimator?.cancel()
+                }
+            }
+        }
+        if (mTreasureBoxPathAnimator != null) {
+            mTreasureBoxPathAnimator?.let {
                 if (it.isRunning) {
                     it.cancel()
                 }

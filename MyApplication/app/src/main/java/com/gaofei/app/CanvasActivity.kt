@@ -38,6 +38,10 @@ class CanvasActivity : BaseAct() , NewTaskContract.View {
         setContentView(R.layout.act_canvas)
         mPresenter = NewTaskPresenter(this)
         taskTreasureBoxView.setPresenter(mPresenter)
+        initView()
+    }
+
+    private fun initView() {
     }
 
     override fun onResume() {

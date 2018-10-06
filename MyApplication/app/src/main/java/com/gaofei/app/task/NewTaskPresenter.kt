@@ -16,7 +16,7 @@ class NewTaskPresenter(val view: NewTaskContract.View) : NewTaskContract.Present
     }
 
     override fun clickTreasureBox(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun requestTheme() {
@@ -46,10 +46,10 @@ class NewTaskPresenter(val view: NewTaskContract.View) : NewTaskContract.Present
 //        }).compose(view.getRXActivity().bindToLifecycle()).subscribe {
         view.updateTaskProgress(Pair(50, 100))
 
-        val newTaskCoinTaskInfo1 = NewTaskCoinTaskInfo(0, 100, true)
-        val newTaskCoinTaskInfo2 = NewTaskCoinTaskInfo(1, 100, true)
-        val newTaskCoinTaskInfo3 = NewTaskCoinTaskInfo(2, 100, true)
-        val newTaskCoinTaskInfo4 = NewTaskCoinTaskInfo(3, 100, true)
+        val newTaskCoinTaskInfo1 = NewTaskCoinTaskInfo(0, 100, false)
+        val newTaskCoinTaskInfo2 = NewTaskCoinTaskInfo(1, 100, false)
+        val newTaskCoinTaskInfo3 = NewTaskCoinTaskInfo(2, 100, false)
+        val newTaskCoinTaskInfo4 = NewTaskCoinTaskInfo(3, 100, false)
         val newTaskCoinTaskInfoList = arrayListOf<NewTaskCoinTaskInfo>(newTaskCoinTaskInfo1, newTaskCoinTaskInfo2, newTaskCoinTaskInfo3, newTaskCoinTaskInfo4)
         val newTaskTreasureBoxTaskInfoList1 = arrayListOf(NewTaskTreasureBoxTaskInfo(0, "1", "已解锁", System.currentTimeMillis(), "concept"), NewTaskTreasureBoxTaskInfo(1, "1", "已解锁", System.currentTimeMillis(), "concept"))
         val newTaskTreasureBoxInfo1 = NewTaskTreasureBoxInfo(0, true, newTaskTreasureBoxTaskInfoList1)
