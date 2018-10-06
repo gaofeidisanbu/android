@@ -3,6 +3,7 @@ package com.yangcong345.android.phone.component.task2
 import com.gaofei.app.R
 import com.gaofei.app.task.NewTaskCoinTaskInfo
 import com.gaofei.app.task.NewTaskTreasureBoxInfo
+import com.gaofei.app.task.NewTaskTreasureBoxTaskInfo
 
 
 class NewTaskPresenter(val view: NewTaskContract.View) : NewTaskContract.Presenter {
@@ -37,8 +38,6 @@ class NewTaskPresenter(val view: NewTaskContract.View) : NewTaskContract.Present
     }
 
 
-
-
     override fun start() {
 //        val ob1 = GetCoinTaskV2Status().strategy(Strategy.REMOTE_ONLY).asObservable()
 //        val ob2 = GetTaskV2CategoryOnce().strategy(Strategy.REMOTE_ONLY).asObservable()
@@ -46,6 +45,27 @@ class NewTaskPresenter(val view: NewTaskContract.View) : NewTaskContract.Present
 //            Pair(t1, t2)
 //        }).compose(view.getRXActivity().bindToLifecycle()).subscribe {
         view.updateTaskProgress(Pair(50, 100))
+
+        val newTaskCoinTaskInfo1 = NewTaskCoinTaskInfo(0, 100, true)
+        val newTaskCoinTaskInfo2 = NewTaskCoinTaskInfo(1, 100, true)
+        val newTaskCoinTaskInfo3 = NewTaskCoinTaskInfo(2, 100, true)
+        val newTaskCoinTaskInfo4 = NewTaskCoinTaskInfo(3, 100, true)
+        val newTaskCoinTaskInfoList = arrayListOf<NewTaskCoinTaskInfo>(newTaskCoinTaskInfo1, newTaskCoinTaskInfo2, newTaskCoinTaskInfo3, newTaskCoinTaskInfo4)
+        val newTaskTreasureBoxTaskInfoList1 = arrayListOf(NewTaskTreasureBoxTaskInfo(0, "1", "已解锁", System.currentTimeMillis(), "concept"), NewTaskTreasureBoxTaskInfo(1, "1", "已解锁", System.currentTimeMillis(), "concept"))
+        val newTaskTreasureBoxInfo1 = NewTaskTreasureBoxInfo(0, true, newTaskTreasureBoxTaskInfoList1)
+
+        val newTaskTreasureBoxTaskInfoList2 = arrayListOf(NewTaskTreasureBoxTaskInfo(0, "1", "已解锁", System.currentTimeMillis(), "concept"), NewTaskTreasureBoxTaskInfo(1, "1", "已解锁", System.currentTimeMillis(), "concept"))
+        val newTaskTreasureBoxInfo2 = NewTaskTreasureBoxInfo(1, true, newTaskTreasureBoxTaskInfoList2)
+
+        val newTaskTreasureBoxTaskInfoList3 = arrayListOf(NewTaskTreasureBoxTaskInfo(0, "1", "已解锁", System.currentTimeMillis(), "concept"), NewTaskTreasureBoxTaskInfo(1, "1", "已解锁", System.currentTimeMillis(), "concept"))
+        val newTaskTreasureBoxInfo3 = NewTaskTreasureBoxInfo(2, true, newTaskTreasureBoxTaskInfoList3)
+
+        val newTaskTreasureBoxTaskInfoList4 = arrayListOf(NewTaskTreasureBoxTaskInfo(0, "1", "已解锁", System.currentTimeMillis(), "concept"), NewTaskTreasureBoxTaskInfo(1, "1", "已解锁", System.currentTimeMillis(), "concept"))
+        val newTaskTreasureBoxInfo4 = NewTaskTreasureBoxInfo(3, true, newTaskTreasureBoxTaskInfoList4)
+
+        val newTaskTreasureBoxInfoList = arrayListOf(newTaskTreasureBoxInfo1, newTaskTreasureBoxInfo2, newTaskTreasureBoxInfo3, newTaskTreasureBoxInfo4)
+
+        view.showTreasureBoxUI(newTaskCoinTaskInfoList, newTaskTreasureBoxInfoList)
 //        }
     }
 

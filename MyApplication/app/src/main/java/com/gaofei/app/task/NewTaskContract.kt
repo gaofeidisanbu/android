@@ -9,6 +9,7 @@ interface NewTaskContract {
         fun onBack()
         fun updateTaskProgress(pair: Pair<Int, Int>)
         fun showTaskTip(message: String, type: Int)
+        fun showTreasureBoxUI(newTaskCoinTaskInfoList: ArrayList<NewTaskCoinTaskInfo>, newTaskTreasureBoxInfoList: ArrayList<NewTaskTreasureBoxInfo>)
 //        fun getRXActivity(): RxActivity
 //        fun showThemeDetailUI(chapterId: String, theme: NewTaskThemeRequest.Theme)
     }

@@ -10,9 +10,9 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.gaofei.app.CanvasActivity
 import com.gaofei.app.R
-import com.gaofei.app.widget.TaskPathView
-import com.gaofei.library.utils.CommonUtils
+import com.gaofei.library.utils.LogUtils
 import com.yangcong345.android.phone.component.task2.NewTaskContract
+import kotlinx.android.synthetic.main.task_treasure_box_icon.view.*
 
 class NewTaskTreasureBoxView : RelativeLayout {
     private val mTaskTreasureBoxCount = 4
@@ -27,8 +27,8 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     private lateinit var mPathPaint1: Paint
     private lateinit var mPathPaint2: Paint
-    private var mAnimatedValue: Float = 0f
-    private var mmValueAnimator: ValueAnimator? = null
+    private var mTreasureBoxPathAnimatedValue: Float = 0f
+    private var mTreasureBoxPathValueAnimator: ValueAnimator? = null
     val values = arrayOf(0f, 1f, 2f, 3f, 4f, 5f)
 
     constructor(context: Context) : super(context) {
@@ -72,6 +72,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
     private fun initPathPaint2() {
+        mPathPaint2 = Paint()
         mPathPaint2.style = Paint.Style.STROKE
         mPathPaint2.color = Color.parseColor("#FFFFFFFF")
         mPathPaint2.strokeWidth = mContext.dip2px(5f).toFloat()
@@ -89,7 +90,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     private fun initView() {
         mCoinTaskViews = arrayListOf(findViewById(R.id.coinTask1), findViewById(R.id.coinTask2), findViewById(R.id.coinTask3), findViewById(R.id.coinTask4))
-        mTreasureBoxViews = arrayListOf(findViewById(R.id.treasureBox1), findViewById(R.id.treasureBox3), findViewById(R.id.treasureBox3), findViewById(R.id.treasureBox4))
+        mTreasureBoxViews = arrayListOf(findViewById(R.id.treasureBox1), findViewById(R.id.treasureBox2), findViewById(R.id.treasureBox3), findViewById(R.id.treasureBox4))
     }
 
 
@@ -104,25 +105,23 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
     private fun updateUI() {
-        var isCoinTaskFinished = false
+        var isCoinTaskFinished = true
         newTaskCoinTasks.forEachIndexed { index, coinTaskInfo ->
-            isCoinTaskFinished = isCoinTaskFinished or !coinTaskInfo.isReceiveCoin
-            updateCoinTaskView(mTreasureBoxViews[index], coinTaskInfo)
+            isCoinTaskFinished = isCoinTaskFinished and coinTaskInfo.isReceiveCoin
+            updateCoinTaskView(mCoinTaskViews[index], coinTaskInfo)
         }
-        if (isCoinTaskFinished) {
-            mNewTaskTreasureBoxInfoList.forEachIndexed { index, treasureBoxGroupTaskInfo ->
-                updateTreasureBoxTaskGroupView(mTreasureBoxViews[index], treasureBoxGroupTaskInfo)
-            }
+        mNewTaskTreasureBoxInfoList.forEachIndexed { index, treasureBoxGroupTaskInfo ->
+            updateTreasureBoxTaskGroupView(mTreasureBoxViews[index], treasureBoxGroupTaskInfo)
         }
 
-        this.isShowCoinTask = isCoinTaskFinished
+        this.isShowCoinTask = !isCoinTaskFinished
         executeAnimation()
 
     }
 
 
     private fun updateCoinTaskView(view: View, newTaskCoinTaskInfo: NewTaskCoinTaskInfo) {
-        view.visibility = if (newTaskCoinTaskInfo.isReceiveCoin) {
+        view.visibility = if (!newTaskCoinTaskInfo.isReceiveCoin) {
             view.setOnClickListener {
                 mPresenter.receiveCoinTask(newTaskCoinTaskInfo)
             }
@@ -134,15 +133,21 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
     private fun updateTreasureBoxTaskGroupView(view: View, newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo) {
-        view.visibility = View.VISIBLE
-        view.setOnClickListener {
-            mPresenter.clickTreasureBox(newTaskTreasureBoxInfo)
+        if (isShowCoinTask) {
+            view.visibility = View.GONE
+            mPresenter.showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo)
+        } else {
+            view.visibility = View.VISIBLE
+            view.setOnClickListener {
+                mPresenter.clickTreasureBox(newTaskTreasureBoxInfo)
+            }
+            val nameView = view.findViewById<TextView>(R.id.name)
+            val imageView = view.findViewById<ImageView>(R.id.image)
+            nameView.text = mPresenter.getTreasureBoxTaskGroupName(newTaskTreasureBoxInfo)
+            imageView.setImageResource(mPresenter.getTreasureBoxTaskGroupImage(newTaskTreasureBoxInfo))
+            mPresenter.showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo)
         }
-        val nameView = view.findViewById<TextView>(R.id.name)
-        val imageView = view.findViewById<ImageView>(R.id.image)
-        nameView.text = mPresenter.getTreasureBoxTaskGroupName(newTaskTreasureBoxInfo)
-        imageView.setImageResource(mPresenter.getTreasureBoxTaskGroupImage(newTaskTreasureBoxInfo))
-        mPresenter.showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo)
+
     }
 
     private fun executeAnimation() {
@@ -156,21 +161,50 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     private fun executeCoinTaskAnimation() {
+
     }
 
     private fun executeTreasureBoxPathAnimation() {
+        if (mTreasureBoxPathValueAnimator != null) {
+            mTreasureBoxPathValueAnimator?.let {
+                if (it.isRunning) {
+                    mTreasureBoxPathValueAnimator?.cancel()
+                }
+            }
+        }
+
+        mTreasureBoxPathValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
+        mTreasureBoxPathValueAnimator?.let {
+            it.addUpdateListener {
+                mTreasureBoxPathAnimatedValue = it.animatedValue as Float
+                updateTreasureBoxScale()
+                invalidate()
+            }
+            it.duration = 10000
+            it.start()
+        }
+    }
+
+    private fun updateTreasureBoxScale() {
 
     }
 
-    public fun clearExistAnimation() {
 
+    private fun clearExistAnimation() {
+        if (mTreasureBoxPathValueAnimator != null) {
+            mTreasureBoxPathValueAnimator?.let {
+                if (it.isRunning) {
+                    it.cancel()
+                }
+            }
+        }
 
     }
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
         canvas?.let {
-            drawTask(it, mAnimatedValue, mTaskTreasureBoxCount)
+            drawTask(it, mTreasureBoxPathAnimatedValue, mTaskTreasureBoxCount)
         }
 
     }
@@ -178,31 +212,12 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     override fun onDraw(canvas: Canvas) {
         for (i in 0 until mTaskTreasureBoxCount - 1) {
-            drawTaskPath(canvas, i, mAnimatedValue)
+            drawTaskPath(canvas, i, mTreasureBoxPathAnimatedValue)
         }
 
         super.onDraw(canvas)
     }
 
-    private fun startAnimator() {
-        if (mmValueAnimator != null) {
-            mmValueAnimator?.let {
-                if (it.isRunning) {
-                    mmValueAnimator?.cancel()
-                }
-            }
-        }
-
-        mmValueAnimator = ValueAnimator.ofFloat(0f, 1f, 2f, 3f, 4f)
-        mmValueAnimator?.let {
-            it.addUpdateListener {
-                mAnimatedValue = it.animatedValue as Float
-                invalidate()
-            }
-            it.duration = 10000
-            it.start()
-        }
-    }
 
     private fun drawTask(canvas: Canvas, value: Float, count: Int) {
         for (i in 0 until count) {
@@ -213,6 +228,10 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     private fun drawTaskTreasureBox(canvas: Canvas, i: Int, value: Float) {
         val isLeft = (i + 1) % 2 != 0
+        val treasureBoxLocationInfo = calculateTreasureBoxCircleLocationInfo(i)
+        val cx = treasureBoxLocationInfo.pointF.x
+        val cy = treasureBoxLocationInfo.pointF.y
+        canvas.drawCircle(cx, cy, 20f, mPathPaint2)
         val circlePointF = calculateTreasureBoxCircleLocationInfo(i).pointF
         if (value < values[i]) {
             mTreasureBoxViews[i]?.let {
@@ -228,10 +247,9 @@ class NewTaskTreasureBoxView : RelativeLayout {
         val t = (v - values[i]) / (values[i + 1] - values[i])
         mTreasureBoxViews[i]?.let {
             it.visibility = View.VISIBLE
-            val treasureBoxLocationInfo = it.getTag(R.id.task_treasure_box_tag_id) as TaskPathView.TreasureBoxLocationInfo
             it.pivotX = treasureBoxLocationInfo.pivotX
             it.pivotY = treasureBoxLocationInfo.pivotY
-            val scale = treasureBoxLocationInfo.scale * t
+            val scale = mScale * t
             it.scaleX = scale
             it.scaleY = scale
         }
@@ -259,7 +277,15 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
     private fun calculateTreasureBoxCircleLocationInfo(i: Int): TreasureBoxLocationInfo {
-//        return TreasureBoxLocationInfo()
+        val treasureBoxView = mTreasureBoxViews[i]
+        val treasureBoxCircleView = treasureBoxView.circle
+        val pivotX = treasureBoxCircleView.width.toFloat() / 2
+        val pivotY = treasureBoxCircleView.height.toFloat() / 2
+        val pointFX = treasureBoxView.left + pivotX
+        val pointFY = treasureBoxView.top + pivotY
+        val density = context.getResources().getDisplayMetrics().density
+        LogUtils.d("calculateTreasureBoxCircleLocationInfo ${i} ${treasureBoxView.left / density} ${treasureBoxView.top / density} ${pivotX / density} ${pivotY / density}")
+        return TreasureBoxLocationInfo(PointF(pointFX, pointFY), pivotX, pivotY, 1f)
     }
 
 
@@ -290,8 +316,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
         }
     }
 
-    data class TreasureBoxLocationInfo(val pointF: PointF, val left: Float,
-                                       val top: Float, var pivotX: Float, var pivotY: Float, var scale: Float)
+    data class TreasureBoxLocationInfo(val pointF: PointF, var pivotX: Float, var pivotY: Float, val scale: Float)
 
 
 }

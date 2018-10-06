@@ -6,6 +6,8 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.FrameLayout
 import android.widget.RelativeLayout
+import com.gaofei.app.task.NewTaskCoinTaskInfo
+import com.gaofei.app.task.NewTaskTreasureBoxInfo
 
 import com.gaofei.library.base.BaseAct
 import com.gaofei.library.utils.ToastManager
@@ -14,20 +16,20 @@ import com.yangcong345.android.phone.component.task2.NewTaskPresenter
 import kotlinx.android.synthetic.main.act_canvas.*
 
 class CanvasActivity : BaseAct() , NewTaskContract.View {
+    override fun showTreasureBoxUI(newTaskCoinTaskInfoList: ArrayList<NewTaskCoinTaskInfo>, newTaskTreasureBoxInfoList: ArrayList<NewTaskTreasureBoxInfo>) {
+        taskTreasureBoxView.bindData(newTaskCoinTaskInfoList, newTaskTreasureBoxInfoList)
+    }
+
     override fun onBack() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun updateTaskProgress(pair: Pair<Int, Int>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun showTaskTip(message: String, type: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun setPresenter(t: NewTaskContract.Presenter) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private lateinit var mPresenter: NewTaskContract.Presenter
@@ -37,6 +39,12 @@ class CanvasActivity : BaseAct() , NewTaskContract.View {
         mPresenter = NewTaskPresenter(this)
         taskTreasureBoxView.setPresenter(mPresenter)
     }
+
+    override fun onResume() {
+        super.onResume()
+        mPresenter.start()
+    }
+
 
     /**
      */

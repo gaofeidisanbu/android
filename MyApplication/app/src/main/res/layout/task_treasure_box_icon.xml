@@ -4,6 +4,7 @@
     android:layout_height="@dimen/task_treasure_box_icon_height">
 
     <FrameLayout
+        android:id="@+id/circle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
