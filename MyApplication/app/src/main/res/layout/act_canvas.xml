@@ -3,6 +3,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,6 +34,7 @@
                     android:layout_marginTop="96dp" />
 
                 <com.gaofei.app.widget.RoundLinearLayout
+                    android:id="@+id/timeLimit"
                     android:layout_width="wrap_content"
                     android:layout_height="28dp"
                     android:layout_marginLeft="30dp"
@@ -169,4 +171,186 @@
             </com.gaofei.app.task.NewTaskTreasureBoxView>
         </com.gaofei.app.widget.TaskFrameLayout>
     </android.support.v4.widget.NestedScrollView>
+
+
+    <RelativeLayout
+        android:id="@+id/rewardCoinRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#b3000000"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/rewardCoinBackGround"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/new_task_coin_reward_bg" />
+
+        <ImageView
+            android:id="@+id/rewardCoin1"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="54.5dp"
+            android:layout_marginTop="37dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin2"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="34.5dp"
+            android:layout_marginTop="43.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin3"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignRight="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_gravity="right"
+            android:layout_marginRight="34.5dp"
+            android:layout_marginTop="43.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin4"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="54.5dp"
+            android:layout_marginTop="53dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin5"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="55.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin7"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignRight="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="10.5dp"
+            android:layout_marginTop="53dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin9"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="56.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin6"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="44.5dp"
+            android:layout_marginTop="59.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <ImageView
+            android:id="@+id/rewardCoin8"
+            android:layout_width="31.5dp"
+            android:layout_height="31.5dp"
+            android:layout_alignLeft="@+id/rewardCoinBackGround"
+            android:layout_alignTop="@+id/rewardCoinBackGround"
+            android:layout_marginLeft="76.5dp"
+            android:layout_marginTop="59.5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/task_ic_onion_coins" />
+
+        <LinearLayout
+            android:layout_width="98dp"
+            android:layout_height="24dp"
+            android:layout_alignBottom="@+id/rewardCoinBackGround"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/new_task_reward_coin_fl_bg">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:gravity="center"
+                android:text="洋葱币"
+                android:textColor="@color/white"
+                android:textSize="13dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                tools:text="@string/new_task_reward_coin_count" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/progressRoot"
+        android:layout_width="118dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="12dp">
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:max="100"
+            android:progress="50"
+            android:progressDrawable="@drawable/new_task_layer_list_progress_drawable" />
+
+        <ImageView
+            android:id="@+id/progressCoin"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/task_appbar_ic_onion_coins" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            tools:text="40/100" />
+    </FrameLayout>
 </FrameLayout>

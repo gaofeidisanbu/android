@@ -10,6 +10,7 @@ interface NewTaskContract {
         fun updateTaskProgress(pair: Pair<Int, Int>)
         fun showTaskTip(message: String, type: Int)
         fun showTreasureBoxUI(newTaskCoinTaskInfoList: ArrayList<NewTaskCoinTaskInfo>, newTaskTreasureBoxInfoList: ArrayList<NewTaskTreasureBoxInfo>)
+        fun playTreasureBoxCoinReceiveAnimation()
 //        fun getRXActivity(): RxActivity
 //        fun showThemeDetailUI(chapterId: String, theme: NewTaskThemeRequest.Theme)
     }
@@ -20,7 +21,7 @@ interface NewTaskContract {
         fun requestTheme()
         fun clickTreasureBox(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo)
 
-        fun showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo)
+        fun isShowTreasureBoxLimitTimeView(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo): Boolean
         fun getTreasureBoxTaskGroupName(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo): String
         fun getTreasureBoxTaskGroupImage(newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo): Int
     }

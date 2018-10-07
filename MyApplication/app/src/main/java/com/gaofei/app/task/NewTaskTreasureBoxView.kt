@@ -122,11 +122,11 @@ class NewTaskTreasureBoxView : RelativeLayout {
             isCoinTaskFinished = isCoinTaskFinished and coinTaskInfo.isReceiveCoin
             updateCoinTaskView(mCoinTaskViews[index], coinTaskInfo)
         }
+        this.isShowCoinTask = !isCoinTaskFinished
         mTreasureBoxInfoList.forEachIndexed { index, treasureBoxGroupTaskInfo ->
             updateTreasureBoxTaskGroupView(mTreasureBoxViews[index], treasureBoxGroupTaskInfo)
         }
 
-        this.isShowCoinTask = !isCoinTaskFinished
         executeAnimation()
 
     }
@@ -145,9 +145,12 @@ class NewTaskTreasureBoxView : RelativeLayout {
     }
 
     private fun updateTreasureBoxTaskGroupView(view: View, newTaskTreasureBoxInfo: NewTaskTreasureBoxInfo) {
+        val timeLimitView = findViewById<View>(R.id.timeLimit)
         if (isShowCoinTask) {
+            if (newTaskTreasureBoxInfo.index == 1) {
+                timeLimitView.visibility = View.GONE
+            }
             view.visibility = View.GONE
-            mPresenter.showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo)
         } else {
             view.visibility = View.VISIBLE
             view.setOnClickListener {
@@ -157,7 +160,8 @@ class NewTaskTreasureBoxView : RelativeLayout {
             val imageView = view.findViewById<ImageView>(R.id.image)
             nameView.text = mPresenter.getTreasureBoxTaskGroupName(newTaskTreasureBoxInfo)
             imageView.setImageResource(mPresenter.getTreasureBoxTaskGroupImage(newTaskTreasureBoxInfo))
-            mPresenter.showDurationTreasureBoxTaskGroup(newTaskTreasureBoxInfo)
+            val isShowTreasureBoxLimitTimeView = mPresenter.isShowTreasureBoxLimitTimeView(newTaskTreasureBoxInfo)
+            view.visibility = if (isShowTreasureBoxLimitTimeView) View.VISIBLE else View.GONE
         }
 
     }
@@ -299,9 +303,11 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     override fun dispatchDraw(canvas: Canvas?) {
         super.dispatchDraw(canvas)
+        if (isShowCoinTask) {
+            return
+        }
         canvas?.let {
             drawAllTreasureBoxCenterPoint(it, mTreasureBoxRouteAnimatedValue, mTaskTreasureBoxCount)
-            updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
         }
 
     }
@@ -309,6 +315,10 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        if (isShowCoinTask) {
+            return
+        }
+        updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
         for (i in 0 until mTaskTreasureBoxCount - 1) {
             drawTreasureBoxRoute(canvas, i, mTreasureBoxRouteAnimatedValue)
         }
@@ -317,6 +327,9 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     private fun drawAllTreasureBoxCenterPoint(canvas: Canvas, value: Float, count: Int) {
+        if (isShowCoinTask) {
+            return
+        }
         for (i in 0 until count) {
             drawTreasureBoxCenterPoint(canvas, i, value)
         }
@@ -360,9 +373,6 @@ class NewTaskTreasureBoxView : RelativeLayout {
 
 
     inner class TreasureBoxRouteInfo(val i: Int, val startPointF: PointF, val endPointF: PointF) {
-        init {
-
-        }
 
         fun getMovePointF(value: Float): PointF {
             // y = ax+b
