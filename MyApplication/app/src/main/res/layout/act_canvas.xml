@@ -290,6 +290,7 @@
             android:src="@drawable/task_ic_onion_coins" />
 
         <LinearLayout
+            android:id="@+id/rewardCoinNumber"
             android:layout_width="98dp"
             android:layout_height="24dp"
             android:layout_alignBottom="@+id/rewardCoinBackGround"

@@ -57,8 +57,9 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
     }
 
 
-    private lateinit var mTreasureBoxCoinReceiveAnimatorSet: AnimatorSet
+    private var mTreasureBoxCoinReceiveAnimatorSet: AnimatorSet? = null
     override fun playTreasureBoxCoinReceiveAnimation() {
+        clearAllAnimation()
         mRewardCoinsView.forEach {
             it.scaleX = 0.8f
             it.scaleY = 0.8f
@@ -68,13 +69,14 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
         }
         rewardCoinRoot.visibility = View.VISIBLE
         rewardCoinRoot.background.alpha = 0
-        val duration = 2000f
-        mTreasureBoxCoinReceiveAnimatorSet = AnimatorSet()
+        val duration = 4000f
         val treasureBoxCoinReceiveScaleAnimation = ValueAnimator.ofFloat(0f, duration)
-        mTreasureBoxCoinReceiveAnimatorSet.setDuration(duration.toLong())
-        mTreasureBoxCoinReceiveAnimatorSet.setInterpolator(AccelerateInterpolator())
+        treasureBoxCoinReceiveScaleAnimation.setDuration(duration.toLong())
+        treasureBoxCoinReceiveScaleAnimation.setInterpolator(AccelerateInterpolator())
         treasureBoxCoinReceiveScaleAnimation.addUpdateListener {
             updateTreasureBoxCoinReceiveScale(it.animatedValue as Float)
+            updateTreasureBoxRewardCoinNumberScale(it.animatedValue as Float)
+            updateTreasureBoxRewardCoinBackgroundScale(it.animatedValue as Float)
         }
         val treasureBoxCoinReceiveAlphaAnimation = ValueAnimator.ofFloat(0f, duration)
         treasureBoxCoinReceiveAlphaAnimation.setDuration(duration.toLong())
@@ -82,32 +84,52 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
         treasureBoxCoinReceiveAlphaAnimation.addUpdateListener {
             updateTreasureBoxCoinReceiveAlpha(it.animatedValue as Float)
             updateTreasureBoxCoinReceiveTranslate(it.animatedValue as Float)
+            updateTreasureBoxRewardCoinNumberAlpha(it.animatedValue as Float)
+            updateTreasureBoxRewardCoinNumberTranslate(it.animatedValue as Float)
+            updateTreasureBoxRewardCoinBackgroundAlpha(it.animatedValue as Float)
+
         }
-        mTreasureBoxCoinReceiveAnimatorSet.playTogether(treasureBoxCoinReceiveScaleAnimation, treasureBoxCoinReceiveAlphaAnimation)
-        mTreasureBoxCoinReceiveAnimatorSet.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(animation: Animator?) {
-            }
+        mTreasureBoxCoinReceiveAnimatorSet = AnimatorSet()
+        mTreasureBoxCoinReceiveAnimatorSet?.let {
 
-            override fun onAnimationEnd(animation: Animator?) {
-                rewardCoinRoot.visibility = View.GONE
-            }
+            it.playTogether(treasureBoxCoinReceiveScaleAnimation, treasureBoxCoinReceiveAlphaAnimation)
+            it.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator?) {
 
-            override fun onAnimationCancel(animation: Animator?) {
-            }
+                }
 
-            override fun onAnimationStart(animation: Animator?) {
-            }
+                override fun onAnimationEnd(animation: Animator?) {
+                    rewardCoinRoot.visibility = View.GONE
+                }
 
-        })
-        mTreasureBoxCoinReceiveAnimatorSet.start()
+                override fun onAnimationCancel(animation: Animator?) {
+                }
+
+                override fun onAnimationStart(animation: Animator?) {
+                }
+
+            })
+            it.start()
+        }
     }
 
     private fun updateTreasureBoxCoinReceiveScale(valueAnimator: Float) {
         mRewardCoinsView.forEachIndexed { index, view ->
-            val rewardCoinStartTime = index * 100f
-            val rewardCoinEndTime = index * 100f + 200f
-            if (valueAnimator in rewardCoinStartTime..rewardCoinEndTime) {
-                val scale = calculateAnimatorValue(0.8f, 1f, rewardCoinStartTime, rewardCoinEndTime, valueAnimator)
+            val rewardCoinFirstStartTime = index * 100f
+            val rewardCoinFirstEndTime = index * 100f + 200f
+            if (valueAnimator in rewardCoinFirstStartTime..rewardCoinFirstEndTime) {
+                val scale = calculateAnimatorValue(0.8f, 1f, rewardCoinFirstStartTime, rewardCoinFirstEndTime, valueAnimator)
+                LogUtils.d("updateTreasureBoxCoinReceiveScale ${scale}")
+                view.pivotX = (view.width / 2).toFloat()
+                view.pivotY = (view.height / 2).toFloat()
+                view.scaleX = scale
+                view.scaleY = scale
+            }
+
+            val rewardCoinSecondStartTime = index * 200f + 1500f
+            val rewardCoinSecondEndTime = index * 200f + 200f + 1500f
+            if (valueAnimator in rewardCoinSecondStartTime..rewardCoinSecondEndTime) {
+                val scale = calculateAnimatorValue(1f, 0.8f, rewardCoinSecondStartTime, rewardCoinSecondEndTime, valueAnimator)
                 LogUtils.d("updateTreasureBoxCoinReceiveScale ${scale}")
                 view.pivotX = (view.width / 2).toFloat()
                 view.pivotY = (view.height / 2).toFloat()
@@ -126,10 +148,17 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
         }
 
         mRewardCoinsView.forEachIndexed { index, view ->
-            val rewardCoinStartTime = index * 100f
-            val rewardCoinEndTime = index * 100f + 100f
-            if (valueAnimator in rewardCoinStartTime..rewardCoinEndTime) {
-                val alpha = calculateAnimatorValue(0.8f, 1f, rewardCoinStartTime, rewardCoinEndTime, valueAnimator)
+            val rewardCoinFirstStartTime = index * 100f
+            val rewardCoinFirstEndTime = index * 100f + 100f
+            if (valueAnimator in rewardCoinFirstStartTime..rewardCoinFirstEndTime) {
+                val alpha = calculateAnimatorValue(0.8f, 1f, rewardCoinFirstStartTime, rewardCoinFirstEndTime, valueAnimator)
+                view.alpha = alpha
+            }
+
+            val rewardCoinSecondStartTime = index * 100f + 1600f
+            val rewardCoinSecondEndTime = index * 100f + 100f + 1600f
+            if (valueAnimator in rewardCoinSecondStartTime..rewardCoinSecondEndTime) {
+                val alpha = calculateAnimatorValue(1f, 0f, rewardCoinSecondStartTime, rewardCoinSecondEndTime, valueAnimator)
                 view.alpha = alpha
             }
         }
@@ -138,13 +167,83 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
 
     private fun updateTreasureBoxCoinReceiveTranslate(valueAnimator: Float) {
         mRewardCoinsView.forEachIndexed { index, view ->
-            val rewardCoinStartTime = index * 200f
-            val rewardCoinEndTime = index * 200f + 600f
+            val rewardCoinStartTime = index * 200f + 1000f
+            val rewardCoinEndTime = index * 200f + 600f + 1000f
             if (valueAnimator in rewardCoinStartTime..rewardCoinEndTime) {
                 val pointF = calculateCoinTranslate(view, rewardCoinStartTime, rewardCoinEndTime, valueAnimator)
-                view.translationX = pointF.x
-                view.translationY = pointF.y
+                view.x = pointF.x
+                view.y = pointF.y
             }
+        }
+
+    }
+
+    private fun updateTreasureBoxRewardCoinNumberScale(valueAnimator: Float) {
+        val firstStartTime = 0f
+        val firstEndTime = 200f
+        if (valueAnimator in firstStartTime..firstEndTime) {
+            val scale = calculateAnimatorValue(0.8f, 1f, firstStartTime, firstEndTime, valueAnimator)
+            rewardCoinNumber.pivotX = (rewardCoinNumber.width / 2).toFloat()
+            rewardCoinNumber.pivotY = (rewardCoinNumber.height / 2).toFloat()
+            rewardCoinNumber.scaleX = scale
+            rewardCoinNumber.scaleY = scale
+        }
+
+    }
+
+    private fun updateTreasureBoxRewardCoinNumberAlpha(valueAnimator: Float) {
+        val firstStartTime = 0f
+        val firstEndTime = 200f
+        if (valueAnimator in firstStartTime..firstEndTime) {
+            val alpha = calculateAnimatorValue(0f, 1f, firstStartTime, firstEndTime, valueAnimator)
+            rewardCoinNumber.alpha = alpha
+        }
+
+        val secondStartTime = 0f + 1000f
+        val secondEndTime = 200f + 1000f
+        if (valueAnimator in secondStartTime..secondEndTime) {
+            val alpha = calculateAnimatorValue(1f, 0f, secondStartTime, secondEndTime, valueAnimator)
+            rewardCoinNumber.alpha = alpha
+        }
+
+    }
+
+    private fun updateTreasureBoxRewardCoinNumberTranslate(valueAnimator: Float) {
+
+    }
+
+    private fun updateTreasureBoxRewardCoinBackgroundScale(valueAnimator: Float) {
+        val firstStartTime = 0f
+        val firstEndTime = 200f
+        if (valueAnimator in firstStartTime..firstEndTime) {
+            val scale = calculateAnimatorValue(0.8f, 1f, firstStartTime, firstEndTime, valueAnimator)
+            rewardCoinBackGround.pivotX = (rewardCoinBackGround.width / 2).toFloat()
+            rewardCoinBackGround.pivotY = (rewardCoinBackGround.height / 2).toFloat()
+            rewardCoinBackGround.scaleX = scale
+            rewardCoinBackGround.scaleY = scale
+        }
+
+    }
+
+    private fun updateTreasureBoxRewardCoinBackgroundAlpha(valueAnimator: Float) {
+        val firstStartTime = 0f
+        val firstEndTime = 600f
+        if (valueAnimator in firstStartTime..firstEndTime) {
+            val alpha = calculateAnimatorValue(0f, 1f, firstStartTime, firstEndTime, valueAnimator)
+            rewardCoinBackGround.alpha = alpha
+        }
+        val secondStartTime = 0f + firstEndTime
+        val secondEndTime = 600f + firstEndTime
+        if (valueAnimator in secondStartTime..secondEndTime) {
+            val alpha = calculateAnimatorValue(1f, 0.5f, secondStartTime, secondEndTime, valueAnimator)
+            rewardCoinBackGround.alpha = alpha
+        }
+
+        val thirdStartTime = 0f + secondEndTime
+        val thirdEndTime = 600f + secondEndTime
+        if (valueAnimator in thirdStartTime..thirdEndTime) {
+            val alpha = calculateAnimatorValue(0.5f, 1f, thirdStartTime, thirdEndTime, valueAnimator)
+            rewardCoinBackGround.alpha = alpha
         }
 
     }
@@ -159,21 +258,22 @@ class CanvasActivity : BaseAct(), NewTaskContract.View {
 
     private fun calculateCoinTranslate(view: View, valueStart: Float, valueEnd: Float, valueCurr: Float): PointF {
         var currProgress = (valueCurr - valueStart) / (valueEnd - valueStart)
-        currProgress = 1f
         val progressLocation = intArrayOf(0, 0)
-        progressCoin.getLocationOnScreen(progressLocation)
+        progressLocation[0] = progressRoot.left
+        progressLocation[1] = progressRoot.top
         val viewLocation = intArrayOf(0, 0)
-        view.getLocationOnScreen(viewLocation)
+        viewLocation[0] = view.left
+        viewLocation[1] = view.top
         val x = (progressLocation[0] - viewLocation[0]) * currProgress + viewLocation[0]
         val y = (progressLocation[1] - viewLocation[1]) * currProgress + viewLocation[1]
-        LogUtils.d("calculateCoinTranslate ${view.id} ${progressLocation[0]} ${progressLocation[1]} ${viewLocation[0]} ${viewLocation[1]} ${x} ${y}")
+        LogUtils.d("calculateCoinTranslate ${view.id} ${progressLocation[0]} ${progressLocation[1]} ${viewLocation[0]} ${viewLocation[1]} ${x} ${y} ${currProgress}")
         return PointF(x, y)
     }
 
 
     private fun clearAllAnimation() {
-        if (mTreasureBoxCoinReceiveAnimatorSet != null) {
-            mTreasureBoxCoinReceiveAnimatorSet.cancel()
+        mTreasureBoxCoinReceiveAnimatorSet?.let {
+            it.cancel()
 //            mTreasureBoxCoinReceiveAnimatorSet.end()
         }
     }
