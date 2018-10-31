@@ -16,6 +16,7 @@ import com.gaofei.app.task.NewTaskTreasureBoxInfo
 
 import com.gaofei.library.base.BaseAct
 import com.gaofei.library.utils.LogUtils
+import com.google.gson.GsonBuilder
 import com.yangcong345.android.phone.component.task2.NewTaskContract
 import com.yangcong345.android.phone.component.task2.NewTaskPresenter
 import kotlinx.android.synthetic.main.act_canvas.*

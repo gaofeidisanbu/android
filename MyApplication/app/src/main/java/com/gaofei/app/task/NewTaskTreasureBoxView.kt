@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.gaofei.app.CanvasActivity
 import com.gaofei.app.R
+import com.gaofei.library.utils.CommonUtils
 import com.gaofei.library.utils.LogUtils
 import com.yangcong345.android.phone.component.task2.NewTaskContract
 import kotlinx.android.synthetic.main.task_treasure_box_icon.view.*
@@ -82,8 +83,8 @@ class NewTaskTreasureBoxView : RelativeLayout {
         mTreasureBoxRoutePaint2 = Paint()
         mTreasureBoxRoutePaint2.style = Paint.Style.STROKE
         mTreasureBoxRoutePaint2.color = Color.parseColor("#FFFFFFFF")
-        mTreasureBoxRoutePaint2.strokeWidth = mContext.dip2px(5f).toFloat()
-        mTreasureBoxRoutePaint2.pathEffect = DashPathEffect(floatArrayOf(4f, 4f), 0f)
+//        mTreasureBoxRoutePaint2.strokeWidth = mContext.dip2px(5f).toFloat()
+
     }
 
     private fun initTreasureBoxRoutePath() {
@@ -240,7 +241,7 @@ class NewTaskTreasureBoxView : RelativeLayout {
             v = values[i + 1]
         }
         val t = (v - values[i]) / (values[i + 1] - values[i])
-        view.visibility = View.VISIBLE
+        view.visibility = View.INVISIBLE
         view.pivotX = treasureBoxPositionInfo.pivotX
         view.pivotY = treasureBoxPositionInfo.pivotY
         val scale = mScale * t
@@ -318,10 +319,28 @@ class NewTaskTreasureBoxView : RelativeLayout {
         if (isShowCoinTask) {
             return
         }
-        updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
+
+        mTreasureBoxRoutePath1.reset()
+        mTreasureBoxRoutePath2.reset()
+        val circle1PointF = mTreasureBoxPositionInfoList[0].pointF
+        mTreasureBoxRoutePath1.moveTo(circle1PointF.x, circle1PointF.y)
+        mTreasureBoxRoutePath2.moveTo(circle1PointF.x, circle1PointF.y)
+        val path = Path()
+        val width = CommonUtils.dip2px(mContext, 22f).toFloat()
+        val height = CommonUtils.dip2px(mContext, 8f).toFloat()
+        val roundRadius = CommonUtils.dip2px(mContext, 2f).toFloat()
+        val rectF = RectF(-width/2, -height/2, width/2, height/2)
+        path.moveTo(circle1PointF.x, circle1PointF.y)
+        path.addRoundRect(rectF, floatArrayOf(roundRadius, roundRadius, roundRadius, roundRadius, roundRadius, roundRadius, roundRadius, roundRadius), Path.Direction.CCW)
+        mTreasureBoxRoutePaint2.pathEffect = PathDashPathEffect(path, 2 * width, 0f , PathDashPathEffect.Style.ROTATE)
         for (i in 0 until mTaskTreasureBoxCount - 1) {
             drawTreasureBoxRoute(canvas, i, mTreasureBoxRouteAnimatedValue)
         }
+
+        canvas.drawPath(mTreasureBoxRoutePath1, mTreasureBoxRoutePaint1)
+        canvas.drawPath(mTreasureBoxRoutePath2, mTreasureBoxRoutePaint2)
+
+        updateAllTreasureBoxScale(mTreasureBoxRouteAnimatedValue)
 
     }
 
@@ -340,7 +359,9 @@ class NewTaskTreasureBoxView : RelativeLayout {
         val treasureBoxLocationInfo = mTreasureBoxPositionInfoList[i]
         val cx = treasureBoxLocationInfo.pointF.x
         val cy = treasureBoxLocationInfo.pointF.y
-        canvas.drawCircle(cx, cy, 20f, mTreasureBoxRoutePaint2)
+        val paint = Paint()
+        paint.color = Color.BLACK
+        canvas.drawCircle(cx, cy, 3f, paint)
 
 
     }
@@ -350,19 +371,16 @@ class NewTaskTreasureBoxView : RelativeLayout {
         if (value < values[i]) {
             return
         }
-        mTreasureBoxRoutePath1.reset()
-        mTreasureBoxRoutePath2.reset()
+
         val circle1PointF = mTreasureBoxPositionInfoList[i].pointF
         LogUtils.d("drawTreasureBoxRoute ${value} ${circle1PointF.x}")
-        mTreasureBoxRoutePath1.moveTo(circle1PointF.x, circle1PointF.y)
-        mTreasureBoxRoutePath2.moveTo(circle1PointF.x, circle1PointF.y)
+
         val circle2PointF = mTreasureBoxPositionInfoList[i + 1].pointF
         val pathInfo = TreasureBoxRouteInfo(i, circle1PointF, circle2PointF)
         val circlePointF = pathInfo.getMovePointF(value)
         mTreasureBoxRoutePath1.lineTo(circlePointF.x, circlePointF.y)
         mTreasureBoxRoutePath2.lineTo(circlePointF.x, circlePointF.y)
-        canvas.drawPath(mTreasureBoxRoutePath1, mTreasureBoxRoutePaint1)
-        canvas.drawPath(mTreasureBoxRoutePath2, mTreasureBoxRoutePaint2)
+
     }
 
 

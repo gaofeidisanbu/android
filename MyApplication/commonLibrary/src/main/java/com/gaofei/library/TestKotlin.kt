@@ -1,9 +1,35 @@
 package com.gaofei.library
 
+import android.app.Activity
 import com.gaofei.library.utils.LogUtils
 
 fun main(args: Array<String>) {
-    recycleUserItemView()
+    clazz()
+
+}
+
+fun convertDuration(mill: Long): Triple<String, String, String> {
+    val ss = 1000
+    val mi = ss * 60
+    val hh = mi * 60
+    val hour = mill / hh
+    val minute = (mill - hour * hh) / mi
+    val second = (mill - hour * hh - minute * mi) / ss
+    return Triple(getFillZeroStr(hour, 2), getFillZeroStr(minute, 2), getFillZeroStr(second, 2))
+}
+
+private fun getFillZeroStr(num: Long, unit: Int): String {
+    val newStr = StringBuilder()
+    val str = num.toString() + ""
+    val len = str.length
+    val diff = unit - len
+    if (diff > 0) {
+        for (i in 0 until diff) {
+            newStr.append(0)
+        }
+    }
+    newStr.append(str)
+    return newStr.toString()
 }
 
 private fun recycleUserItemView() {
@@ -14,13 +40,25 @@ private fun recycleUserItemView() {
     }
 }
 
+val aa = arrayListOf<Any>(java.util.List::class.java)
+
+private fun clazz() {
+    var canvasActivity = java.util.ArrayList<Any>()
+    val listClass = java.util.List::class.java
+
+    aa.forEach {
+        println("${it}")
+        println("${(it as Class<*>).isAssignableFrom(canvasActivity::class.java)}")
+    }
+}
+
 class TestKotlin {
 
     fun main(args: Array<String>) {
         val size = 10
         val maxNum = 4
         if (size > maxNum) {
-            for (i in size - 1 downTo  maxNum) {
+            for (i in size - 1 downTo maxNum) {
                 LogUtils.d("maxNum = $maxNum i = $i")
             }
         }

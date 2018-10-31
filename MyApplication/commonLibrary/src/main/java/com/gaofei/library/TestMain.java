@@ -59,7 +59,7 @@ public class TestMain {
 
     public static void main(String[] args) {
         try {
-//            rxjava();
+            rxjava();
 //            json();
 //            generic();
 //            addPubParam(URL_TEACHER_GUIDE);
@@ -76,13 +76,23 @@ public class TestMain {
 //            testTime();
 //            testException();
 //            kotlin();
-            new User().ff();
+
+//            new User().ff();
+            clazz();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("error");
             System.out.println(e);
         }
     }
+
+    private static void  clazz() {
+        ArrayList canvasActivity = new java.util.ArrayList<Object>();
+        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
+        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
+    }
+
+
 
     private static void kotlin() {
     }
@@ -244,7 +254,6 @@ public class TestMain {
 
     @SuppressLint("CheckResult")
     public static void rxjava() throws Exception {
-
     }
 
 

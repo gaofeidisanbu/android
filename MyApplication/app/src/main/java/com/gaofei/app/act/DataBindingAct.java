@@ -11,6 +11,7 @@ import com.gaofei.app.BR;
 import com.gaofei.app.R;
 import com.gaofei.app.act.common.UserInfo;
 import com.gaofei.app.databinding.ActDataBindingBinding;
+import com.gaofei.app.task.RewardCoinViewAnimation;
 import com.gaofei.library.base.BaseAct;
 
 /**
@@ -33,8 +34,10 @@ public class DataBindingAct extends BaseAct {
         mBinding.button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mBinding.setUser(new UserInfo("冯昂","傻"));
-                mViewModel.contact.setName("高飞升级");
+//                mBinding.setUser(new UserInfo("冯昂","傻"));
+//                mViewModel.contact.setName("高飞升级");
+                RewardCoinViewAnimation rewardCoinViewAnimation = new RewardCoinViewAnimation();
+                RewardCoinViewAnimation.Companion.play(rewardCoinViewAnimation);
 
             }
         });

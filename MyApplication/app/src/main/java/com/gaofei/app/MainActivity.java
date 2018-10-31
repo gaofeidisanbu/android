@@ -19,6 +19,7 @@ import android.view.View;
 import com.gaofei.app.act.AnnoAct;
 import com.gaofei.app.act.BarrageAnimationAct;
 import com.gaofei.app.act.BroadcastReceiverAct;
+import com.gaofei.app.act.ClockSetUpActivity;
 import com.gaofei.app.act.DataBindingAct;
 import com.gaofei.app.act.EditTextAct;
 import com.gaofei.app.act.ExceptionAct;
@@ -73,9 +74,9 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
             WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class,
             BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,
-            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, BarrageAnimationAct.class, CanvasActivity.class};
+            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class};
     private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView",
-            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas"};
+            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas", "clock"};
     private Handler mHandler = new Handler();
 
     @Override
