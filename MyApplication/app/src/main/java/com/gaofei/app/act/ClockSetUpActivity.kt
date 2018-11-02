@@ -1,19 +1,22 @@
 package com.gaofei.app.act
 
 import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.TimeUtils
 import android.view.View
 import android.widget.NumberPicker
 import com.gaofei.app.R
+import com.gaofei.library.ProjectApplication
 import com.gaofei.library.base.BaseAct
+import com.gaofei.library.utils.LogUtils
 import com.gaofei.library.utils.TextUtils
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_clock_set_up.*
 import kotlinx.android.synthetic.main.layout_cock_set_up_week.view.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 private var CLOCK_LOCAL_DATA = "clock_local_data"
@@ -32,21 +35,55 @@ private fun getLocalClockData(context: Context): ClockStatus {
     }
 }
 
-private fun calcalateClockStartupTime(context: Context): List<ClockExecuteTimeInfo> {
-    val clockExecuteTimeInfoList = arrayListOf<ClockExecuteTimeInfo>()
+
+private fun convertCalendarWeekToIndex(week: Int): Int {
+    var index = week - 2
+    if (week == Calendar.SUNDAY) {
+        index = 6
+    }
+    return index
+}
+
+private fun calculateClockStartupTime(context: Context): Long {
+    var clockFirstStartup = -1L
     val clockStatus = getLocalClockData(context)
     val calendar = Calendar.getInstance()
+    val currTime = System.currentTimeMillis()
+    calendar.timeInMillis = currTime
+    val currWeek = calendar.get(Calendar.DAY_OF_WEEK)
+    val curWeekIndex = convertCalendarWeekToIndex(currWeek)
+    LogUtils.d("getRecentlyClockStartup currWeek = $currWeek curWeekIndex = $curWeekIndex ${getDataFromate(currTime)} ${clockStatus.weekIndexList}")
+    // 设置闹钟时间
     calendar.set(Calendar.AM_PM, clockStatus.AMOrPMIndex)
     calendar.set(Calendar.HOUR, clockStatus.hourIndex + 1)
     calendar.set(Calendar.MINUTE, clockStatus.minuteIndex)
-    clockStatus.weekIndexList.forEach {
-        if (it > 0) {
-            val clockExecuteTimeInfo = ClockExecuteTimeInfo(calendar.timeInMillis, 24 * 60 * 60 * 1000)
-            clockExecuteTimeInfoList.add(clockExecuteTimeInfo)
+    val currDate = calendar.get(Calendar.DATE)
+    val clockTime = calendar.timeInMillis
+    LogUtils.d("getRecentlyClockStartup currWeek  ${getDataFromate(clockTime)}")
+    var aheadDay = 0
+    if (clockStatus.weekIndexList[curWeekIndex] == 1 && clockTime > currTime) {
+        clockFirstStartup = clockTime
+    } else {
+        for (tempIndex in curWeekIndex until curWeekIndex + 7) {
+            val realWeekIndex = tempIndex % 7
+            calendar.set(Calendar.DATE, currDate + aheadDay)
+            val tempTime = calendar.timeInMillis
+            LogUtils.d("getRecentlyClockStartup realWeekIndex $realWeekIndex ${getDataFromate(tempTime)}")
+            if (clockStatus.weekIndexList[realWeekIndex] == 1 && tempTime > clockTime) {
+                clockFirstStartup = tempTime
+                break
+            }
+            aheadDay += 1
         }
     }
-    return clockExecuteTimeInfoList
+    return clockFirstStartup
 }
+
+private fun getDataFromate(time: Long): String {
+    val format = SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒 EEEE")
+    return format.format(time)
+}
+
 
 data class ClockExecuteTimeInfo(val startTime: Long, val intervalTime: Long)
 
@@ -78,7 +115,7 @@ class ClockSetUpActivity : BaseAct() {
         }
         mAMOrPMArr[0] = "上午"
         mAMOrPMArr[1] = "下午"
-        mLocalClockStatus = getLocalClockData()
+        mLocalClockStatus = getLocalClockData(this)
         mCurrClockStatus = mLocalClockStatus
     }
 
@@ -171,19 +208,34 @@ data class ClockStatus(var AMOrPMIndex: Int = 0, var hourIndex: Int = 0, var min
 
 object ClockProcessor : Runnable {
     override fun run() {
-
+        triggerClock()
     }
 
-    fun initAlarmManager(context: Context) {
+    private fun triggerClock() {
+        val context = ProjectApplication.getContext()
+        val clockStartTime = calculateClockStartupTime(context)
+        LogUtils.d("triggerClock currTime = ${getDataFromate(System.currentTimeMillis())}  clockStartTime = ${getDataFromate(clockStartTime)} ")
+        if (clockStartTime < 1) {
+            return
+        }
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent = getClockPendingIntent(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            am.setExact(AlarmManager.RTC_WAKEUP, TimeUtils
-                    .stringToLong(recordTime, TimeUtils.NO_SECOND_FORMAT), sender)
+//            am.setWindow(AlarmManager.RTC_WAKEUP, clockStartTime, 2 * 60 * 1000, pendingIntent)
+//            am.set(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
+            am.setExact(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
         } else {
-            am.set(AlarmManager.RTC_WAKEUP, TimeUtils
-                    .stringToLong(recordTime, TimeUtils.NO_SECOND_FORMAT), sender)
+            am.set(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
         }
     }
+
+    private fun getClockPendingIntent(context: Context): PendingIntent {
+        val intent = Intent()
+        intent.action = ClockBroadcastReceiver.ACTION
+        context.sendBroadcast(intent)
+        return PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
 }
 
 

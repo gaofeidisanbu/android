@@ -20,14 +20,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:name">
-        <activity android:name="com.gaofei.app.MainActivity" >
+        <activity android:name="com.gaofei.app.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gaofei.app.act.SkipAct"/>
+        <activity android:name="com.gaofei.app.act.SkipAct" />
         <activity android:name="com.gaofei.app.act.ExceptionAct" />
         <activity android:name="com.gaofei.app.webview.WebviewActivity" />
         <activity android:name="com.gaofei.app.act.RecyclerSwipeAct" />
@@ -35,10 +35,12 @@
         <activity android:name="com.gaofei.app.act.TestAct" />
         <activity android:name="com.gaofei.app.act.AnnoAct" />
         <activity android:name="com.gaofei.app.act.ScreenshotAct" />
-        <activity android:name="com.gaofei.app.act.LayoutAct" android:launchMode="singleTask"/>
+        <activity
+            android:name="com.gaofei.app.act.LayoutAct"
+            android:launchMode="singleTask" />
         <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
         <activity android:name="com.gaofei.app.act.SetUpAct" />
-        <activity android:name="com.gaofei.app.act.ProcessAct"   />
+        <activity android:name="com.gaofei.app.act.ProcessAct" />
         <activity android:name="com.gaofei.app.act.PermissionAct" />
         <activity android:name="com.gaofei.app.act.ReflectAct" />
         <activity android:name="com.gaofei.app.act.TouchEventAct" />
@@ -47,13 +49,23 @@
         <activity android:name="com.gaofei.app.act.EditTextAct" />
         <activity android:name="com.gaofei.app.act.DataBindingAct" />
         <activity android:name="com.gaofei.app.act.TaskActivity" />
-        <activity android:name=".CanvasActivity" android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.gaofei.app.act.BarrageAnimationAct" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".CanvasActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.gaofei.app.act.BarrageAnimationAct"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.gaofei.app.act.ClockSetUpActivity" />
 
-        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" >
+        <receiver android:name=".act.ClockBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.intent.action_Broadcast_Receiver_Test"/>
+                <action android:name="SIGN_IN_CLOCK"></action>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">
+            <intent-filter>
+                <action android:name="android.intent.action_Broadcast_Receiver_Test" />
             </intent-filter>
         </receiver>
     </application>
