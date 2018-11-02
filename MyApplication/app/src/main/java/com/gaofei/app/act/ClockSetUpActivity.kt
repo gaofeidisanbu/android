@@ -215,15 +215,20 @@ object ClockProcessor : Runnable {
         val context = ProjectApplication.getContext()
         val clockStartTime = calculateClockStartupTime(context)
         LogUtils.d("triggerClock currTime = ${getDataFromate(System.currentTimeMillis())}  clockStartTime = ${getDataFromate(clockStartTime)} ")
+        LogUtils.d("triggerClock currTime = ${System.currentTimeMillis()}")
+        LogUtils.d("triggerClock clockStartTime = ${clockStartTime}")
         if (clockStartTime < 1) {
             return
         }
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        am.cancel(AlarmManager.OnAlarmListener {
+
+        })
         val pendingIntent = getClockPendingIntent(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 //            am.setWindow(AlarmManager.RTC_WAKEUP, clockStartTime, 2 * 60 * 1000, pendingIntent)
 //            am.set(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
-            am.setExact(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
+            am.setExact(AlarmManager.RTC_WAKEUP, clockStartTime + 1000*60, pendingIntent)
         } else {
             am.set(AlarmManager.RTC_WAKEUP, clockStartTime, pendingIntent)
         }
@@ -232,8 +237,7 @@ object ClockProcessor : Runnable {
     private fun getClockPendingIntent(context: Context): PendingIntent {
         val intent = Intent()
         intent.action = ClockBroadcastReceiver.ACTION
-        context.sendBroadcast(intent)
-        return PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(context, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
 }
