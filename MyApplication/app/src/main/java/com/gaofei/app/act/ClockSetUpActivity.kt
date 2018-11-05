@@ -103,6 +103,7 @@ class ClockSetUpActivity : BaseAct() {
         initWeekView()
         confirm.setOnClickListener {
             saveClockStatus()
+            ClockStartActivity.intentTo(this)
         }
     }
 
