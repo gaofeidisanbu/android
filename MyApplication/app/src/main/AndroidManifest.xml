@@ -56,6 +56,7 @@
             android:name="com.gaofei.app.act.BarrageAnimationAct"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.gaofei.app.act.ClockSetUpActivity" />
+        <activity android:name="com.gaofei.app.act.ClockStartActivity"  android:theme="@style/AppTheme.NoActionBar"/>
 
         <receiver android:name=".act.ClockBroadcastReceiver">
             <intent-filter>
