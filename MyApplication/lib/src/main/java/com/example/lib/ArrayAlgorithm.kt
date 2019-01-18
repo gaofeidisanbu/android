@@ -6,7 +6,8 @@ object ArrayAlgorithm : Runnable {
 
 
     override fun run() {
-        arrayMerge1()
+//        arrayMerge1()
+        arrayMerge2()
     }
 
     private val arrayA = arrayOf(3, 6, 28, 29, 45)
@@ -41,6 +42,46 @@ object ArrayAlgorithm : Runnable {
                 pa < arrayALength -> {
                     System.arraycopy(arrayA, pa, arrayC, pc, arrayALength - pa)
                     break@loop
+                }
+                else -> {
+                    pc++
+                }
+            }
+        }
+        val sb = StringBuilder()
+        arrayC.forEach {
+            sb.append(" ${it ?: "null"} ")
+        }
+        println(sb.toString())
+
+    }
+
+    private fun arrayMerge2() {
+        val arrayALength = arrayA.size
+        val arrayBLength = arrayB.size
+        val arrayCLength = arrayALength + arrayBLength
+        val arrayC = arrayOfNulls<Int>(arrayCLength)
+        var pa = 0
+        var pb = 0
+        var pc = 0
+        loop@ while (pc < arrayCLength) {
+            when {
+                pa < arrayALength && pb < arrayBLength -> {
+                    if (arrayA[pa] < arrayB[pb]) {
+                        arrayC[pc++] = arrayA[pa++]
+                    } else {
+                        arrayC[pc++] = arrayB[pb++]
+                    }
+                }
+                pb < arrayBLength -> {
+                    while (pb < arrayBLength) {
+                        arrayC[pc++] = arrayB[pb++]
+                    }
+                }
+                pa < arrayALength -> {
+                    while (pa < arrayALength) {
+                        arrayC[pc++] = arrayB[pa++]
+                    }
                 }
                 else -> {
                     pc++
