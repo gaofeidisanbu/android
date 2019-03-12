@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <include
+        android:id="@+id/growthChatItem1"
+        layout="@layout/layout_growth_chat_item"
+        android:layout_width="0dp"
+        android:layout_height="124dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/empty1"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1" />
+    <View
+        android:id="@+id/empty1"
+        android:layout_width="12dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@+id/growthChatItem1"
+        app:layout_constraintEnd_toStartOf="@+id/growthChatItem2"/>
+
+    <include
+        android:id="@+id/growthChatItem2"
+        layout="@layout/layout_growth_chat_item"
+        app:layout_constraintStart_toEndOf="@+id/empty1"
+        app:layout_constraintEnd_toStartOf="@+id/empty2"
+        android:layout_width="0dp"
+        android:layout_height="124dp"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <View
+        android:id="@+id/empty2"
+        android:layout_width="12dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@+id/growthChatItem2"
+        app:layout_constraintEnd_toStartOf="@+id/growthChatItem3"/>
+
+    <include
+        android:id="@+id/growthChatItem3"
+        layout="@layout/layout_growth_chat_item"
+        app:layout_constraintStart_toEndOf="@+id/empty2"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="124dp"
+        app:layout_constraintHorizontal_weight="1" />
+
+</android.support.constraint.ConstraintLayout>

@@ -50,4 +50,9 @@ public class MyLinearLayout extends LinearLayout{
         super.onDraw(canvas);
         Log.d(TAG,"onDraw");
     }
+
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+    }
 }

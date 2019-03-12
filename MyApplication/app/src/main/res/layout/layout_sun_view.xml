@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/sunViewRoot"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="-30dp"
+    android:layout_marginTop="10dp"
+    android:layout_gravity="right">
+
+    <View
+        android:id="@+id/sunView1"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center"
+        android:background="@drawable/sun_view_bg1"/>
+
+    <View
+        android:id="@+id/sunView2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:background="@drawable/sun_view_bg2"/>
+
+    <View
+        android:id="@+id/sunView3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:background="@drawable/sun_view_bg3"/>
+
+</FrameLayout>
