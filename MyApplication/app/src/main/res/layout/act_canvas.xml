@@ -7,45 +7,15 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00C3FF"
+    android:background="#000000"
     android:orientation="vertical">
 
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:visibility="gone">
-
-        <com.gaofei.app.widget.MyLinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/yc_red3">
-
-            <com.gaofei.app.widget.MyTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="111111111111111111111111111111111111111111111111111244444444444444444444444
-667788889999999999999999999986966666666666666666666666666" />
-        </com.gaofei.app.widget.MyLinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-    <com.gaofei.app.widget.MyLinearLayout
-        android:id="@+id/ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/yc_red3"
-        android:visibility="gone">
-
-        <com.gaofei.app.widget.MyTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:text="12345678987654321" />
-    </com.gaofei.app.widget.MyLinearLayout>
-
-    <com.gaofei.app.widget.SunAnimationView
-        android:id="@+id/chatView"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifDrawalbe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+
+        android:src="@drawable/app_icon" />
 
 
 </LinearLayout>

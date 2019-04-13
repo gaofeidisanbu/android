@@ -1,11 +1,10 @@
 package com.example.lib
 
-import io.reactivex.Maybe
-import io.reactivex.MaybeObserver
-import io.reactivex.Observable
-import io.reactivex.Observer
+import com.example.lib.file.FileUtils
+import io.reactivex.*
 import io.reactivex.disposables.Disposable
-import org.omg.CORBA.Object
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 object RXJava : Runnable {
     override fun run() {
@@ -20,7 +19,7 @@ object RXJava : Runnable {
         Observable
                 .just(1, 2)
                 .subscribe {
-                    println(it)
+//                    println(it)
                 }
         Observable
                 .just(1, 2)
@@ -47,13 +46,40 @@ object RXJava : Runnable {
     }
 
     private fun observable() {
-        Observable.create<Any> {
-            it.onNext("1")
-            it.onComplete()
-        }.subscribe()
-        Observable.fromCallable<Any> {
+//        Observable.create<Any> {
+//            it.onNext("1")
+//            it.onComplete()
+//        }.subscribe()
+//        Observable.fromCallable<Any> {
+//
+//        }.subscribe()
+        Observable.interval(10, TimeUnit.SECONDS, Schedulers.trampoline())
+                .subscribe {
+                    FileUtils.write(it.toString())
+                    println("interval $it")
 
-        }.subscribe()
+                }
+
+//        Observable.interval(10, TimeUnit.SECONDS, Schedulers.trampoline())
+//                .subscribe(COn)
+
+        method(ITest { })
+        TestTest.method {
+
+        }
     }
 
+
+    private fun method(i: ITest) {
+
+    }
+
+
+
+}
+
+
+
+interface IInterface {
+    fun method()
 }

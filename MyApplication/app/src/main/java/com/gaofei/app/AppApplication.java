@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.gaofei.library.base.ProjectProxy;
 
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class AppApplication extends Application {
         ProjectProxy.getInstance().setApplication(this);
         ProjectProxy.getInstance().onCreate();
         Log.d("ProjectApplication", "------->onCreate");
+        Fresco.initialize(this);
 
     }
 
