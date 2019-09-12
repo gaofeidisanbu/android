@@ -1,8 +1,9 @@
 package com.example.lib;
 
+import com.example.lib.algorithm.ArrayAlgorithm;
 import com.example.lib.algorithm.SortAlgorithm;
 
-public class MyClass {
+public class MainClass {
 
     public static void main(String[] args) {
         try {
