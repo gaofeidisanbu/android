@@ -1,8 +1,19 @@
 package com.example.lib.algorithm
 
+import com.example.lib.common.print
+import com.example.lib.common.printArray
+import java.util.*
+import kotlin.collections.ArrayList
+
 object SortAlgorithm : Runnable {
 
-    override fun run() {}
+    override fun run() {
+//        sss(arrayOf(1, 2, 3))
+        val arra = arrayOf(ArrayOrInt(1), ArrayOrInt(arrayOf(ArrayOrInt(2), ArrayOrInt(3), ArrayOrInt(arrayOf(ArrayOrInt(4))))))
+        sss4(arra).print()
+
+    }
+
     /**
      * 描述
      * 计一个算法，找出只含素因子2，3，5 的第 n 小的数。
@@ -35,7 +46,126 @@ object SortAlgorithm : Runnable {
             }
         }
 
-        return array[n -1]!!
+        return array[n - 1]!!
     }
+
+    fun stringFind(targetStr: String, sourceStr: String) {
+        var start = 0
+        var i = 0
+        var length = 0
+        while (i < targetStr.length && start < sourceStr.length - targetStr.length) {
+            if (targetStr.toCharArray()[i] == sourceStr.toCharArray()[start + i]) {
+                i++
+                length++
+            } else {
+                i = 0
+                start++
+                length = 0
+            }
+            if (length == targetStr.length) {
+                print("$start")
+                break
+            }
+        }
+        if (length == targetStr.length) {
+            print("$start")
+        }
+    }
+
+    private fun sss(nums: Array<Int>) {
+        val indexs = Array(nums.size) {
+            return@Array 0
+        }
+        val position = 0
+        ssss1(nums, indexs, position)
+    }
+
+    private fun ssss1(nums: Array<Int>, indexs: Array<Int>, position: Int) {
+        if (position == indexs.size - 1) {
+            indexs[position] = nums[0]
+            indexs.printArray()
+            return
+        }
+        val len = nums.size
+        for (i in 0 until len) {
+            indexs[position] = nums[i]
+            val nextPos = position + 1
+            ssss1(getNewArray(nums, nums[i]), indexs, nextPos)
+        }
+
+    }
+
+
+    private fun getNewArray(nums: Array<Int>, exclude: Int): Array<Int> {
+        val len = nums.size
+        val newLen = len - 1
+        val newArray = Array(newLen) {
+            return@Array 0
+        }
+        var n = 0
+        for (i in 0 until len) {
+            if (nums[i] != exclude) {
+                newArray[n] = nums[i]
+                n++
+            }
+        }
+        return newArray
+    }
+
+
+}
+
+fun sss2(array: Array<ArrayOrInt>): List<Int> {
+    val list = ArrayList<Int>()
+    sss3(array, list)
+    return list
+}
+
+fun sss3(array: Array<ArrayOrInt>, list: ArrayList<Int>) {
+    array.forEach {
+        if (it.isInt()) {
+            list.add(it.num!!)
+        } else {
+            sss3(it.nums!!, list)
+        }
+    }
+}
+
+fun sss4(array: Array<ArrayOrInt>): List<Int> {
+    val list = ArrayList<Int>()
+    val stack = LinkedList<ArrayOrInt>()
+    array.forEach {
+        stack.push(it)
+    }
+    while (stack.peek() != null) {
+        var curr = stack.poll()
+        if (curr.isInt()) {
+            list.add(curr.num!!)
+        } else {
+            curr.nums!!.forEach {
+                stack.push(it)
+            }
+        }
+    }
+
+    return list
+}
+
+class ArrayOrInt {
+    constructor(num: Int) {
+        this.num = num
+    }
+
+    constructor(nums: Array<ArrayOrInt>) {
+        this.nums = nums
+    }
+
+    var num: Int? = null
+    var nums: Array<ArrayOrInt>? = null
+
+    fun isInt(): Boolean {
+        return num != null
+    }
+
 
 }
