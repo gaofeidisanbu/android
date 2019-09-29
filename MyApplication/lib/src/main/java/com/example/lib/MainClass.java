@@ -6,7 +6,7 @@ import com.example.lib.algorithm.SortAlgorithm;
 import java.util.Stack;
 
 public class MainClass {
-
+    final int a = 1;
     public static void main(String[] args) {
         try {
             SortAlgorithm.INSTANCE.run();
