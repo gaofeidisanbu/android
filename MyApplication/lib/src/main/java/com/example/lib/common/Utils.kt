@@ -18,6 +18,9 @@ fun <T> Iterable<T>.print() {
     println(sb)
 }
 
+/**
+ * 二分法查找
+ */
 fun Array<Int>.binarySearch(target: Int): Int {
     val len = this.size
     var start = 0
@@ -35,4 +38,11 @@ fun Array<Int>.binarySearch(target: Int): Int {
         }
     }
     return -1
+}
+
+/**
+ * 是否是字母
+ */
+fun Char.isLetter(): Boolean {
+    return this.isLetter()
 }

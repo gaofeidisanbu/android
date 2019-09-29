@@ -1,12 +1,9 @@
 package com.example.lib.algorithm
 
 import com.example.lib.common.binarySearch
-import com.example.lib.common.print
 import com.example.lib.common.printArray
 import java.util.*
-import kotlin.Comparator
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 object SortAlgorithm : Runnable {
 
@@ -14,7 +11,8 @@ object SortAlgorithm : Runnable {
 //        sss(arrayOf(1, 2, 3))
 //        val arra = arrayOf(ArrayOrInt(1), ArrayOrInt(arrayOf(ArrayOrInt(2), ArrayOrInt(3), ArrayOrInt(arrayOf(ArrayOrInt(4))))))
 //        sss4(arra).print()
-        binarySearchTest()
+//        binarySearchTest()
+        stringWordReverse("Hello        world")
 
     }
 
@@ -31,9 +29,6 @@ object SortAlgorithm : Runnable {
      */
 
     fun solution1(n: Int): Int {
-        val i = 0
-        val result = -1
-        val special = 1
         val array = arrayOfNulls<Int>(n)
         array[0] = 1
         val p2 = 2
@@ -147,7 +142,7 @@ fun sss4(array: Array<ArrayOrInt>): List<Int> {
         stack.push(it)
     }
     while (stack.peek() != null) {
-        var curr = stack.poll()
+        val curr = stack.poll()
         if (curr.isInt()) {
             list.add(curr.num!!)
         } else {
@@ -160,87 +155,33 @@ fun sss4(array: Array<ArrayOrInt>): List<Int> {
     return list
 }
 
-class ArrayOrInt {
-    constructor(num: Int) {
-        this.num = num
+/**
+ * 给定一个字符串，逐个翻转字符串中的每个单词
+ */
+fun stringWordReverse(string: String) {
+    val stack1 = Stack<Char>()
+    val stack2 = Stack<Char>()
+    string.forEach {
+        stack1.push(it)
     }
-
-    constructor(nums: Array<ArrayOrInt>) {
-        this.nums = nums
-    }
-
-    var num: Int? = null
-    var nums: Array<ArrayOrInt>? = null
-
-    fun isInt(): Boolean {
-        return num != null
-    }
-
-
-}
-
-class LFU<T, R>(val count: Int) {
-    private val map = HashMap<T, Node>()
-    private val queue = PriorityQueue<Node>()
-
-    fun set(key: T, value: R) {
-        val existNode = map[key]
-        if (existNode != null) {
-            existNode.value = value
+    val sb = StringBuilder()
+    while (!stack1.empty()) {
+        val next = stack1.pop()
+        if (!next.isWhitespace()) {
+            stack2.push(next)
         } else {
-            clear()
-            map[key] = Node(key, value, 0)
-        }
-
-    }
-
-    fun get(key: T): R? {
-        val result = map[key]
-        result?.let {
-            queue.remove(it)
-            result.accessCount++
-            queue.add(result)
-        }
-        return result?.value
-    }
-
-    private fun clear() {
-        if (queue.size == count) {
-            val node = queue.poll()
-            map.remove(node.key)
-            print("remove, $node")
-        }
-    }
-
-
-    inner class Node(val key: T, var value: R, var accessCount: Int) : Comparator<Node> {
-        override fun compare(p0: Node, p1: Node): Int {
-            return when {
-                p0.accessCount == p1.accessCount -> 0
-                p0.accessCount == p1.accessCount -> 1
-                else -> -1
-
+            while (!stack2.isEmpty()) {
+                sb.append(stack2.pop())
             }
-        }
-
-
-    }
-
-    fun cc(array: Array<Array<Int>>, target: Int) {
-        val n = array.size
-        val m = array[0].size
-        var mP = 0
-        var nP = 0
-        val start = 0
-        val end = n - 1
-        while (start < end) {
-            val midValue = array[(start + end) / 2][m - 1]
-            if (midValue < target) {
-
-            }
+            sb.append(next)
         }
 
     }
+    while (!stack2.isEmpty()) {
+        sb.append(stack2.pop())
+    }
 
-
+    println(sb.toString())
 }
+
+
