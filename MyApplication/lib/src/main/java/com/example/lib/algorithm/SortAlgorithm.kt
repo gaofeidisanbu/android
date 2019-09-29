@@ -1,5 +1,6 @@
 package com.example.lib.algorithm
 
+import com.example.lib.common.binarySearch
 import com.example.lib.common.print
 import com.example.lib.common.printArray
 import java.util.*
@@ -11,9 +12,15 @@ object SortAlgorithm : Runnable {
 
     override fun run() {
 //        sss(arrayOf(1, 2, 3))
-        val arra = arrayOf(ArrayOrInt(1), ArrayOrInt(arrayOf(ArrayOrInt(2), ArrayOrInt(3), ArrayOrInt(arrayOf(ArrayOrInt(4))))))
-        sss4(arra).print()
+//        val arra = arrayOf(ArrayOrInt(1), ArrayOrInt(arrayOf(ArrayOrInt(2), ArrayOrInt(3), ArrayOrInt(arrayOf(ArrayOrInt(4))))))
+//        sss4(arra).print()
+        binarySearchTest()
 
+    }
+
+    private fun binarySearchTest() {
+        val nums = arrayOf(1, 3, 5, 7, 9)
+        println(nums.binarySearch(9))
     }
 
     /**
@@ -235,7 +242,5 @@ class LFU<T, R>(val count: Int) {
 
     }
 
-    private fun binarySearch(array: Array<Int>): Int {
-        return 0
-    }
+
 }

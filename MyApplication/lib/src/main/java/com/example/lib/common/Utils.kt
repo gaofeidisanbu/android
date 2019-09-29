@@ -17,3 +17,22 @@ fun <T> Iterable<T>.print() {
     }
     println(sb)
 }
+
+fun Array<Int>.binarySearch(target: Int): Int {
+    val len = this.size
+    var start = 0
+    var end = len - 1
+    while (start <= end) {
+        val mid = (end + start) / 2
+        if (this[mid] == target) {
+            return mid
+        }
+        if (this[mid] > target) {
+            end = mid - 1
+        }
+        if (this[mid] < target) {
+            start = mid + 1
+        }
+    }
+    return -1
+}
