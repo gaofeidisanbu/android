@@ -1,6 +1,6 @@
 package com.example.lib.algorithm
 
-class TreeNode(val data: Int, var leftChild: TreeNode? = null, val rightChild: TreeNode, val isRootNode: Boolean = false) {
+class TreeNode(val data: Int, var leftChild: TreeNode? = null, val rightChild: TreeNode? = null, val isRootNode: Boolean = false) {
     fun isExistLeftChild(): Boolean {
         return leftChild != null
     }
