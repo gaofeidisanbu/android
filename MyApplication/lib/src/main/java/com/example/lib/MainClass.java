@@ -1,5 +1,6 @@
 package com.example.lib;
 
+import com.example.lib.algorithm.Algorithm;
 import com.example.lib.algorithm.ArrayAlgorithm;
 import com.example.lib.algorithm.RecursionAlgorithm;
 import com.example.lib.algorithm.SortAlgorithm;
@@ -16,7 +17,9 @@ public class MainClass {
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
 //            TempTest.INSTANCE.run();
-            RecursionAlgorithm.INSTANCE.run();
+//            RecursionAlgorithm.INSTANCE.run();
+            Algorithm algorithm = new Algorithm();
+            algorithm.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
