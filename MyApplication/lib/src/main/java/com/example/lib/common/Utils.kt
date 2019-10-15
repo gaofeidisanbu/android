@@ -46,3 +46,4 @@ fun Array<Int>.binarySearch(target: Int): Int {
 fun Char.isLetter(): Boolean {
     return this.isLetter()
 }
+
