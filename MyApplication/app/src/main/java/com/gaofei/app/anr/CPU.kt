@@ -11,7 +11,7 @@ class CPU {
                 for (m in 0..max) {
                     for (n in 0..max) {
                         val long: Long = i * j + m * n
-                        LogUtils.d(long)
+//                        LogUtils.d(long)
                     }
                 }
             }

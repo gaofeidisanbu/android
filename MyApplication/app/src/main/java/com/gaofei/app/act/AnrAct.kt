@@ -6,6 +6,7 @@ import android.os.Handler
 import com.gaofei.app.R
 import com.gaofei.app.anr.CPU
 import com.gaofei.app.anr.DeadLock
+import com.gaofei.app.anr.IO
 import com.gaofei.app.anr.TestBroadCastReceiver
 import com.gaofei.library.base.BaseAct
 import kotlinx.android.synthetic.main.dialog_common_with_2_button.*
@@ -22,8 +23,9 @@ class AnrAct : BaseAct() {
 //        }, 400)
 //        val cpu = CPU()
 //        cpu.test()
-        val intent = Intent()
-        intent.action = TestBroadCastReceiver.ACTION
-        this.sendBroadcast(intent)
+//        val intent = Intent()
+//        intent.action = TestBroadCastReceiver.ACTION
+//        this.sendBroadcast(intent)
+        IO.aa()
     }
 }
