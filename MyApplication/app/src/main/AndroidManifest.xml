@@ -51,6 +51,11 @@
         <activity android:name="com.gaofei.app.act.DataBindingAct" />
         <activity android:name="com.gaofei.app.act.TaskActivity" />
         <activity android:name="com.gaofei.app.act.AnrAct" />
+        <receiver android:name=".anr.TestBroadCastReceiver" >
+            <intent-filter>
+                <action android:name="TestBroadCastReceiver"/>
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".CanvasActivity"
             android:theme="@style/AppTheme.NoActionBar" />
