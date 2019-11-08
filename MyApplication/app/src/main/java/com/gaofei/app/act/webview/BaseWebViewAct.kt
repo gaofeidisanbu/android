@@ -36,6 +36,16 @@ abstract class BaseWebViewAct : BaseAct() {
 
     abstract fun setWebView()
 
+    override fun onResume() {
+        super.onResume()
+        mWebView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mWebView.onPause()
+    }
+
     @CallSuper
     @Override
     open fun initView() {
