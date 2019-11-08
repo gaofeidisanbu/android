@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,6 +33,7 @@ import com.gaofei.app.act.SetUpAct;
 import com.gaofei.app.act.TestAct;
 import com.gaofei.app.act.TouchEventAct;
 import com.gaofei.app.act.ViewPagerAct;
+import com.gaofei.app.act.webview.WebViewTransferPageAct;
 import com.gaofei.app.act.adapter.BaseRecyclerAdapter;
 import com.gaofei.app.act.holder.MainViewHolder;
 import com.gaofei.app.act.holder.ViewHolderHandler;
@@ -43,27 +41,12 @@ import com.gaofei.app.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.gaofei.app.act.view.swipetoloadlayout.OnRefreshListener;
 import com.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout;
 import com.gaofei.app.webview.WebviewActivity;
-import com.gaofei.library.TestKotlinKt;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.internal.functions.Functions;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseAdapterListener, OnRefreshListener, OnLoadMoreListener {
     private RecyclerView mRecyclerView;
@@ -75,9 +58,9 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
             WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class,
             BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,
-            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class};
+            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class, WebViewTransferPageAct.class};
     private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView",
-            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas", "clock", "anr"};
+            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas", "clock", "anr", "webView"};
     private Handler mHandler = new Handler();
 
     @Override

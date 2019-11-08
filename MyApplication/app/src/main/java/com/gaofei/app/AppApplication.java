@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.util.Log;
+import android.webkit.WebView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.gaofei.app.act.webview.WebViewPool;
 import com.gaofei.library.base.ProjectProxy;
 
 import java.util.LinkedList;
@@ -19,6 +21,8 @@ import java.util.List;
 public class AppApplication extends Application {
     private static Context context;
 
+    private static WebView webView;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,8 +31,15 @@ public class AppApplication extends Application {
         ProjectProxy.getInstance().onCreate();
         Log.d("ProjectApplication", "------->onCreate");
         Fresco.initialize(this);
+//        WebViewPool.INSTANCE.init();
 
     }
+
+    public static Context getAppContext() {
+        return context;
+    }
+
+
 
     @Override
     public void onTerminate() {
