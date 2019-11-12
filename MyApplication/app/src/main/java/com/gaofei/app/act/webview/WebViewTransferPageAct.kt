@@ -7,23 +7,25 @@ import com.gaofei.library.base.BaseAct
 import kotlinx.android.synthetic.main.act_webview_transfer_page.*
 
 class WebViewTransferPageAct : BaseAct() {
-
     protected var mWebView: WebView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_webview_transfer_page)
+        supportActionBar?.let {
+            it.setTitle("page${pageIndex++}")
+        }
         mWebView = findViewById(R.id.webView)
         mWebView?.let {
             preInitWebView(it)
         }
         webView1.setOnClickListener {
-            BaseWebViewAct.intentTo(this, "https://www.baidu.com")
+            BaseWebViewAct.intentTo(this, "file:///android_asset/html/index.html")
         }
         webView2.setOnClickListener {
-            BaseWebViewAct.intentTo(this, "https://www.baidu.com")
+            BaseWebViewAct.intentTo(this, "file:///android_asset/html/index.html")
         }
         webView3.setOnClickListener {
-            BaseWebViewAct.intentTo(this, "https://www.baidu.com")
+            BaseWebViewAct.intentTo(this, "file:///android_asset/html/index.html")
         }
         webView4.setOnClickListener {
             BaseWebViewAct.intentTo(this, "https://www.baidu.com")
@@ -59,4 +61,10 @@ class WebViewTransferPageAct : BaseAct() {
     fun preInitWebView(webView: WebView) {
         WebViewConfig.configWebView(this, webView)
     }
+
+    companion object {
+        @JvmStatic
+        private var pageIndex = 0
+    }
+
 }

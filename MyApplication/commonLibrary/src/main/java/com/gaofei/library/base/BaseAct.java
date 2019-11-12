@@ -132,4 +132,5 @@ public class BaseAct extends AppCompatActivity {
         ProjectApplication.getInstance().ActivityFinalize(this);
     }
 
+
 }

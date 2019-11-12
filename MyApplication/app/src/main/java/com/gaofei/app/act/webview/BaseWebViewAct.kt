@@ -16,7 +16,10 @@ abstract class BaseWebViewAct : BaseAct() {
         setWebView()
         initView()
         var url = intent.getStringExtra(KEY_URL)
-        url?.let {
+//        url?.let {
+//            url = defaultUrl
+//        }
+        if (url == null) {
             url = defaultUrl
         }
         WebViewConfig.configWebView(this, mWebView!!)

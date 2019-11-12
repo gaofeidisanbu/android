@@ -1,41 +1,25 @@
 package com.gaofei.app.act;
 
-import android.animation.ValueAnimator;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
-import android.text.TextUtils;
-import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StrikethroughSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTestBinding;
 import com.gaofei.library.TestKotlin;
 import com.gaofei.library.base.BaseAct;
-import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
+
+import java.util.concurrent.Callable;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by gaofei on 2017/6/29.
@@ -49,6 +33,43 @@ public class TestAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
+        LogUtils.d(TAG + " main " + Thread.currentThread().getId());
+        Observable.fromCallable(() -> {
+            LogUtils.d(TAG + " fromCallable1 " + Thread.currentThread().getId());
+            return new Object();
+        }).subscribeOn(Schedulers.io())
+                .map(o -> {
+                    LogUtils.d(TAG + " map1 " + Thread.currentThread().getId());
+                    return new Object();
+                }).subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(o -> {
+                    LogUtils.d(TAG + " map2 " + Thread.currentThread().getId());
+                    return new Object();
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        LogUtils.d(TAG + " onSubscribe " + Thread.currentThread().getId());
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        LogUtils.d(TAG + " onNext " + Thread.currentThread().getId());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+
         TestKotlin testKotlin = new TestKotlin();
         testKotlin.main(new String[]{});
 

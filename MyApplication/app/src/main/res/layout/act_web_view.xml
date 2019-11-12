@@ -10,10 +10,27 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+
+
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
         android:text="skipWebViewTransferPageAct"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        android:text="加载网址知乎"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="加载网址百度"/>
+
 </android.support.constraint.ConstraintLayout>
