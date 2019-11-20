@@ -16,11 +16,26 @@ class GlobalWebViewActivity : BaseWebViewAct() {
         this.mWebView = webView
     }
 
+    override fun onPause() {
+        super.onPause()
+        webViewContainer.removeAllViews()
+    }
+
+
     override fun initView() {
+
         super.initView()
         findViewById<Button>(R.id.button).setOnClickListener {
             val intent = Intent(this, WebViewTransferPageAct::class.java)
             startActivity(intent)
+        }
+
+
+        findViewById<Button>(R.id.button2).setOnClickListener {
+            mWebView.loadUrl("https://www.zhihu.com/")
+        }
+        findViewById<Button>(R.id.button3).setOnClickListener {
+            mWebView.loadUrl("https://www.baidu.com/")
         }
     }
 }

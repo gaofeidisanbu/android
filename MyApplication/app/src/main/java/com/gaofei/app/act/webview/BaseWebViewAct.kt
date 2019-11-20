@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.CallSuper
+import android.text.TextUtils
 import android.webkit.*
 import com.gaofei.library.base.BaseAct
 
@@ -52,6 +53,25 @@ abstract class BaseWebViewAct : BaseAct() {
     @CallSuper
     @Override
     open fun initView() {
+
+    }
+
+    override fun onBackPressed() {
+        var canBack = false
+        if (mWebView.canGoBack()) {
+            val mWebBackForwardList = mWebView.copyBackForwardList()
+            if (mWebBackForwardList.size > 0) {
+                if (!TextUtils.equals(mWebBackForwardList.getItemAtIndex(0).url, mWebView!!.url)) {
+                    canBack = true
+                }
+            }
+        }
+
+        if (canBack) {
+            mWebView.goBack()
+        } else {
+            finish()
+        }
 
     }
 

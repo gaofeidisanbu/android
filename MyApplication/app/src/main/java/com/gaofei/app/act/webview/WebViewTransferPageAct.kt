@@ -1,9 +1,11 @@
 package com.gaofei.app.act.webview
 
 import android.os.Bundle
+import android.os.Handler
 import android.webkit.WebView
 import com.gaofei.app.R
 import com.gaofei.library.base.BaseAct
+import com.gaofei.library.utils.LogUtils
 import kotlinx.android.synthetic.main.act_webview_transfer_page.*
 
 class WebViewTransferPageAct : BaseAct() {

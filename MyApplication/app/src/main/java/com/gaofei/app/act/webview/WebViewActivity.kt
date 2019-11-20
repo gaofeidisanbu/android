@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.webkit.*
 import android.widget.Button
 import com.gaofei.app.R
+import kotlinx.android.synthetic.main.act_web_view.*
 
 class WebViewActivity : BaseWebViewAct() {
 
@@ -20,6 +21,13 @@ class WebViewActivity : BaseWebViewAct() {
         mWebView.loadUrl(url)
     }
 
+    override fun onPause() {
+        super.onPause()
+//        root.removeView(mWebView)
+//        WebViewConfig.webViewDestroy(this, mWebView)
+//        finish()
+    }
+
 
     override fun initView() {
         super.initView()
@@ -30,29 +38,13 @@ class WebViewActivity : BaseWebViewAct() {
 
         findViewById<Button>(R.id.button2).setOnClickListener {
            mWebView.loadUrl("https://www.zhihu.com/")
+            throw Exception("")
         }
         findViewById<Button>(R.id.button3).setOnClickListener {
            mWebView.loadUrl("https://www.baidu.com/")
         }
     }
 
-    override fun onBackPressed() {
-        var canBack = false
-        if (mWebView.canGoBack()) {
-            val mWebBackForwardList = mWebView.copyBackForwardList()
-            if (mWebBackForwardList.size > 0) {
-                if (!TextUtils.equals(mWebBackForwardList.getItemAtIndex(0).url, mWebView!!.url)) {
-                    canBack = true
-                }
-            }
-        }
 
-        if (canBack) {
-            mWebView.goBack()
-        } else {
-            finish()
-        }
-
-    }
 
 }

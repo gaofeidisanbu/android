@@ -51,7 +51,7 @@
         <activity android:name="com.gaofei.app.act.DataBindingAct" />
         <activity android:name="com.gaofei.app.act.TaskActivity" />
         <activity android:name="com.gaofei.app.act.AnrAct" />
-        <activity android:name=".act.webview.WebViewActivity" android:launchMode="singleInstance"/>
+        <activity android:name=".act.webview.WebViewActivity" android:process=".webView"/>
         <activity android:name=".act.webview.WebViewTransferPageAct" />
         <activity android:name=".act.webview.GlobalWebViewActivity" />
         <receiver android:name=".anr.TestBroadCastReceiver" >
