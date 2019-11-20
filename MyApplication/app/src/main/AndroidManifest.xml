@@ -54,6 +54,7 @@
         <activity android:name=".act.webview.WebViewActivity" android:process=".webView"/>
         <activity android:name=".act.webview.WebViewTransferPageAct" />
         <activity android:name=".act.webview.GlobalWebViewActivity" />
+        <activity android:name=".act.AIDLActivity" />
         <receiver android:name=".anr.TestBroadCastReceiver" >
             <intent-filter>
                 <action android:name="TestBroadCastReceiver"/>

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.gaofei.app2.databinding.ActivityMainBinding;
 import com.gaofei.library.Add;
 import com.gaofei.library.base.BaseAct;
 
@@ -15,8 +14,8 @@ public class Test2Activity extends BaseAct {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        binding.button.setOnClickListener(new View.OnClickListener() {
+        setContentView( R.layout.activity_main);
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
