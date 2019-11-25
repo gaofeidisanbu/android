@@ -3,7 +3,6 @@ package com.gaofei.app
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Bundle
-import android.support.annotation.Nullable
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +24,6 @@ import pl.droidsonroids.gif.GifDrawable
 
 
 class CanvasActivity : BaseAct() {
-
     private val mData = ArrayList<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

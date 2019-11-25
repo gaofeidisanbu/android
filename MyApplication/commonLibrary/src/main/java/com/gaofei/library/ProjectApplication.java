@@ -10,6 +10,7 @@ import com.facebook.stetho.Stetho;
 import com.gaofei.library.base.IApplicationInterface;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -49,6 +50,7 @@ public class ProjectApplication implements IApplicationInterface {
         Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         LogUtils.d(exceptionHandler.getClass().getName());
         Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(exceptionHandler));
+        LeakCanary.install(mApplication);
     }
 
     public static Application getContext() {
