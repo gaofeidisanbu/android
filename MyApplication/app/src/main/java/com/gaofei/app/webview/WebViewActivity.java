@@ -21,8 +21,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-@SuppressLint("SetJavaScriptEnabled") 
-public class WebviewActivity extends BaseAct {
+@SuppressLint("SetJavaScriptEnabled")
+public class WebViewActivity extends BaseAct {
 
     private WebView webView;
     private WVJBWebViewClient webViewClient;
@@ -48,8 +48,8 @@ public class WebviewActivity extends BaseAct {
 
 					@Override
 					public void callback(Object data) {
-						Toast.makeText(WebviewActivity.this, "sendMessage got response: " + data, Toast.LENGTH_LONG).show();
-						Intent intent = new Intent(WebviewActivity.this,ExceptionAct.class);
+						Toast.makeText(WebViewActivity.this, "sendMessage got response: " + data, Toast.LENGTH_LONG).show();
+						Intent intent = new Intent(WebViewActivity.this,ExceptionAct.class);
 						startActivity(intent);
 					}
 				});
@@ -66,7 +66,7 @@ public class WebviewActivity extends BaseAct {
 
 						@Override
 						public void callback(Object data) {
-							Toast.makeText(WebviewActivity.this, "testJavascriptHandler responded: " + data, Toast.LENGTH_LONG).show();
+							Toast.makeText(WebViewActivity.this, "testJavascriptHandler responded: " + data, Toast.LENGTH_LONG).show();
 						}
 					});
 				} catch (JSONException e) {
@@ -85,7 +85,7 @@ public class WebviewActivity extends BaseAct {
 
 				@Override
 				public void request(Object data, WVJBResponseCallback callback) {
-					Toast.makeText(WebviewActivity.this, "ObjC Received message from JS:" + data, Toast.LENGTH_LONG).show();
+					Toast.makeText(WebViewActivity.this, "ObjC Received message from JS:" + data, Toast.LENGTH_LONG).show();
 					callback.callback("Response for message from ObjC!");
 				}
 			});
@@ -101,7 +101,7 @@ public class WebviewActivity extends BaseAct {
 				
 				@Override
 				public void request(Object data, WVJBResponseCallback callback) {		
-					Toast.makeText(WebviewActivity.this, "testObjcCallback called:" + data, Toast.LENGTH_LONG).show();
+					Toast.makeText(WebViewActivity.this, "testObjcCallback called:" + data, Toast.LENGTH_LONG).show();
 					callback.callback("Response from testObjcCallback!");
 				}
 	        });
@@ -110,7 +110,7 @@ public class WebviewActivity extends BaseAct {
 
 				@Override
 				public void callback(Object data) {
-					Toast.makeText(WebviewActivity.this, "ObjC got response! :" + data, Toast.LENGTH_LONG).show();
+					Toast.makeText(WebViewActivity.this, "ObjC got response! :" + data, Toast.LENGTH_LONG).show();
 				}
 	        });
 	        
@@ -119,7 +119,7 @@ public class WebviewActivity extends BaseAct {
 
 					@Override
 					public void callback(Object data) {
-						Toast.makeText(WebviewActivity.this, "ObjC call testJavascriptHandler got response! :" + data, Toast.LENGTH_LONG).show();
+						Toast.makeText(WebViewActivity.this, "ObjC call testJavascriptHandler got response! :" + data, Toast.LENGTH_LONG).show();
 					}
 		        });
 			} catch (JSONException e) {

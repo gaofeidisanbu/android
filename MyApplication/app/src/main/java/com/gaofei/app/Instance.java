@@ -3,15 +3,17 @@ package com.gaofei.app;
 import android.content.Context;
 import android.util.Log;
 
+import com.gaofei.library.utils.LogUtils;
+
 /**
  * Created by gaofei on 2017/5/17.
  */
 
 public class Instance {
-    private static Instance mInstance = null;
+    private static Instance mInstance ;
     private Context mCtx;
 
-    private Instance(Context context) {
+    public Instance(Context context) {
         this.mCtx = context;
     }
 
@@ -35,5 +37,6 @@ public class Instance {
         Log.d("Instance","3");
         Log.d("Instance","4");
     }
+
 
 }

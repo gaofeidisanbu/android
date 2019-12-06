@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.gaofei.app.act.AIDLActivity;
-import com.gaofei.app.act.AnnoAct;
+import com.gaofei.app.act.AnnotationAct;
 import com.gaofei.app.act.AnrAct;
 import com.gaofei.app.act.BarrageAnimationAct;
 import com.gaofei.app.act.BroadcastReceiverAct;
@@ -42,7 +42,8 @@ import com.gaofei.app.act.holder.ViewHolderHandler;
 import com.gaofei.app.act.view.swipetoloadlayout.OnLoadMoreListener;
 import com.gaofei.app.act.view.swipetoloadlayout.OnRefreshListener;
 import com.gaofei.app.act.view.swipetoloadlayout.SwipeToLoadLayout;
-import com.gaofei.app.webview.WebviewActivity;
+import com.gaofei.app.webview.WebViewActivity;
+import com.gaofei.app.widget.InstanceTest;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
@@ -57,12 +58,14 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     /**
      * 增加一个测试类，需要同时在2个数组增加
      */
-    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class, TestAct.class,
-            WebviewActivity.class, AnnoAct.class, ScreenshotAct.class, LayoutAct.class,
+    private Class[] classArr = {KeyboardAct.class, RecyclerSwipeAct.class, ExceptionAct.class,
+            WebViewActivity.class, AnnotationAct.class, ScreenshotAct.class, LayoutAct.class,
             BroadcastReceiverAct.class,ProcessAct.class,PermissionAct.class,ReflectAct.class,
-            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class, BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class, WebViewTransferPageAct.class, AIDLActivity.class, ReferenceAct.class};
-    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "普通测试", "webView",
-            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas", "clock", "anr", "webView", "AIDL", ""};
+            TouchEventAct.class,ViewPagerAct.class,FragmentAct.class, EditTextAct.class, DataBindingAct.class,
+            BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class, WebViewTransferPageAct.class,
+            AIDLActivity.class, ReferenceAct.class, TestAct.class};
+    private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "webView",
+            "注解", "截屏", "layout", "广播","进程信息","权限","反射","touchEvent","ViewPager","fragment","editText","dataBinding", "弹幕动画", "canvas", "clock", "anr", "webView", "AIDL", "", "普通测试"};
     private Handler mHandler = new Handler();
 
     @Override
@@ -73,6 +76,13 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         setContentView(R.layout.activity_main);
         initView();
         initData();
+        Class aa = InstanceTest.class;
+        aa.getCanonicalName();
+//        try {
+//            InstanceTest.class.newInstance();
+//        } catch (InstantiationException e) {
+//        } catch (IllegalAccessException e) {
+//        }
     }
 
     private void initData() {

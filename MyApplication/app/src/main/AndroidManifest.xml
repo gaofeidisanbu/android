@@ -29,11 +29,11 @@
         </activity>
         <activity android:name="com.gaofei.app.act.SkipAct" />
         <activity android:name="com.gaofei.app.act.ExceptionAct" />
-        <activity android:name="com.gaofei.app.webview.WebviewActivity" />
+        <activity android:name="com.gaofei.app.webview.WebViewActivity" />
         <activity android:name="com.gaofei.app.act.RecyclerSwipeAct" />
         <activity android:name="com.gaofei.app.act.KeyboardAct" />
         <activity android:name="com.gaofei.app.act.TestAct" />
-        <activity android:name="com.gaofei.app.act.AnnoAct" />
+        <activity android:name="com.gaofei.app.act.AnnotationAct" />
         <activity android:name="com.gaofei.app.act.ScreenshotAct" />
         <activity
             android:name="com.gaofei.app.act.LayoutAct"
@@ -50,12 +50,12 @@
         <activity android:name="com.gaofei.app.act.DataBindingAct" />
         <activity android:name="com.gaofei.app.act.TaskActivity" />
         <activity android:name="com.gaofei.app.act.AnrAct" />
-        <activity android:name=".act.webview.WebViewActivity" android:process=".webView"/>
-        <activity android:name=".act.webview.WebViewTransferPageAct" />
-        <activity android:name=".act.webview.GlobalWebViewActivity" />
-        <activity android:name=".act.AIDLActivity" />
-        <activity android:name=".act.ReferenceAct" />
-        <receiver android:name=".anr.TestBroadCastReceiver" >
+        <activity android:name="com.gaofei.app.act.webview.WebViewActivity" android:process=".webView"/>
+        <activity android:name="com.gaofei.app.act.webview.WebViewTransferPageAct" />
+        <activity android:name="com.gaofei.app.act.webview.GlobalWebViewActivity" />
+        <activity android:name="com.gaofei.app.act.AIDLActivity" />
+        <activity android:name="com.gaofei.app.act.ReferenceAct" />
+        <receiver android:name="com.gaofei.app.anr.TestBroadCastReceiver" >
             <intent-filter>
                 <action android:name="TestBroadCastReceiver"/>
             </intent-filter>

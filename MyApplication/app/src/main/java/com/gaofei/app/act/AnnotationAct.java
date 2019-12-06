@@ -18,28 +18,28 @@ import java.lang.reflect.Type;
  * Created by gaofei on 2017/7/4.
  */
 
-public class AnnoAct extends BaseAct {
+public class AnnotationAct extends BaseAct {
     public int aa;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG,"aa = "+aa);
-        processAnno();
+        processAnnotation();
 
     }
 
 
-    public void processAnno(){
+    public void processAnnotation(){
         Test test = new Test();
         Method[] declaredMethods = Test.class.getDeclaredMethods();
         for (Method method:declaredMethods){
-            AnnoTest annoTest =  method.getAnnotation(AnnoTest.class);
+            AnnotationTest annotationTest =  method.getAnnotation(AnnotationTest.class);
             Type type = method.getReturnType();
             if(type  == Void.TYPE){
                 Log.d(TAG,"isNull = class "+(type  == Void.TYPE));
             }
-            boolean isNull = (annoTest == null);
+            boolean isNull = (annotationTest == null);
 //            try {
 ////                Object object = method.invoke(test);
                 Log.d(TAG,"isNull = "+isNull+" methodName = "+method.getName()+" return = "+type+" ");
@@ -54,7 +54,7 @@ public class AnnoAct extends BaseAct {
 
     @Retention(RetentionPolicy.CLASS)
     @Target({ElementType.METHOD})
-    public @interface AnnoTest {
+    public @interface AnnotationTest {
 
     }
 

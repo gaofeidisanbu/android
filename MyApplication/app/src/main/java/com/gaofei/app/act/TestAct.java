@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTestBinding;
+import com.gaofei.app.http.OkhttpUtils;
 import com.gaofei.library.TestKotlin;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.LogUtils;
@@ -28,6 +29,10 @@ import io.reactivex.schedulers.Schedulers;
 public class TestAct extends BaseAct {
     private ActTestBinding mBinding;
     private boolean isToolBarShow = false;
+
+    static {
+        LogUtils.d("TestAct init");
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,8 +81,9 @@ public class TestAct extends BaseAct {
         mBinding.image1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TestAct.this, TaskActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(TestAct.this, TaskActivity.class);
+//                startActivity(intent);
+                OkhttpUtils.INSTANCE.getDatasync();
             }
         });
 
