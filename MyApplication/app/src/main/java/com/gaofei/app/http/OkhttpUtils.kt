@@ -12,7 +12,7 @@ object OkhttpUtils {
             try {
                 val client = OkHttpClient()//创建OkHttpClient对象
                 val request = Request.Builder()
-                        .url("http://www.baidu.com")//请求接口。如果需要传参拼接到接口后面。
+                        .url("https://hls.media.yangcong345.com/mobileM/mobileM_586f4100065b7e9d714296cb.m3u8")//请求接口。如果需要传参拼接到接口后面。
                         .build()//创建Request 对象
                 var response: Response? = null
                 response = client.newCall(request).execute()//得到Response 对象

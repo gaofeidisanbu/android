@@ -1,11 +1,15 @@
 package com.example.lib
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 object TempTest : Runnable {
 
 
     override fun run() {
-        val map = hashMapOf(Pair("type","1"))
-       val ss =  map["aaa"]
+        GlobalScope.launch {
+
+        }
     }
 
 }

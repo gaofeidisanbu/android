@@ -5,10 +5,12 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.TextView;
 
 import com.gaofei.app.R;
 import com.gaofei.app.databinding.ActTestBinding;
 import com.gaofei.app.http.OkhttpUtils;
+import com.gaofei.app.plugin.EncryptUtil;
 import com.gaofei.library.TestKotlin;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.LogUtils;
@@ -31,13 +33,14 @@ public class TestAct extends BaseAct {
     private boolean isToolBarShow = false;
 
     static {
-        LogUtils.d("TestAct init");
+//        LogUtils.d("TestAct init");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.act_test);
+        TextView text = (TextView) findViewById(R.id.text);
         LogUtils.d(TAG + " main " + Thread.currentThread().getId());
         Observable.fromCallable(() -> {
             LogUtils.d(TAG + " fromCallable1 " + Thread.currentThread().getId());
@@ -114,6 +117,8 @@ public class TestAct extends BaseAct {
             }
         });
     }
+
+
 
 
 }

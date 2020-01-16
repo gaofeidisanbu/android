@@ -16,12 +16,35 @@ public class MainClass {
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
-//            TempTest.INSTANCE.run();
+            TempTest.INSTANCE.run();
 //            RecursionAlgorithm.INSTANCE.run();
-            Algorithm algorithm = new Algorithm();
-            algorithm.run();
+//            Algorithm algorithm = new Algorithm();
+//            algorithm.run();
+            System.out.println(adapter());
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static Integer adapter() {
+        try {
+            return 1;
+        } catch (Exception e) {
+        } finally {
+            return 2;
+        }
+    }
+
+    public static int div() throws Exception{
+        try {
+            int a = 5 / 0;
+            return a;
+        } catch (ArithmeticException e) {
+            System.out.println("catch in div");
+            throw new Exception("Exception in div"); // 抛出新的异常
+        } finally {
+            System.out.println("finally in div");
+            throw new Exception("Exception in Finally");  // 抛出新的异常
         }
     }
 

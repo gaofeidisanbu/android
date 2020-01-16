@@ -7,9 +7,9 @@ import com.gaofei.app.R
 import com.gaofei.app.anr.CPU
 import com.gaofei.app.anr.DeadLock
 import com.gaofei.app.anr.IO
-import com.gaofei.app.anr.TestBroadCastReceiver
+import com.gaofei.app.plugin.AesUtils
 import com.gaofei.library.base.BaseAct
-import kotlinx.android.synthetic.main.dialog_common_with_2_button.*
+import kotlinx.android.synthetic.main.act_anr.*
 
 class AnrAct : BaseAct() {
     private val mHandler = Handler()
@@ -27,5 +27,15 @@ class AnrAct : BaseAct() {
 //        intent.action = TestBroadCastReceiver.ACTION
 //        this.sendBroadcast(intent)
         IO.aa()
+        text.setText(getTex11t())
+    }
+
+    private fun getTex11t(): String {
+        val data = "20191231-onion"
+        val key = "ycmath"
+        val tran = "AES"
+        val byte = "1111111111111111"
+        val aa = AesUtils.encrypt(data)
+        return aa.toString()
     }
 }
