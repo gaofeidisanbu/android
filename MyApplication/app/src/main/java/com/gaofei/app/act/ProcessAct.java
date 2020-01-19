@@ -9,19 +9,18 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.databinding.DataBindingUtil;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.gaofei.app.MainActivity;
 import com.gaofei.app.R;
 import com.gaofei.app.act.adapter.BaseRecyclerAdapter;
 import com.gaofei.app.act.holder.ViewHolderHandler;
-import com.gaofei.app.databinding.ActProcessBinding;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.LogUtils;
 import com.jaredrummler.android.processes.AndroidProcesses;
@@ -45,10 +44,11 @@ public class ProcessAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LogUtils.d(MainActivity.process );
-        ActProcessBinding binding = DataBindingUtil.setContentView(this, R.layout.act_process);
+        setContentView( R.layout.act_process);
         BaseRecyclerAdapter adapter = new BaseRecyclerAdapter(this);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        binding.recycler.setLayoutManager(linearLayoutManager);
+        RecyclerView recycler = findViewById(R.id.recycler);
+        recycler.setLayoutManager(linearLayoutManager);
         adapter.setOnBaseAdapterListener(new BaseRecyclerAdapter.OnBaseAdapterListener() {
             @Override
             public void click(View view, ViewHolderHandler.Item item) {
@@ -56,8 +56,8 @@ public class ProcessAct extends BaseAct {
             }
         });
         adapter.addList(getListData());
-        binding.recycler.addItemDecoration(new MainActivity.MyItemDecoration(this));
-        binding.recycler.setAdapter(adapter);
+        recycler.addItemDecoration(new MainActivity.MyItemDecoration(this));
+        recycler.setAdapter(adapter);
     }
 
     public List<ViewHolderHandler.Item> getListData() {

@@ -1,31 +1,31 @@
 package com.gaofei.app.act;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gaofei.app.R;
-import com.gaofei.app.databinding.ActViewPagerBinding;
 import com.gaofei.library.base.BaseAct;
+import com.gaofei.library.widget.tab.CustomTabLayout;
 
 /**
  * Created by gaofei on 2017/12/16.
  */
 
 public class ViewPagerAct extends BaseAct {
-    private ActViewPagerBinding mBinding;
-
+    CustomTabLayout tab;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.act_view_pager);
-        mBinding.pager.setAdapter(new MyPagerAdapter());
-        mBinding.tab.setupWithViewPager(mBinding.pager);
+        setContentView( R.layout.act_view_pager);
+        ViewPager pager = findViewById(R.id.pager);
+        tab  = findViewById(R.id.tab);
+        pager.setAdapter(new MyPagerAdapter());
+        tab.setupWithViewPager(pager);
         initTab();
 
     }
@@ -34,7 +34,7 @@ public class ViewPagerAct extends BaseAct {
         for (int i = 0; i < 2; i++) {
             TextView textWithHotView = new TextView(this);
             textWithHotView.setText("gaofei");
-            mBinding.tab.getTabAt(i).setCustomView(textWithHotView);
+            tab.getTabAt(i).setCustomView(textWithHotView);
 
         }
     }

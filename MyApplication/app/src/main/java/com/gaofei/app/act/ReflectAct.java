@@ -1,13 +1,11 @@
 package com.gaofei.app.act;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 
 import com.gaofei.app.R;
-import com.gaofei.app.databinding.ActReflectBinding;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.LogUtils;
 
@@ -20,7 +18,6 @@ import java.util.Date;
  */
 
 public class ReflectAct extends BaseAct {
-    private ActReflectBinding mBinding;
 
     public static class ReflectTimeInfo {
         public int n;
@@ -37,8 +34,7 @@ public class ReflectAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.act_reflect);
-        mBinding.text.setMovementMethod(ScrollingMovementMethod.getInstance());
+        setContentView( R.layout.act_reflect);
     }
 
 
@@ -55,7 +51,6 @@ public class ReflectAct extends BaseAct {
         ReflectTimeInfo method1000 = objectMethodTest(1000);
         sb.append("\n");
         sb.append(getText(1, method1, method10, method100, method1000));
-        mBinding.text.setText(sb.toString());
     }
 
     public String getText(int type, ReflectTimeInfo... reflectTimeInfos) {

@@ -1,14 +1,13 @@
 package com.gaofei.app.act;
 
 import android.Manifest;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 
 import com.gaofei.app.R;
-import com.gaofei.app.databinding.ActPermissionBinding;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.permission.PermissionFail;
 import com.gaofei.library.permission.PermissionHandler;
@@ -23,16 +22,18 @@ public class PermissionAct extends BaseAct implements View.OnClickListener {
     public static final int PERMISSION_WRITE_EXTERNAL_STORAGE_REQUEST_CODE = 1;
     public static final int PERMISSION_READ_EXTERNAL_STORAGE_REQUEST_CODE = 2;
     public static final int PERMISSION_READ_PHONE_STATE_REQUEST_CODE = 3;
-    private ActPermissionBinding mBinding;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.act_permission);
-        mBinding.button1.setOnClickListener(this);
-        mBinding.button2.setOnClickListener(this);
-        mBinding.button3.setOnClickListener(this);
+        setContentView(R.layout.act_permission);
+        Button button1 = findViewById(R.id.button1);
+        Button button2 = findViewById(R.id.button2);
+        Button button3 = findViewById(R.id.button3);
+        button1.setOnClickListener(this);
+        button2.setOnClickListener(this);
+        button3.setOnClickListener(this);
     }
 
     @Override

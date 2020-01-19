@@ -1,11 +1,11 @@
 package com.gaofei.app.act;
 
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.gaofei.app.R;
-import com.gaofei.app.databinding.ActEditTextBinding;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.ToastManager;
 
@@ -14,22 +14,24 @@ import com.gaofei.library.utils.ToastManager;
  */
 
 public class EditTextAct extends BaseAct {
-    private ActEditTextBinding mBinding;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.act_edit_text);
-        mBinding.button1.setOnClickListener( v -> {
-            mBinding.edit.setOnClickListener( e -> {
+       setContentView(R.layout.act_edit_text);
+        Button button1 = findViewById(R.id.button1);
+        Button button2 = findViewById(R.id.button2);
+        EditText edit = findViewById(R.id.edit);
+        button1.setOnClickListener( v -> {
+            edit.setOnClickListener( e -> {
                 ToastManager.show("button1 onclick");
             });
-            mBinding.edit.setFocusable(false);
+            edit.setFocusable(false);
         });
-        mBinding.button2.setOnClickListener( v -> {
-            mBinding.edit.setFocusable(true);
-            mBinding.edit.setFocusableInTouchMode(true);
-            mBinding.edit.setOnClickListener(null);
-            ToastManager.show(mBinding.edit.isFocused()+"requestFocus =  "+mBinding.edit.requestFocus());
+        button2.setOnClickListener( v -> {
+            edit.setFocusable(true);
+            edit.setFocusableInTouchMode(true);
+            edit.setOnClickListener(null);
+            ToastManager.show(edit.isFocused()+"requestFocus =  "+edit.requestFocus());
         });
 
     }

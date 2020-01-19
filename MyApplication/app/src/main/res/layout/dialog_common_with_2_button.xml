@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -33,14 +33,14 @@
             android:textSize="15sp" />
 
         <Button
-            android:id="@+id/button_negative"
+            android:id="@+id/buttonNegative"
             style="@style/button_white_style2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/content"
             android:minWidth="0dp"
             android:layout_marginTop="24dp"
-            android:layout_toLeftOf="@+id/button_positive"
+            android:layout_toLeftOf="@+id/buttonPositive"
             android:layout_marginRight="8dp"
             android:gravity="center"
             android:paddingBottom="10dp"
@@ -52,7 +52,7 @@
             android:textStyle="bold"/>
 
         <Button
-            android:id="@+id/button_positive"
+            android:id="@+id/buttonPositive"
             style="@style/button_white_style2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,4 +69,3 @@
             android:textSize="16sp"
             android:textStyle="bold" />
     </RelativeLayout>
-</layout>

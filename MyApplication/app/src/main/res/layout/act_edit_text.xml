@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -61,4 +60,3 @@
             android:background="@color/yc_red2"
             android:layout_above="@+id/text"/>
     </RelativeLayout>
-</layout>

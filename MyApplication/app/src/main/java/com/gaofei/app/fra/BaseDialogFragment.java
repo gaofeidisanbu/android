@@ -4,16 +4,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.Window;
+import android.widget.TextView;
 
 import com.gaofei.app.MainActivity;
 import com.gaofei.app.R;
-import com.gaofei.app.databinding.DialogCommonWith2ButtonBinding;
 import com.gaofei.library.utils.LogUtils;
 
 /**
@@ -48,14 +47,18 @@ public class BaseDialogFragment extends DialogFragment implements View.OnClickLi
         final Activity context = getActivity();
         dialog = super.onCreateDialog(savedInstanceState);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        DialogCommonWith2ButtonBinding binding = DataBindingUtil.inflate(context.getLayoutInflater(), R.layout.dialog_common_with_2_button, null,false);
-        dialog.setContentView(binding.getRoot());
-        binding.title.setText(title);
-        binding.content.setText(message);
-        binding.buttonNegative.setText(btnText1);
-        binding.buttonPositive.setText(btnText2);
-        binding.buttonNegative.setOnClickListener(this);
-        binding.buttonPositive.setOnClickListener(this);
+        View binding = context.getLayoutInflater().inflate(R.layout.dialog_common_with_2_button, null,false);
+        dialog.setContentView(binding);
+        TextView titleView= binding.findViewById(R.id.title);
+        TextView contentView= binding.findViewById(R.id.content);
+        TextView btnText1View= binding.findViewById(R.id.buttonNegative);
+        TextView btnText2View= binding.findViewById(R.id.buttonPositive);
+        titleView.setText(title);
+        contentView.setText(message);
+        btnText1View.setText(btnText1);
+        btnText2View.setText(btnText2);
+        binding.findViewById(R.id.buttonNegative).setOnClickListener(this);
+        binding.findViewById(R.id.buttonPositive).setOnClickListener(this);
         dialog.setCanceledOnTouchOutside(true);
 
         return dialog;
@@ -64,12 +67,12 @@ public class BaseDialogFragment extends DialogFragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_negative:
+            case R.id.buttonNegative:
                 if(listener != null){
                     listener.onClick(dialog,DialogInterface.BUTTON_NEGATIVE);
                 }
                 break;
-            case R.id.button_positive:
+            case R.id.buttonPositive:
                 if(listener != null){
                     listener.onClick(dialog,DialogInterface.BUTTON_POSITIVE);
                 }
