@@ -5,6 +5,7 @@ import com.example.lib.algorithm.ArrayAlgorithm;
 import com.example.lib.algorithm.RecursionAlgorithm;
 import com.example.lib.algorithm.SortAlgorithm;
 import com.example.lib.algorithm.StackAlgorithm;
+import com.example.lib.load.SimpleClassLoader;
 
 import java.util.Stack;
 
@@ -16,11 +17,14 @@ public class MainClass {
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
-            TempTest.INSTANCE.run();
+//            TempTest.INSTANCE.run();
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
-            System.out.println(adapter());
+            ClassLoader classLoader = new SimpleClassLoader();
+            Class clazz = classLoader.loadClass("com.example.lib.load.TestClassLoad");
+            clazz.newInstance();
+//            System.out.println(adapter());
         } catch (Exception e) {
             e.printStackTrace();
         }
