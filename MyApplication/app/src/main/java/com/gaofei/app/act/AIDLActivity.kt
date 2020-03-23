@@ -31,6 +31,7 @@ class AIDLActivity : BaseAct() {
                     LogUtils.d("$TAG onServiceConnected")
                     easyService = IEasyService.Stub.asInterface(service)
 
+
                 }
 
             }, Context.BIND_AUTO_CREATE)

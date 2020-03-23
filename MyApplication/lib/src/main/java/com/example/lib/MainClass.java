@@ -8,11 +8,18 @@ import com.example.lib.algorithm.StackAlgorithm;
 import com.example.lib.load.SimpleClassLoader;
 
 import java.util.Stack;
+import java.util.concurrent.Semaphore;
 
 public class MainClass {
     final int a = 1;
+
+    {
+        int b = 3;
+        System.out.println("a");
+    }
     public static void main(String[] args) {
         try {
+            MainClass mainClass = new MainClass();
 //            SortAlgorithm.INSTANCE.run();
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
@@ -21,9 +28,9 @@ public class MainClass {
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
-            ClassLoader classLoader = new SimpleClassLoader();
-            Class clazz = classLoader.loadClass("com.example.lib.load.TestClassLoad");
-            clazz.newInstance();
+//            ClassLoader classLoader = new SimpleClassLoader();
+//            Class clazz = classLoader.loadClass("com.example.lib.load.TestClassLoad");
+//            clazz.newInstance();
 //            System.out.println(adapter());
         } catch (Exception e) {
             e.printStackTrace();

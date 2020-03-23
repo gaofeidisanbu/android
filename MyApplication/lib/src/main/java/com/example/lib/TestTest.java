@@ -1,8 +1,19 @@
 package com.example.lib;
 
-public class TestTest {
-    public static void method(ITest test) {
+
+import java.io.FileWriter;
+
+public class TestTest implements Runnable {
+
+    public Object shutdown( Object object) {
+        Object ob = object;
+        return ob;
     }
 
+    @Override
+    public void run() {
 
+    }
 }
+
+

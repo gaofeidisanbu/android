@@ -2,6 +2,7 @@ package com.gaofei.app.act;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -156,7 +157,19 @@ public class RecyclerSwipeAct extends BaseAct implements OnRefreshListener, OnLo
 
             }
         }, 300);
+        Message msg  = Message.obtain();
+        msg.arg1 = 1;
+        mHandler.sendMessage(msg);
+
     }
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
 
 
     @Override

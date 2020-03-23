@@ -24,5 +24,7 @@
         <item name="android:background">@drawable/sl_round_rect_white2</item>
         <item name="android:textColor">@color/yc_blue5</item>
     </style>
-
+    <style name="AppThemeCustom" parent="AppTheme">
+        <item name="windowActionBar">false</item>
+    </style>
 </resources>

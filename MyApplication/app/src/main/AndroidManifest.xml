@@ -55,6 +55,7 @@
         <activity android:name="com.gaofei.app.act.webview.GlobalWebViewActivity" />
         <activity android:name="com.gaofei.app.act.AIDLActivity" />
         <activity android:name="com.gaofei.app.act.ReferenceAct" />
+        <activity android:name="com.gaofei.app.act.GLSurfaceAct" />
         <receiver android:name="com.gaofei.app.anr.TestBroadCastReceiver" >
             <intent-filter>
                 <action android:name="TestBroadCastReceiver"/>
