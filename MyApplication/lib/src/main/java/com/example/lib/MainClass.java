@@ -17,6 +17,9 @@ public class MainClass {
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
             TempTest.INSTANCE.run();
+            Jvm jvm = new Jvm();
+            jvm.fun1();
+
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
