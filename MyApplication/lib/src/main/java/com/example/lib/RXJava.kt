@@ -64,9 +64,6 @@ object RXJava : Runnable {
 //                .subscribe(COn)
 
         method(ITest { })
-        TestTest.method {
-
-        }
     }
 
 

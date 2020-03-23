@@ -19,7 +19,7 @@ object OkhttpUtils {
                 if (response!!.isSuccessful()) {
                     Log.d("kwwl", "response.code()==" + response!!.code())
                     Log.d("kwwl", "response.message()==" + response!!.message())
-                    Log.d("kwwl", "res==" + response!!.body().string())
+                    Log.d("kwwl", "res==" + response!!.body()!!.string())
                     //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
                 }
             } catch (e: Exception) {

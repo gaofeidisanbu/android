@@ -23,7 +23,6 @@ public class MainClass {
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
-            System.out.println(adapter());
         } catch (Exception e) {
             e.printStackTrace();
         }
