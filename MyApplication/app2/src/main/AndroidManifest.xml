@@ -13,7 +13,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".EasyService" android:process=".remoteService" android:exported="true" android:enabled="true">
+        <service android:name=".EasyService" android:exported="true" android:enabled="true">
             <intent-filter>
             <action android:name="com.gaofei.app2.EasyService" />
             </intent-filter>

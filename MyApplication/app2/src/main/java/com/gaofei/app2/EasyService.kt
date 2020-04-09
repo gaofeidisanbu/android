@@ -7,6 +7,10 @@ import com.gaofei.library.utils.LogUtils
 
 class EasyService : Service() {
 
+    override fun onCreate() {
+        super.onCreate()
+    }
+
 
     override fun onBind(intent: Intent?): IBinder? {
         val service = object : IEasyService.Stub(){

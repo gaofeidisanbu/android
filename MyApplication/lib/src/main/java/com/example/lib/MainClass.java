@@ -5,6 +5,7 @@ import com.example.lib.algorithm.ArrayAlgorithm;
 import com.example.lib.algorithm.RecursionAlgorithm;
 import com.example.lib.algorithm.SortAlgorithm;
 import com.example.lib.algorithm.StackAlgorithm;
+import com.example.lib.algorithm.TreeAlgorithm;
 import com.example.lib.load.SimpleClassLoader;
 
 import java.util.Stack;
@@ -19,7 +20,7 @@ public class MainClass {
     }
     public static void main(String[] args) {
         try {
-            MainClass mainClass = new MainClass();
+//            MainClass mainClass = new MainClass();
 //            SortAlgorithm.INSTANCE.run();
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
@@ -32,6 +33,8 @@ public class MainClass {
 //            Class clazz = classLoader.loadClass("com.example.lib.load.TestClassLoad");
 //            clazz.newInstance();
 //            System.out.println(adapter());
+            TreeAlgorithm.INSTANCE.run();
+//            new ThreadTest2().run();
         } catch (Exception e) {
             e.printStackTrace();
         }

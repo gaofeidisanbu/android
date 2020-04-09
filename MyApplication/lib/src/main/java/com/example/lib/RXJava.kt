@@ -4,6 +4,7 @@ import com.example.lib.file.FileUtils
 import io.reactivex.*
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import sun.misc.Unsafe
 import java.util.concurrent.TimeUnit
 
 object RXJava : Runnable {

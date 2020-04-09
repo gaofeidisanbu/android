@@ -4,18 +4,23 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import sun.misc.Unsafe
 
-object TempTest : Runnable {
+object ThreadTest : Runnable {
 
-    private final val  m = "aaa"
 
     override fun run() {
-//        GlobalScope.launch {
-//            print(m)
-//        }
 
     }
 
 
 
+
+}
+
+class ThreadUtils {
+    companion object {
+    }
+
+    fun run () {
+    }
 
 }
