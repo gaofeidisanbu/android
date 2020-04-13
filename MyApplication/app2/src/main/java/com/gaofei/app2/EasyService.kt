@@ -12,6 +12,7 @@ class EasyService : Service() {
     }
 
 
+
     override fun onBind(intent: Intent?): IBinder? {
         val service = object : IEasyService.Stub(){
             override fun connect(mes: String?) {

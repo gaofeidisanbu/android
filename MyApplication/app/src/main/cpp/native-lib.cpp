@@ -14,12 +14,12 @@ Java_com_gaofei_app_act_TestAct_stringFromJNI(
     return (*env).NewStringUTF(hello.c_str());
 }
 
-jstring pointTest() {
-    int b = 4;
-    int *a = &b;
-    std::string hello = "Hello from C++";
-    return
-}
+//jstring pointTest() {
+//    int b = 4;
+//    int *a = &b;
+//    std::string hello = "Hello from C++";
+//    return "";
+//}
 
 
 
