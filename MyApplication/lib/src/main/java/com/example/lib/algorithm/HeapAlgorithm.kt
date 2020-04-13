@@ -66,6 +66,8 @@ class HeapAlgorithm(val array: Array<Int>) {
                         array[i] = array[leftNodeIndex]
                         array[leftNodeIndex] = temp
                         break
+                    } else {
+                        break
                     }
                 } else {
                     break
@@ -97,6 +99,8 @@ class HeapAlgorithm(val array: Array<Int>) {
                         array[i] = array[leftNodeIndex]
                         array[leftNodeIndex] = temp
                         break
+                    } else {
+                        break
                     }
                 } else {
                     break
@@ -116,11 +120,53 @@ class HeapAlgorithm(val array: Array<Int>) {
         }
     }
 
+    fun sort() {
+        for (i in size - 1 downTo 1) {
+            var h = i / 2
+            val temp = array[0]
+            array[0] = array[i]
+            array[i] = temp
+            var j = 0
+            val size = i - 1
+            while (j <= h) {
+                val leftNodeIndex = 2 * j + 1
+                val rightNodeIndex = 2 * j + 2
+                if (rightNodeIndex >= size) {
+                    if (leftNodeIndex == size - 1) {
+                        if (array[leftNodeIndex] > array[j]) {
+                            val temp = array[j]
+                            array[j] = array[leftNodeIndex]
+                            array[leftNodeIndex] = temp
+                            break
+                        } else {
+                            break
+                        }
+                    } else {
+                        break
+                    }
+                } else {
+                    val maxChildNode = max(array[leftNodeIndex], array[rightNodeIndex])
+                    if (maxChildNode > array[j]) {
+                        val maxChildIndex = if (maxChildNode == array[leftNodeIndex]) leftNodeIndex else rightNodeIndex
+                        val temp = array[j]
+                        array[j] = array[maxChildIndex]
+                        array[maxChildIndex] = temp
+                        j = maxChildIndex
+                    } else {
+                        break
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
         fun test() {
             val array = arrayOf<Int>(5, 1, 13, 3, 16, 7, 10, 14, 6, 9)
             array.printArray()
             val head = HeapAlgorithm(array)
+            array.printArray()
+            head.sort()
             array.printArray()
 
         }
