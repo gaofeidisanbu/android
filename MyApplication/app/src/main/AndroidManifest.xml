@@ -81,6 +81,12 @@
                 <action android:name="android.intent.action_Broadcast_Receiver_Test" />
             </intent-filter>
         </receiver>
+
+        <provider
+            android:authorities="com.test.demo.fileprovider"
+            android:exported="true"
+            android:name="TestContentProvider"></provider>
+
     </application>
 
 </manifest>

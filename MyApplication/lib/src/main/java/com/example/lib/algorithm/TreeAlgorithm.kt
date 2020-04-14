@@ -5,6 +5,7 @@ import java.util.*
 import kotlin.math.max
 
 object TreeAlgorithm : Runnable {
+
     override fun run() {
         maxHeadTest()
     }
@@ -49,7 +50,7 @@ object TreeAlgorithm : Runnable {
      * 树中结点的值总是不大于或者不小于其孩子结点的值
      * 每一个结点的子树也是一个堆
      */
-    fun maxHead(array: Array<Int>) {
+    private fun maxHead(array: Array<Int>) {
         val size = array.size
         val lastNodeParentIndex = size / 2
         if (lastNodeParentIndex == 0) {
