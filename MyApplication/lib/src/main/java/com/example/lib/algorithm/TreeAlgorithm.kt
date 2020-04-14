@@ -7,7 +7,8 @@ import kotlin.math.max
 object TreeAlgorithm : Runnable {
 
     override fun run() {
-        maxHeadTest()
+//        maxHeadTest()
+        HeapAlgorithm.test()
     }
 
     fun maxHeadTest() {
@@ -103,6 +104,11 @@ object TreeAlgorithm : Runnable {
             }
 
         }
+    }
+
+
+    fun siftUp() {
+
     }
 
 }
