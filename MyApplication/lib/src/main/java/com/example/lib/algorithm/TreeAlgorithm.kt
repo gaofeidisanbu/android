@@ -1,24 +1,45 @@
 package com.example.lib.algorithm
 
-import com.example.lib.common.printArray
+import com.example.lib.common.print
 import java.util.*
-import kotlin.math.max
+import java.util.Stack
 
 object TreeAlgorithm : Runnable {
 
     override fun run() {
-//        maxHeadTest()
-        HeapAlgorithm.test()
+        val array = intArrayOf(1, 2, 3, 4, 5, 6, 7, 8)
+        val size = array.size
+        val rootNode = TreeNode(0, null, null, null)
+        val queue = LinkedList<TreeNode>()
+        queue.add(rootNode)
+        var index = 0
+        var index2 = 1
+        while (!queue.isEmpty()) {
+            val tempNode = queue.poll()
+            tempNode.data = array[index]
+            if (index2 < size) {
+                val leftChild = TreeNode(0, tempNode, null, null)
+                tempNode.leftChild = leftChild
+                queue.add(leftChild)
+                index2++
+            }
+            if (index2 < size) {
+                val rightChild = TreeNode(0, tempNode, null, null)
+                tempNode.rightChild = rightChild
+                queue.add(rightChild)
+                index2++
+            }
+            index++
+        }
+        val list = LinkedList<TreeNode>();
+//        preOrderTraverse1(rootNode, list)
+//        breadthFirstSearch(rootNode, list)
+        traverse13(rootNode, list)
+        list.print()
     }
 
-    fun maxHeadTest() {
-        val array = arrayOf<Int>(5, 1, 13, 3, 16, 7, 10, 14, 6, 9)
-        maxHead(array)
-        array.printArray()
-    }
-
-    //先序
-    fun preOrderTraverse1(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
+    //先序遍历，递归
+    private fun preOrderTraverse1(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
         if (treeNode == null) {
             return
         }
@@ -27,88 +48,50 @@ object TreeAlgorithm : Runnable {
         preOrderTraverse1(treeNode.rightChild, list)
     }
 
-    //先序
-    fun preOrderTraverse12(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
+    //遍历，木有找到实现方式
+    fun traverse12(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
         if (treeNode == null) {
             return
         }
-        var currNode = treeNode
-        while (currNode != null) {
-            list.add(currNode)
-            if (currNode.isExistLeftChild()) {
-                currNode = currNode.leftChild!!
-            } else if (currNode.isExistRightChild()) {
-                currNode = currNode.rightChild
-            } else if (currNode.parent != null) {
-                currNode = currNode.parent!!.rightChild
-            }
-        }
+
     }
 
-
-    /**
-     * 它是一颗完全二叉树,它可以是空
-     * 树中结点的值总是不大于或者不小于其孩子结点的值
-     * 每一个结点的子树也是一个堆
-     */
-    private fun maxHead(array: Array<Int>) {
-        val size = array.size
-        val lastNodeParentIndex = size / 2
-        if (lastNodeParentIndex == 0) {
+    //深度优先遍历，使用栈
+    fun traverse13(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
+        if (treeNode == null) {
             return
         }
-        for (i in lastNodeParentIndex - 1 downTo 0) {
-            val currParentNodeIndex = i
-            val currLeftNodeIndex = 2 * i + 1
-            val currRightNodeIndex = 2 * i + 2
-            if (currRightNodeIndex > size - 1) {
-                if (currLeftNodeIndex == size - 1) {
-                    if (array[currLeftNodeIndex] > array[currParentNodeIndex]) {
-                        val temp = array[currParentNodeIndex]
-                        array[currParentNodeIndex] = array[currLeftNodeIndex]
-                        array[currLeftNodeIndex] = temp
-                    }
-                }
-            } else {
-                val maxNode = max(array[currLeftNodeIndex], array[currRightNodeIndex])
-                if (maxNode > array[currParentNodeIndex]) {
-                    val maxChildNodeIndex = if (maxNode == array[currLeftNodeIndex]) currLeftNodeIndex else currRightNodeIndex
-                    val temp = array[currParentNodeIndex]
-                    array[currParentNodeIndex] = array[maxChildNodeIndex]
-                    array[maxChildNodeIndex] = temp
-                    var j = maxChildNodeIndex
-                    while (j <= lastNodeParentIndex) {
-                        if (2 * j + 2 > size - 1) {
-                            if (2 * j + 1 == size - 1) {
-                                val temp = array[j]
-                                array[j] = array[2 * j + 1]
-                                array[2 * j + 1] = temp
-                                break
-                            } else {
-                                break
-                            }
-                        } else {
-                            val maxDown = max(array[2 * j + 1], array[2 * j + 2])
-                            if (maxDown > array[j]) {
-                                val downIndex = if (array[2 * j + 1] > array[2 * j + 2]) 2 * j + 1 else 2 * j + 2
-                                val temp = array[j]
-                                array[j] = array[downIndex]
-                                array[downIndex] = temp
-                                j = downIndex
-                            } else {
-                                break
-                            }
-                        }
-                    }
-                }
+        val stack = Stack<TreeNode>()
+        stack.add(treeNode)
+        while (stack.isNotEmpty()) {
+            val tempNode = stack.pop()
+            list.add(tempNode)
+            tempNode.rightChild?.let {
+                stack.add(it)
             }
-
+            tempNode.leftChild?.let {
+                stack.add(it)
+            }
         }
+
+
     }
 
-
-    fun siftUp() {
-
+    private fun breadthFirstSearch(treeNode: TreeNode?, list: LinkedList<TreeNode>) {
+        treeNode?.let { rootNode ->
+            val queue = LinkedList<TreeNode>()
+            queue.offer(rootNode)
+            while (queue.isNotEmpty()) {
+                val tempNode = queue.poll()
+                list.add(tempNode)
+                tempNode.leftChild?.let {
+                    queue.offer(it)
+                }
+                tempNode.rightChild?.let {
+                    queue.offer(it)
+                }
+            }
+        }
     }
 
 }

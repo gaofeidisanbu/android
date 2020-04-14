@@ -3,6 +3,21 @@ package com.example.lib.algorithm
 import com.example.lib.common.printArray
 import kotlin.math.max
 
+object HeapRunnable : Runnable {
+    override fun run() {
+        fun test() {
+            val array = arrayOf<Int>(5, 1, 13, 3, 16, 7, 10, 14, 6, 9)
+            array.printArray()
+            val head = HeapAlgorithm(array)
+            array.printArray()
+            head.sort()
+            array.printArray()
+
+        }
+    }
+
+}
+
 class HeapAlgorithm(val array: Array<Int>) {
 
     //数量
@@ -160,18 +175,6 @@ class HeapAlgorithm(val array: Array<Int>) {
                     }
                 }
             }
-        }
-    }
-
-    companion object {
-        fun test() {
-            val array = arrayOf<Int>(5, 1, 13, 3, 16, 7, 10, 14, 6, 9)
-            array.printArray()
-            val head = HeapAlgorithm(array)
-            array.printArray()
-            head.sort()
-            array.printArray()
-
         }
     }
 }
