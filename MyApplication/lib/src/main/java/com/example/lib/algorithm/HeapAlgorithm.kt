@@ -120,6 +120,9 @@ class HeapAlgorithm(val array: Array<Int>) {
         }
     }
 
+    /**
+     * 时间复杂度为log(n-1)+log(n-2)+...+log(1) = nLogn
+     */
     fun sort() {
         for (i in size - 1 downTo 1) {
             var h = i / 2
