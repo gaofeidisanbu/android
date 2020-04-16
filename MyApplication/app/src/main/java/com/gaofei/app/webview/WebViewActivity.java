@@ -6,16 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.gaofei.app.R;
 import com.gaofei.app.act.ExceptionAct;
 import com.gaofei.library.base.BaseAct;
-import com.tencent.smtt.export.external.interfaces.WebResourceError;
-import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
-import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
-import com.tencent.smtt.sdk.WebChromeClient;
-import com.tencent.smtt.sdk.WebView;
 
 import org.json.JSONException;
 import org.json.JSONObject;

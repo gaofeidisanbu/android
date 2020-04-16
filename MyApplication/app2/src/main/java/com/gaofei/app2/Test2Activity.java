@@ -1,5 +1,6 @@
 package com.gaofei.app2;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,15 +15,19 @@ public class Test2Activity extends BaseAct {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_main);
-        Object obj = findViewById(R.id.surface).getWindowToken();
 
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setAction("android.intent.action_Broadcast_Receiver_Test");
+//                sendBroadcast(intent);
+//                Add.fun();
                 Intent intent = new Intent();
-                intent.setAction("android.intent.action_Broadcast_Receiver_Test");
-                sendBroadcast(intent);
-                Add.fun();
+                intent.setComponent(new ComponentName("com.gaofei.app", "com.gaofei.app.TaskAffinity"));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+
             }
         });
     }

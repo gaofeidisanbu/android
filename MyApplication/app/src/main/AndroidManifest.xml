@@ -87,6 +87,10 @@
             android:exported="true"
             android:name="TestContentProvider"></provider>
 
+        <activity android:name="com.gaofei.app.TaskAffinity" android:taskAffinity="com.gaofei.app.TaskAffinity" android:allowTaskReparenting="true" android:exported="true" android:theme="@android:style/Theme.Translucent.NoTitleBar"> </activity>
+
+        <activity android:name=".TransparentAct" android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
     </application>
 
 </manifest>

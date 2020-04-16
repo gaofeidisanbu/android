@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
+import android.webkit.ValueCallback;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
-import com.tencent.smtt.sdk.ValueCallback;
-import com.tencent.smtt.sdk.WebView;
-import com.tencent.smtt.sdk.WebViewClient;
 
 import org.json.JSONArray;
 import org.json.JSONException;

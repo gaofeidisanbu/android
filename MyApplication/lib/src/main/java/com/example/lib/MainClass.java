@@ -2,6 +2,7 @@ package com.example.lib;
 
 import com.example.lib.algorithm.Algorithm;
 import com.example.lib.algorithm.ArrayAlgorithm;
+import com.example.lib.algorithm.CommonAlgorithm;
 import com.example.lib.algorithm.RecursionAlgorithm;
 import com.example.lib.algorithm.SortAlgorithm;
 import com.example.lib.algorithm.StackAlgorithm;
@@ -33,8 +34,9 @@ public class MainClass {
 //            Class clazz = classLoader.loadClass("com.example.lib.load.TestClassLoad");
 //            clazz.newInstance();
 //            System.out.println(adapter());
-            TreeAlgorithm.INSTANCE.run();
+//            TreeAlgorithm.INSTANCE.run();
 //            new ThreadTest2().run();
+            CommonAlgorithm.INSTANCE.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
