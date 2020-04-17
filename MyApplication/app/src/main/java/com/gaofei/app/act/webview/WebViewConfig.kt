@@ -97,7 +97,7 @@ object WebViewConfig {
             if (Build.VERSION.SDK_INT > 15) {
                 return
             }
-            var field = com.tencent.smtt.sdk.WebView::class.java.getDeclaredField("mWebViewCore")
+            var field = WebView::class.java.getDeclaredField("mWebViewCore")
             field = field.type.getDeclaredField("mBrowserFrame")
             field = field.type.getDeclaredField("sConfigCallback")
             field.isAccessible = true
