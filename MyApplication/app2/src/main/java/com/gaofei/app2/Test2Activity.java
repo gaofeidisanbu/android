@@ -23,10 +23,9 @@ public class Test2Activity extends BaseAct {
 //                intent.setAction("android.intent.action_Broadcast_Receiver_Test");
 //                sendBroadcast(intent);
 //                Add.fun();
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName("com.gaofei.app", "com.gaofei.app.TaskAffinity"));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                Intent intent = new Intent("android.intent.action_Broadcast_Receiver_Test");
+//                intent.setPackage("com.gaofei.app");
+                sendBroadcast(intent);
 
             }
         });

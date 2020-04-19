@@ -3,24 +3,32 @@ package com.gaofei.app2
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
+import android.os.Process
 import com.gaofei.library.utils.LogUtils
 
 class EasyService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        LogUtils.d("$TAG ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return super.onStartCommand(intent, flags, startId)
     }
 
 
 
+
     override fun onBind(intent: Intent?): IBinder? {
+        LogUtils.d("$TAG ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
         val service = object : IEasyService.Stub(){
             override fun connect(mes: String?) {
-                LogUtils.d("$TAG connect $mes")
+                LogUtils.d("$TAG connect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
             }
 
             override fun disConnect(mes: String?) {
-                LogUtils.d("$TAG disConnect $mes")
+                LogUtils.d("$TAG disConnect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
             }
 
         }
