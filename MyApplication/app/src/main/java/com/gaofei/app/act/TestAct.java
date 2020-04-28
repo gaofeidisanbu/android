@@ -1,6 +1,8 @@
 package com.gaofei.app.act;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
@@ -30,7 +32,10 @@ public class TestAct extends BaseAct {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new BaseDialogFragment().show(getSupportFragmentManager(), "");
+//                new BaseDialogFragment().show(getSupportFragmentManager(), "");
+                Intent intent = new Intent("android.intent.action_Broadcast_Receiver_Test");
+//                intent.setPackage("com.gaofei.app");
+                sendBroadcast(intent);
             }
         });
     }

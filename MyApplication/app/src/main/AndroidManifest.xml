@@ -76,11 +76,11 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">
-            <intent-filter>
-                <action android:name="android.intent.action_Broadcast_Receiver_Test" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action_Broadcast_Receiver_Test" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <provider
             android:authorities="com.test.demo.fileprovider"
