@@ -21,6 +21,18 @@ class Linked : ILinked {
     }
 
     override fun insert(node: Node, index: Int): Boolean {
+        if (head == null) {
+            head = node
+        } else {
+            var curr: Node = head!!
+            while (curr.next != null) {
+                curr = curr.next!!
+            }
+            curr.next = node
+
+        }
+
+
         return insertInner(node, index)
     }
 
