@@ -50,6 +50,11 @@ public class ProjectApplication implements IApplicationInterface {
         Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         LogUtils.d(exceptionHandler.getClass().getName());
         Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(exceptionHandler));
+        if (LeakCanary.isInAnalyzerProcess(mApplication)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
         LeakCanary.install(mApplication);
     }
 
