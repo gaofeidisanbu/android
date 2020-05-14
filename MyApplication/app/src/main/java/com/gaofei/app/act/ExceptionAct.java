@@ -24,22 +24,31 @@ public class ExceptionAct extends BaseAct {
         findViewById(R.id.text).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    ExceptionTest exception = new ExceptionTest();
-                    exception.fun(null);
-                } catch (Exception e) {
-                    Log.e("ycmaaa", "cdaaaaaaaaa", e);
-                }
+//                try {
+//                    ExceptionTest exception = new ExceptionTest();
+//                    exception.fun(null);
+//                } catch (Exception e) {
+//                    Log.e("ycmaaa", "cdaaaaaaaaa", e);
+//                }
+//
+//                try {
+//                    ExceptionTest exception = new ExceptionTest();
+//                    exception.fun3(null);
+//                } catch (Exception e) {
+//                    Log.e("ycmaaa", "cdaaaaaaaaa", e);
+//                }
+//
+//                ExceptionTest exception = new ExceptionTest();
+//                exception.fun4(null);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
 
-                try {
-                    ExceptionTest exception = new ExceptionTest();
-                    exception.fun3(null);
-                } catch (Exception e) {
-                    Log.e("ycmaaa", "cdaaaaaaaaa", e);
-                }
 
-                ExceptionTest exception = new ExceptionTest();
-                exception.fun4(null);
+                    }
+                }).start();
+                LogUtils.d("aaa "+Thread.currentThread().getId());
+                throw new RuntimeException("test");
 
             }
         });

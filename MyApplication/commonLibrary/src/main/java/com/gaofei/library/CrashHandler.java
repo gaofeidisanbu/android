@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import com.gaofei.library.utils.LogUtils;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,6 +34,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         // 这种方式写文件不太好，有可能丢失exception日志
+        LogUtils.d("aaa "+Thread.currentThread().getId());
         createLogs(e);
         mDefaultUncaughtExceptionHandler.uncaughtException(t, e);
     }
