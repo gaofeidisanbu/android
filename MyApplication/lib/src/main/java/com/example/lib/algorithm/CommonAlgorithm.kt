@@ -7,7 +7,8 @@ object CommonAlgorithm : Runnable {
 
     override fun run() {
 //        common2(3, 2)
-        common3(4)
+//        common3(4)
+        stringWordReverse("Hello        world")
     }
 
     /**
@@ -155,5 +156,7 @@ object CommonAlgorithm : Runnable {
         // 第三步 二，记录g2
 
     }
+
+
 
 }

@@ -36,7 +36,8 @@ public class MainClass {
 //            System.out.println(adapter());
 //            TreeAlgorithm.INSTANCE.run();
 //            new ThreadTest2().run();
-            CommonAlgorithm.INSTANCE.run();
+//            CommonAlgorithm.INSTANCE.run();
+            SortAlgorithm.INSTANCE.run();
         } catch (Exception e) {
             e.printStackTrace();
         }
