@@ -13,7 +13,8 @@ object SortAlgorithm : Runnable {
 //        sss4(arra).print()
 //        binarySearchTest()
 //        stringWordReverse("Hello        world")
-        quickSort(arrayOf(5, 3, 3, 2, 1))
+//        quickSort(arrayOf(5, 3, 3, 2, 1))
+        sort1(arrayOf(1, 2, 3, 4, 5))
 
     }
 
@@ -187,6 +188,9 @@ fun stringWordReverse(string: String) {
     println(sb.toString())
 }
 
+/**
+ * 快速排序
+ */
 fun quickSort(arr: Array<Int>) {
     quickSort1(arr, 0, arr.size - 1)
     arr.printArray()
@@ -217,7 +221,7 @@ private fun quickSort1(arr: Array<Int>, startLow: Int, startHigh: Int) {
                 }
             }
         } else {
-          break
+            break
         }
     }
     arr[low] = target
@@ -232,6 +236,28 @@ private fun quickSort1(arr: Array<Int>, startLow: Int, startHigh: Int) {
         quickSort1(arr, rightLow, rightHigh)
     }
 
+}
+
+/**
+ * 冒泡
+ */
+fun sort1(arr: Array<Int>) {
+    val size = arr.size
+    var isExchange = true
+    for (i in 0 until size - 1) {
+        for (j in 0 until size - i - 1) {
+            if (arr[j] > arr[j + 1]) {
+                val temp = arr[j]
+                arr[j] = arr[j+1]
+                arr[j+1] = temp
+                isExchange = true
+            }
+        }
+        if (!isExchange) {
+            break
+        }
+    }
+    arr.printArray()
 }
 
 
