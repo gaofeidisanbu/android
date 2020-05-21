@@ -14,7 +14,8 @@ object SortAlgorithm : Runnable {
 //        binarySearchTest()
 //        stringWordReverse("Hello        world")
 //        quickSort(arrayOf(5, 3, 3, 2, 1))
-        sort1(arrayOf(1, 2, 3, 4, 5))
+//        sort1(arrayOf(1, 2, 3, 4, 5))
+        chooseSort(arrayOf(5, 3, 3, 2, 1))
 
     }
 
@@ -248,13 +249,27 @@ fun sort1(arr: Array<Int>) {
         for (j in 0 until size - i - 1) {
             if (arr[j] > arr[j + 1]) {
                 val temp = arr[j]
-                arr[j] = arr[j+1]
-                arr[j+1] = temp
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
                 isExchange = true
             }
         }
         if (!isExchange) {
             break
+        }
+    }
+    arr.printArray()
+}
+
+fun chooseSort(arr: Array<Int>) {
+    val size = arr.size
+    for (i in 0 until size) {
+        for (j in i + 1 until size) {
+            if (arr[j] < arr[i]) {
+                val temp = arr[j]
+                arr[j] = arr[i]
+                arr[i] = temp
+            }
         }
     }
     arr.printArray()
