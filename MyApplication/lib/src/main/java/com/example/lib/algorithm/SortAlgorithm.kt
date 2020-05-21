@@ -13,7 +13,7 @@ object SortAlgorithm : Runnable {
 //        sss4(arra).print()
 //        binarySearchTest()
 //        stringWordReverse("Hello        world")
-        quickSort(arrayOf(3, 2, 1))
+        quickSort(arrayOf(5, 3, 3, 2, 1))
 
     }
 
@@ -189,30 +189,31 @@ fun stringWordReverse(string: String) {
 
 fun quickSort(arr: Array<Int>) {
     quickSort1(arr, 0, arr.size - 1)
+    arr.printArray()
 }
 
 private fun quickSort1(arr: Array<Int>, startLow: Int, startHigh: Int) {
     var low = startLow
     var high = startHigh
     val target = arr[low]
-    val beforeLow = low
-    val beforeHigh = high
+    val beforeLow = startLow
+    val beforeHigh = startHigh
     var isLow = true
     while (true) {
         if (low < high) {
             if (isLow) {
-                if (arr[low] > target) {
-                    arr[high] = arr[low]
-                    isLow = false
-                } else {
-                    low++
-                }
-            } else {
                 if (arr[high] < target) {
                     arr[low] = arr[high]
-                    isLow = true
+                    isLow = false
                 } else {
                     high--
+                }
+            } else {
+                if (arr[low] > target) {
+                    arr[high] = arr[low]
+                    isLow = true
+                } else {
+                    low++
                 }
             }
         } else {
@@ -222,10 +223,15 @@ private fun quickSort1(arr: Array<Int>, startLow: Int, startHigh: Int) {
     arr[low] = target
     val leftLow = beforeLow
     val leftHigh = low - 1
-    quickSort1(arr, leftLow, leftHigh)
+    if (leftLow < leftHigh) {
+        quickSort1(arr, leftLow, leftHigh)
+    }
     val rightLow = beforeLow + 1
     val rightHigh = beforeHigh
-    quickSort1(arr, rightLow, rightHigh)
+    if (rightLow < rightHigh) {
+        quickSort1(arr, rightLow, rightHigh)
+    }
+
 }
 
 
