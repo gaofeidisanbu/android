@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <com.yangcong345.webpage.view.YCBridgeWebViewV2
+        android:id="@+id/webView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/webpage_layer_list_progress_drawable" />
+
+    <FrameLayout
+        android:id="@+id/failPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#F6F7F9">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/failImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/illus_load_failed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/failDes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="页面被飞船带走了，刷新一下试试~"
+                android:textColor="#8995AB"
+                android:textSize="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/failImage" />
+
+            <TextView
+                android:id="@+id/failBack"
+                android:layout_width="84dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/sl_round_blue_32dp"
+                android:gravity="center"
+                android:text="返回"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                app:layout_constraintEnd_toStartOf="@+id/failRefresh"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/failDes" />
+
+            <TextView
+                android:id="@+id/failRefresh"
+                android:layout_width="84dp"
+                android:layout_height="32dp"
+                android:background="@drawable/sl_round_blue_32dp"
+                android:gravity="center"
+                android:text="刷新"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/failBack"
+                app:layout_constraintTop_toTopOf="@+id/failBack" />
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+</RelativeLayout>

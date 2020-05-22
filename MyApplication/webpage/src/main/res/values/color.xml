@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="webpage_toolbar_title_color_default">#3A4E73</color>
+    <color name="webpage_toolbar_background_color_default">#FFFFFF</color>
+</resources>

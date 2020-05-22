@@ -1,0 +1,10 @@
+<manifest package="com.yangcong345.webpage"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application >
+        <activity
+            android:name="com.yangcong345.webpage.BaseBridgeWebViewV2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+</manifest>
