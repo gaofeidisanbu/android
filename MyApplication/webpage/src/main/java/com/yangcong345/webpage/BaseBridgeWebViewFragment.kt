@@ -398,7 +398,6 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Module.getContract().onBaseBridgeWebViewFragmentResult(activity, requestCode, resultCode, data)
         mWebView?.onActivityResult(requestCode, resultCode, data)
         handleFile(requestCode, resultCode, data)
         mIActivity?.onActivityResult(requestCode, resultCode, data)

@@ -39,15 +39,6 @@ public class WebPageUtils {
         String newUrl = url;
         if (url.startsWith("http:") || url.startsWith("https:") || url.startsWith("file:")) {
             Map<String, Object> map = new HashMap<>();
-            map.put(KEY_APP_VERSION, Module.getContract().getVersionName());
-            map.put(KEY_CHANNEL, Module.getContract().getChannel());
-            map.put(KEY_PLATFORM, "android");
-            map.put(KEY_ENV, isReleaseEnvironment ? "prod" : "dev");
-            map.put(KEY_APP_CATEGORY, Module.getContract().getRole());
-            map.put(KEY_TOKEN, Module.getContract().getToken());
-            map.put(KEY_USER_ID, Module.getContract().getUserId());
-            map.put(KEY_CLIENT_TYPE, CLIENT_TYPE_ANDROID);
-            map.put(KEY_CLIENT_CHANNEL, Module.getContract().getChannel());
         }
         LogUtils.d("WebPageUtils newUrl = " + newUrl);
         return newUrl;

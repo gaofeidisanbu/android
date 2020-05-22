@@ -10,7 +10,6 @@ import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-import com.yangcong345.webpage.Module;
 import com.yangcong345.webpage.WebPageApi;
 import com.yangcong345.webpage.WebPageUtils;
 import com.yangcong345.webpage.register.IActivityResultInterface;
@@ -55,9 +54,6 @@ public class YCBridgeWebViewV2 extends JsBridgeWebViewV2 implements IActivityRes
     @Override
     protected void init(Context context) {
         super.init(context);
-        if (!Module.getContract().isSupportHardwareAcceleratedForAll()) {
-            setLayerType(LAYER_TYPE_SOFTWARE, null);
-        }
         preRegister(context);
     }
 

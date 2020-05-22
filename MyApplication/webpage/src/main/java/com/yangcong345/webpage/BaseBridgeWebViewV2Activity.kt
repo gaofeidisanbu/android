@@ -65,7 +65,6 @@ class BaseBridgeWebViewV2Activity : AppCompatActivity(), IWebView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Module.getContract().onBaseBridgeWebViewActivityResult(this, requestCode, resultCode, data)
         mWebViewFragment.onActivityResult(requestCode, resultCode, data)
     }
 

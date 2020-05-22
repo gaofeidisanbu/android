@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:24px; margin-top:24px; }
+		button { margin:0 3px 10px; font-size:12px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+		html, body {background-color: transparent;}
+
+    </style>
+    <script src="./eruda.js"></script>
+    <script src="./base64.js"></script>
+    <script>
+        eruda.init();
+    </script>
+</head>
+<body>
+<h1>WebViewJavascriptBridge Demo3</h1>
+<a href="./index2.html">inner skip</a>
+<div id='buttons'></div>
+<div id='log'></div>
+<script>
+	window.onerror = function (msg, url, lineNo, columnNo, error) {
+        var string = msg.toLowerCase();
+        var substring = "script error";
+        if (string.indexOf(substring) > -1){
+            alert('Script Error: See Browser Console for Detail');
+        } else {
+            var message = [
+                'Message: ' + msg,
+                'URL: ' + url,
+                'Line: ' + lineNo,
+                'Column: ' + columnNo,
+                'Error object: ' + JSON.stringify(error)
+            ].join(' - ');
+
+            log('error', message)
+        }
+
+        return false;
+    };
+
+    function setupWebViewJavascriptBridge() {
+        log("WVJBCallbacks loaded");
+         //<!-- 点击调用 分享面板方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire test'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			//YCJSBridge.evaluateJava('gf')
+			messageObj.callJump("ycmath://yangcong345.com/bindSchool")
+            //window.open("file:///android_asset/bridge/jsbridge.html")
+           // window.open("http://www.baidu.com")
+		}
+
+        //<!-- 点击调用 分享面板方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire browserShareActivityLink'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			console.log();
+			var message = Base64.encode("{'eventName':'browserShareActivityLink','dispatchId':'1','params':{'ok':true,'data':{'title': 'title','linkUrl':'https://m.yangcong345.com','content':'你已获得奖励'}}}")
+			YCJSBridge.evaluateJava(message)
+		}
+
+		 //<!-- 点击调用 二级页面跳转到做题  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'exercise'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			console.log();
+			var data = {}
+			data["pluginName"] = 'ladderTest'
+			data["context"] = {"money":10000}
+			callNative("browserPluginInstall", data, function(result) {
+			    console.log(result.data.requestURL)
+			    console.log("ccc", result.data.requestURL)
+			    location.assign(result.data.requestURL)
+			})
+
+		}
+
+		 //<!-- 点击调用 二级页面跳转到做题  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'messageCenter'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			console.log();
+			var data = {}
+			data["pluginName"] = 'messageCenter'
+			data["context"] = {"type":"aa"}
+			callNative("browserPluginInstall", data, function(result) {
+			    console.log(result.data.requestURL)
+			    console.log("ccc", result.data.requestURL)
+			    location.assign(result.data.requestURL)
+			})
+
+		}
+
+    }
+    var log = (function () {
+        var uniqueId = 1
+        return function (message, data) {
+            var log = document.getElementById('log')
+			var el = document.createElement('div')
+			el.className = 'logLine'
+			el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+			if (log.children.length) { log.insertBefore(el, log.children[0]) }
+			else { log.appendChild(el) }
+        }
+    })
+
+    function responseCallBack(str){
+        console.log("responseCallBack", str);
+        return str;
+    }
+
+
+    setupWebViewJavascriptBridge()
+
+      mListeners = {}
+
+    var dispatchId = 1
+    function callNative(eventName, data, callback) {
+        var message = {}
+        message["eventName"] = eventName
+        var responseId = ++dispatchId
+        message["dispatchId"] = responseId + ""
+        mListeners[responseId] = callback
+        var paramJson = {}
+        paramJson["ok"] = true
+        paramJson["data"] = data
+        message["params"]  = paramJson
+        var messageStr = JSON.stringify(message)
+        var encodeMessage = Base64.encode(messageStr)
+        YCJSBridge.evaluateJava(encodeMessage)
+        log("aaa", data)
+    }
+
+
+    function responseCallback(result) {
+        var decodeResult = Base64.decode(result)
+         console.log(decodeResult)
+        var responseMSG = JSON.parse(decodeResult)
+        var callback = mListeners[responseMSG.eventName]
+        callback(responseMSG.params)
+    }
+
+    var __YCBridge__ = {
+        responseCallback: responseCallback
+    }
+
+
+</script>
+</body>
+</html>

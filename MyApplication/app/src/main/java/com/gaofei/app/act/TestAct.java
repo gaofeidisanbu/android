@@ -15,6 +15,8 @@ import com.gaofei.library.ProjectApplication;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.FileUtils;
 import com.gaofei.library.utils.LogUtils;
+import com.yangcong345.webpage.BaseBridgeWebViewV2Activity;
+import com.yangcong345.webpage.WebPageParam;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -46,38 +48,27 @@ public class TestAct extends BaseAct {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new BaseDialogFragment().show(getSupportFragmentManager(), "");
-//                Intent intent = new Intent("android.intent.action_Broadcast_Receiver_Test");
-//                intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
-//                intent.setPackage("com.gaofei.app");
-//                sendBroadcast(intent);
-                text.setText("");
-                int i = 0;
+                WebPageParam webPageParam = new WebPageParam("file:///android_asset/bridge/jsbridge.html",
+                        "无法修改学校", true, true, true, true, 1, null);
 
-                for (i = 0; i < 1000; i++) {
-                    new Thread(new RunnableTest()).start();
-                }
-                for (i = 0; i < 20000; i++) {
-                    for (int j = 0; j < 20000; j++) {
-//                        try {
-//                            Thread.sleep(3);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-                        int c = i +j;
-//                        new Handler().postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//
-//                                text.setText("i = "+" j = "+c);
-//                            }
-//                        }, 1000);
-                    }
-                }
+                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
             }
         });
+
     }
 
+
+    private void testAnr() {
+        int i = 0;
+
+        for (i = 0; i < 1000; i++) {
+            new Thread(new RunnableTest()).start();
+        }
+        for (i = 0; i < 20000; i++) {
+            for (int j = 0; j < 20000; j++) {
+            }
+        }
+    }
 
     public native String stringFromJNI();
 

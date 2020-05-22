@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:24px; margin-top:24px; }
+		button { margin:0 3px 10px; font-size:12px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+		html, body {background-color: transparent;}
+
+    </style>
+</head>
+<body>
+<h1>WebViewJavascriptBridge Demo</h1>
+<a href="./index2.html">inner skip</a>
+<div id='buttons'></div>
+<div id='log'></div>
+<script>
+	//window.onerror = function(err) {
+	//	log('window.onerror: ' + err)
+	//	log(arguments[1])
+	//	log(arguments[2])
+	//}
+	window.onerror = function (msg, url, lineNo, columnNo, error) {
+        var string = msg.toLowerCase();
+        var substring = "script error";
+        if (string.indexOf(substring) > -1){
+            alert('Script Error: See Browser Console for Detail');
+        } else {
+            var message = [
+                'Message: ' + msg,
+                'URL: ' + url,
+                'Line: ' + lineNo,
+                'Column: ' + columnNo,
+                'Error object: ' + JSON.stringify(error)
+            ].join(' - ');
+
+            log('error', message)
+        }
+
+        return false;
+    };
+    function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'androidhttps://__bridge_loaded__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+        log("WVJBCallbacks loaded");
+
+    }
+    var log = (function () {
+        var uniqueId = 1
+        return function (message, data) {
+            var log = document.getElementById('log')
+			var el = document.createElement('div')
+			el.className = 'logLine'
+			el.innerHTML = uniqueId++ + '. ' + message + ':<br/>' + JSON.stringify(data)
+			if (log.children.length) { log.insertBefore(el, log.children[0]) }
+			else { log.appendChild(el) }
+        }
+    })()
+    setupWebViewJavascriptBridge(function(bridge) {
+        //调用native方法
+        bridge.callHandler('browserHideLoading',{'ok':true,data:{'content':'call browserHideLoading'}}, function(response) {
+				log('JS got response', response)
+			})
+
+		bridge.registerHandler('browserPageReResume', function(data, responseCallback) {
+			log('ObjC called browserPageReResume with', data)
+			var responseData = { 'Javascript Says':'Right back atcha!' }
+			log('JS responding with', responseData)
+			responseCallback(responseData)
+		})
+
+		//<!-- 点击调用 分享面板方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire browserShareActivityLink'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler, "browserShareActivityLink"')
+			bridge.callHandler('browserShareActivityLink',{'ok':true,'data':{'title': 'title','linkUrl':'https://m.yangcong345.com','content':'你已获得奖励'}}, function(response) {
+				log('JS got response', response)
+				bridge.callHandler('browserShowToast',{'ok':true,'data':{'message': '你已获得奖励!'}})
+			})
+		}
+
+        //<!-- 点击测试handler方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire handler'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler, "handler"')
+			bridge.callHandler('handler',{'ok':true,data:{'content':'call handler'}}, function(response) {
+				log('JS got response', response)
+			})
+		}
+
+        //<!-- 点击测试action方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire action'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler, "action"')
+			bridge.callHandler('action',{'ok':true,data:{'content':'call action'}}, function(response) {
+				log('JS got response', response)
+			})
+		}
+
+        //<!-- 点击测试action1方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire action1'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler ,"action1"')
+			bridge.callHandler('action1',{'ok':true,data:{'content':'call action1'}}, function(response) {
+				log('JS got response', response)
+			})
+		}
+
+       //<!-- 点击测试action2方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire action2'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler "action2"')
+			bridge.callHandler('action2',{'ok':true,data:{'content':'call action2'}}, function(response) {
+				log('JS got response', response)
+			})
+		}
+
+		//<!-- 点击测试browserHideLoading方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire browserHideLoading'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler ,"browserHideLoading"')
+			bridge.callHandler('browserHideLoading',{'ok':true,data:{'content':'call browserHideLoading'}}, function(response) {
+				log('JS got response', response)
+			})
+		}
+
+		//<!-- 点击测试callJump方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire callJump'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler, "browserHideLoading"')
+			window.messageObj.callJump('callJump')
+		}
+
+		//<!-- 点击测试onResultForScript方法  -->
+		document.body.appendChild(document.createElement('br'))
+		var callbackButton = document.getElementById('buttons').appendChild(document.createElement('button'))
+		callbackButton.innerHTML = 'Fire onResultForScript'
+		callbackButton.onclick = function(e) {
+			e.preventDefault()
+			log('JS calling handler, "onResultForScript"')
+			window.WVJBInterface.onResultForScript('callJump','aa')
+		}
+
+
+	})
+
+
+</script>
+</body>
+</html>

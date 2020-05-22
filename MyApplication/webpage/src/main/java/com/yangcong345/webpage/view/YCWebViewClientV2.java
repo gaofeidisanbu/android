@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 
-import com.yangcong345.webpage.Module;
 import com.yangcong345.webpage.toast.OmToastManager;
 
 import java.util.HashMap;
@@ -41,12 +40,6 @@ public class YCWebViewClientV2 extends BridgeWebViewClientV2 {
             return true;
         }
 
-        // TODO: killnono 17/9/30  need reactor
-        if (Module.getContract().disableYinLianPay()
-                && url.contains("mcashier.95516.com")) {
-            OmToastManager.show("当前设备不支持该功能，请使用其他设备");
-            return true;
-        }
 
         if (url.startsWith("https://wx.tenpay")) {
             Map<String, String> extraHeaders = new HashMap<>();
@@ -65,9 +58,6 @@ public class YCWebViewClientV2 extends BridgeWebViewClientV2 {
                 return false;
             }
         }
-        //白名单拦截
-        if (Module.getContract().needInterceptUrl(url))
-            return true;
         return super.shouldOverrideUrlLoading(view, url);
     }
 
