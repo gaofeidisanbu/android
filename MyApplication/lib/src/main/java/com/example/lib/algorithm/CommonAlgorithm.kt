@@ -1,7 +1,12 @@
 package com.example.lib.algorithm
 
 import java.lang.StringBuilder
+import java.lang.reflect.InvocationHandler
+import java.lang.reflect.Method
+import java.lang.reflect.Proxy
+class Obj1 {
 
+}
 object CommonAlgorithm : Runnable {
 
 

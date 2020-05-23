@@ -42,6 +42,7 @@ public class TestAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        EventBus.getDefault().register(this);
         setContentView(R.layout.act_test);
         TextView text = (TextView) findViewById(R.id.text);
         text.setText(stringFromJNI());
@@ -58,6 +59,7 @@ public class TestAct extends BaseAct {
     }
 
 
+
     private void testAnr() {
         int i = 0;
 
@@ -68,6 +70,11 @@ public class TestAct extends BaseAct {
             for (int j = 0; j < 20000; j++) {
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     public native String stringFromJNI();
