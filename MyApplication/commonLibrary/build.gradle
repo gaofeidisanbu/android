@@ -55,5 +55,5 @@ dependencies {
     api 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    api 'org.greenrobot:eventbus:3.2.0'
 }
