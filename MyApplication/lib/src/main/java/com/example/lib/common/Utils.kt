@@ -10,6 +10,14 @@ fun <T> Array<T>.printArray() {
     println(sb)
 }
 
+fun <T> Array<T>.printArray(tag: String) {
+    val sb = StringBuilder()
+    this.forEach {
+        sb.append("$it ")
+    }
+    println("$tag -> $sb")
+}
+
 fun <T> Iterable<T>.print() {
     val sb = StringBuilder()
     this.forEach {

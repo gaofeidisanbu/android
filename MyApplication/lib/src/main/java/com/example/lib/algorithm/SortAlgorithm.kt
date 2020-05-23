@@ -15,7 +15,8 @@ object SortAlgorithm : Runnable {
 //        stringWordReverse("Hello        world")
 //        quickSort(arrayOf(5, 3, 3, 2, 1))
 //        sort1(arrayOf(1, 2, 3, 4, 5))
-        chooseSort(arrayOf(5, 3, 3, 2, 1))
+//        chooseSort(arrayOf(5, 3, 3, 2, 1))
+        insertSort2()
 
     }
 
@@ -261,6 +262,9 @@ fun sort1(arr: Array<Int>) {
     arr.printArray()
 }
 
+/**
+ * 选择排序
+ */
 fun chooseSort(arr: Array<Int>) {
     val size = arr.size
     for (i in 0 until size) {
@@ -271,6 +275,50 @@ fun chooseSort(arr: Array<Int>) {
                 arr[i] = temp
             }
         }
+    }
+    arr.printArray()
+}
+
+/**
+ * 插入排序,相邻元素直接交换
+ */
+fun insertSort(arr: Array<Int>) {
+    val size = arr.size
+    for (i in 1 until size) {
+        for (j in i - 1 downTo 0) {
+            if (arr[j + 1] < arr[j]) {
+                val temp = arr[j + 1]
+                arr[j + 1] = arr[j]
+                arr[j] = temp
+            } else {
+                break
+            }
+        }
+    }
+    arr.printArray()
+}
+
+
+/**
+ * 插入排序,先确定位置，再移动数组
+ */
+fun insertSort2() {
+    val arr = arrayOf(5, 3, 3, 2, 1, 9, 7, 8, 5)
+    val size = arr.size
+    for (i in 1 until size) {
+        var target = arr[i]
+        var m = i
+        for (j in i - 1 downTo 0) {
+            if (target < arr[j]) {
+                arr[j + 1] = arr[j]
+                m--
+                arr.printArray("a")
+            } else {
+                break
+            }
+        }
+        arr[m] = target
+        arr.printArray("b")
     }
     arr.printArray()
 }
