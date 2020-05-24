@@ -16,7 +16,9 @@ object SortAlgorithm : Runnable {
 //        quickSort(arrayOf(5, 3, 3, 2, 1))
 //        sort1(arrayOf(1, 2, 3, 4, 5))
 //        chooseSort(arrayOf(5, 3, 3, 2, 1))
-        insertSort2()
+//        insertSort2()
+//        mergeArray()
+        cellSort()
 
     }
 
@@ -312,15 +314,103 @@ fun insertSort2() {
             if (target < arr[j]) {
                 arr[j + 1] = arr[j]
                 m--
-                arr.printArray("a")
             } else {
                 break
             }
         }
         arr[m] = target
-        arr.printArray("b")
     }
     arr.printArray()
+}
+
+/**
+ * 希尔排序
+ */
+fun cellSort() {
+    val arr = arrayOf(5, 3, 3, 2, 1, 9, 7, 8, 5)
+    val size = arr.size
+    val low = 0
+    val high = size - 1
+    cellSortInner(arr, low, high)
+    arr.printArray()
+}
+
+private fun cellSortInner(arr: Array<Int>, low: Int, high: Int) {
+    val size = high - low + 1
+    val mid = low + size / 2
+    if (size > 1) {
+        cellSortInner(arr, low, mid - 1)
+        cellSortInner(arr, mid, high)
+        cellSortInnerMerge(arr, low, mid, high)
+    }
+}
+
+private fun cellSortInnerMerge(arr: Array<Int>, low: Int, mid: Int, high: Int) {
+    val leftLen = mid  - low
+    val rightLen = high - mid + 1
+    val tempLen = leftLen + rightLen
+    val tempArr = Array<Int>(tempLen) {
+        return@Array 0
+    }
+    var leftIndex = low
+    var rightIndex = mid
+    for (i in 0 until tempLen) {
+        if (leftIndex < mid && rightIndex <= high) {
+            if (arr[leftIndex] <= arr[rightIndex]) {
+                tempArr[i] = arr[leftIndex]
+                leftIndex++
+            } else {
+                tempArr[i] = arr[rightIndex]
+                rightIndex++
+            }
+        } else if (leftIndex < mid) {
+            tempArr[i] = arr[leftIndex]
+            leftIndex++
+        } else if (rightIndex <= high) {
+            tempArr[i] = arr[rightIndex]
+            rightIndex++
+        }
+
+    }
+    var tempIndex = 0
+    for (i in low..high) {
+        arr[i] = tempArr[tempIndex++]
+    }
+    arr.printArray()
+
+
+}
+
+
+private fun mergeArray() {
+    val arr1 = intArrayOf(1, 2, 3)
+    val arr2 = intArrayOf(4, 5, 6, 8)
+    val len1 = arr1.size
+    val len2 = arr2.size
+    val size = len1 + len2
+    val target = Array<Int>(size) {
+        return@Array 0
+    }
+    var m = 0
+    var n = 0
+    for (i in 0 until size) {
+        if (m < len1 && n < len2) {
+            if (arr1[m] <= arr2[n]) {
+                target[i] = arr1[m]
+                m++
+            } else if (arr1[m] > arr2[n]) {
+                target[i] = arr2[n]
+                n++
+            }
+        } else if (m < len1) {
+            target[i] = arr1[m]
+            m++
+        } else {
+            target[i] = arr2[n]
+            n++
+        }
+    }
+    target.printArray()
 }
 
 
