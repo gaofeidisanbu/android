@@ -53,16 +53,15 @@ public class TestAct extends BaseAct {
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WebPageParam webPageParam = new WebPageParam("file:///android_asset/bridge/jsbridge.html",
-                        "无法修改学校", true, true, true, true, 1, null);
-
-                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
+//                WebPageParam webPageParam = new WebPageParam("file:///android_asset/bridge/jsbridge.html",
+//                        "无法修改学校", true, true, true, true, 1, null);
+//
+//                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
+                EventBus.getDefault().post(new MessageEvent());
             }
         });
 
     }
-
-
 
 
     private void testAnr() {
@@ -80,15 +79,16 @@ public class TestAct extends BaseAct {
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().post(new MessageEvent());
         EventBus.getDefault().unregister(this);
     }
-    public static class MessageEvent { /* Additional fields if needed */ }
+
+    public static class MessageEvent { /* Additional fields if needed */
+    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
         LogUtils.d("");
-    };
+    }
 
     public native String stringFromJNI();
 

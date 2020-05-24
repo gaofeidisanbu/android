@@ -8,10 +8,6 @@ repositories {
     mavenCentral()
 }
 
-kapt {
-    generateStubs = true
-}
-
 android {
     signingConfigs {
         config {
@@ -33,6 +29,11 @@ android {
         externalNativeBuild {
             cmake {
                 cppFlags ""
+            }
+        }
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [ eventBusIndex : 'com.gaofei.library.MyEventBusIndex' ]
             }
         }
     }
@@ -81,4 +82,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_v"
+    def eventbus_version = '3.1.1'
+    api "org.greenrobot:eventbus:$eventbus_version"
+    annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbus_version"
 }

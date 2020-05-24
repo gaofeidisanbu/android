@@ -4,14 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     //noinspection GradleCompatible
-    compileSdkVersion 22
+    compileSdkVersion 28
 
 
     defaultConfig {
         applicationId "com.example.android4"
-        minSdkVersion 22
+        minSdkVersion 23
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 22
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
