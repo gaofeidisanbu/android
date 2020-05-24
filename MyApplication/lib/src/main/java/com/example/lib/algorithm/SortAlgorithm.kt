@@ -324,7 +324,7 @@ fun insertSort2() {
 }
 
 /**
- * 希尔排序
+ * 归并排序
  */
 fun cellSort() {
     val arr = arrayOf(5, 3, 3, 2, 1, 9, 7, 8, 5)
@@ -411,6 +411,22 @@ private fun mergeArray() {
         }
     }
     target.printArray()
+}
+
+
+fun aaa() {
+    var n = 10
+    var h = 1
+    while (h < n) {
+        h *= 2
+    }
+}
+
+/**
+ * 希尔排序
+ */
+fun shellSort() {
+
 }
 
 
