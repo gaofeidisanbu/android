@@ -2,7 +2,6 @@ package com.gaofei.library;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.os.Process;
 import android.text.TextUtils;
 
@@ -11,6 +10,7 @@ import com.gaofei.library.base.IApplicationInterface;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
 import com.squareup.leakcanary.LeakCanary;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -56,6 +56,8 @@ public class ProjectApplication implements IApplicationInterface {
             return;
         }
         LeakCanary.install(mApplication);
+
+
     }
 
     public static Application getContext() {

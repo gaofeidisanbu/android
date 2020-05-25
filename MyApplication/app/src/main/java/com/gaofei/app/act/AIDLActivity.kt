@@ -18,7 +18,6 @@ class AIDLActivity : BaseAct() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_aidl)
-
         createService.setOnClickListener {
             val intent = Intent("com.gaofei.app2.EasyService")
             intent.setPackage("com.gaofei.app2")

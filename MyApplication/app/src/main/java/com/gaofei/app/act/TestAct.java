@@ -18,6 +18,10 @@ import com.gaofei.library.utils.LogUtils;
 import com.yangcong345.webpage.BaseBridgeWebViewV2Activity;
 import com.yangcong345.webpage.WebPageParam;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -42,16 +46,18 @@ public class TestAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
         setContentView(R.layout.act_test);
         TextView text = (TextView) findViewById(R.id.text);
         text.setText(stringFromJNI());
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WebPageParam webPageParam = new WebPageParam("file:///android_asset/bridge/jsbridge.html",
-                        "无法修改学校", true, true, true, true, 1, null);
-
-                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
+//                WebPageParam webPageParam = new WebPageParam("file:///android_asset/bridge/jsbridge.html",
+//                        "无法修改学校", true, true, true, true, 1, null);
+//
+//                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
+                EventBus.getDefault().post(new MessageEvent());
             }
         });
 
@@ -68,6 +74,20 @@ public class TestAct extends BaseAct {
             for (int j = 0; j < 20000; j++) {
             }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public static class MessageEvent { /* Additional fields if needed */
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        LogUtils.d("");
     }
 
     public native String stringFromJNI();

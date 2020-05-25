@@ -28,3 +28,5 @@ YCMath/YCMath_apk
 
 #  这是啥？
 captures/
+/.cxx
+.cxx/
