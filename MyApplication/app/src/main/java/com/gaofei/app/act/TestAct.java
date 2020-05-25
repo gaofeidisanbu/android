@@ -82,8 +82,6 @@ public class TestAct extends BaseAct {
         EventBus.getDefault().unregister(this);
     }
 
-    public static class MessageEvent { /* Additional fields if needed */
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(MessageEvent event) {
