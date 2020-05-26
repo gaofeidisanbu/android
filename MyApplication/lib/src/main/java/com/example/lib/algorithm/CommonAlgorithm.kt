@@ -1,19 +1,20 @@
 package com.example.lib.algorithm
 
-import java.lang.StringBuilder
-import java.lang.reflect.InvocationHandler
-import java.lang.reflect.Method
-import java.lang.reflect.Proxy
+import com.example.lib.common.printArray
+
+
 class Obj1 {
 
 }
+
 object CommonAlgorithm : Runnable {
 
 
     override fun run() {
 //        common2(3, 2)
 //        common3(4)
-        stringWordReverse("Hello        world")
+//        stringWordReverse("Hello        world")
+        common7()
     }
 
     /**
@@ -138,7 +139,7 @@ object CommonAlgorithm : Runnable {
      * @param n
      */
     private fun common3_2(n: Int, array: IntArray, k: Int) {
-       val max = n;
+        val max = n;
     }
 
     /**
@@ -162,6 +163,97 @@ object CommonAlgorithm : Runnable {
 
     }
 
+    /**
+     *有一个整形数组，包含正数和负数，然后要求把数组内的所有负数移至正数的左边，且保证相对位置不变，要求时间复杂度为O(n),
+     * 空间复杂度为O(1)。例如，{10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35}变化后是{-2, -4，-3, -88, -23,5, 8 ,10, 2, 7, 12, 35}。
+     */
+    private fun common5() {
+        val array = arrayOf<Int>(10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35)
+        val len = array.size
+        var index = -1
+        for (i in 0 until len) {
+            if (array[i] > 0) {
+                if (index < 0) {
+                    index = i
+                }
+            } else {
+                if (index >= 0) {
+                    val temp = array[i]
+                    for (j in i - 1 downTo index) {
+                        array[j + 1] = array[j]
+                    }
+                    array[index] = temp
+                    index++
+                }
+            }
+        }
+        array.printArray()
+    }
+
+    /**
+     *有一个整形数组，包含正数和负数，然后要求把数组内的所有负数移至正数的左边，且保证相对位置不变，要求时间复杂度为O(n),
+     * 空间复杂度为O(1)。例如，{10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35}变化后是{-2, -4，-3, -88, -23,5, 8 ,10, 2, 7, 12, 35}。
+     */
+    private fun common6() {
+        val array = arrayOf<Int>(10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35)
+        val len = array.size
+        var index = -1
+        var temp: Int
+        for (i in 0 until len) {
+            if (array[i] > 0) {
+                if (index < 0) {
+                    index = i
+                }
+            } else {
+                if (index >= 0) {
+                    temp = array[i]
+                    array[i] = array[index]
+                    array[index] = temp
+                    index++
+                }
+            }
+        }
+        array.printArray()
+    }
+
+    private fun common7() {
+        val array = arrayOf<Int>(10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35)
+        setParted1(array, 0, array.size - 1)
+    }
+
+    fun setParted1(a: Array<Int>, left: Int, right: Int) {
+        var left = left
+        var right = right
+        if (left >= right || left == a.size || right == 0) {
+            for (i in a.indices) {
+                println(a[i])
+            }
+            return
+        }
+        while (a[left] < 0) {
+            left++
+        }
+        while (a[right] >= 0) {
+            right--
+        }
+        if (left >= right || left == a.size || right == 0) {
+            for (i in a.indices) {
+                println(a[i])
+            }
+            return
+        }
+        swap(a, left, right)
+        left++
+        right--
+        setParted1(a, left, right)
+    }
+
+    private fun swap(a: Array<Int>, left: Int, right: Int) {
+        var temp = 0
+        temp = a[left]
+        a[left] = a[right]
+        a[right] = temp
+    }
 
 
 }
