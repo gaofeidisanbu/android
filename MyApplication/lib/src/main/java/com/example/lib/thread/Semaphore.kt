@@ -8,17 +8,18 @@ object Semaphore : Runnable {
     val obj = Store(10)
     override fun run() {
 
-        Thread(Runnable {
-            aa()
-        }).start()
-
-        Thread(Runnable {
-            bb()
-        }).start()
-
-        Thread(Runnable {
-            cc()
-        }).start()
+//        Thread(Runnable {
+//            aa()
+//        }).start()
+//
+//        Thread(Runnable {
+//            bb()
+//        }).start()
+//
+//        Thread(Runnable {
+//            cc()
+//        }).start()
+        ThirdThreadABC()
     }
 
     fun aa() {
@@ -162,5 +163,96 @@ class Consumer(private val store: Store, val proSem: Semaphore, val conSem: Sema
         proSem.release()
     }
 }
+
+val a = Object()
+val b = Object()
+val c = Object()
+fun ThirdThreadABC() {
+    Thread(Runnable {
+        while (true) {
+            synchronized(a) {
+                println("a")
+                synchronized(b) {
+                    b.notifyAll()
+                }
+                a.wait()
+            }
+
+        }
+
+    }).start()
+    Thread.sleep(100)
+    Thread(Runnable {
+        while (true) {
+            synchronized(b) {
+                b.wait()
+                println("b")
+
+            }
+            synchronized(c) {
+                c.notifyAll()
+            }
+        }
+
+    }).start()
+    Thread(Runnable {
+        while (true) {
+            synchronized(c) {
+                c.wait()
+                println("c")
+                synchronized(a) {
+                    a.notifyAll()
+                }
+            }
+        }
+
+    }).start()
+}
+
+
+class StoreA : Object() {
+    val list = mutableListOf<Int>()
+    val max = 10
+
+    @Synchronized
+    fun add() {
+        synchronized(this) {
+
+        }
+
+    }
+
+    @Synchronized
+    fun remove() {
+        synchronized(this) {
+
+        }
+    }
+
+    @Synchronized
+    fun getLen(): Int {
+        return 0
+    }
+
+    class Product(val store: StoreA) {
+        fun product() {
+            while (true) {
+                val i = 1
+                synchronized(store) {
+                    if (store.getLen() > 1) {
+                        store.wait()
+                    } else {
+                        store.add()
+                    }
+
+
+                }
+            }
+
+        }
+    }
+}
+
+
 
 

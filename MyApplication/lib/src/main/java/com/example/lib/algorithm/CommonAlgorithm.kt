@@ -14,7 +14,31 @@ object CommonAlgorithm : Runnable {
 //        common2(3, 2)
 //        common3(4)
 //        stringWordReverse("Hello        world")
-        common7()
+//        common7()
+        test()
+    }
+
+    fun test() {
+        val a = arrayOf<Int>(10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35)
+        val n = a.size
+        var h = 1
+        while (h <= n / 3) h = 3 * h
+        println("3h size = $n h = $h")
+
+
+        while (h >= 1) {
+            for (i in 0 until n) {
+                var j = i
+                while (j >= h && a[j] < a[j - h]) {
+                    val tmp = a[j]
+                    a[j] = a[j - h]
+                    a[j - h] = tmp
+                    j -= h
+                }
+            }
+            h /= 3;//减小间距
+        }
+        a.printArray()
     }
 
     /**

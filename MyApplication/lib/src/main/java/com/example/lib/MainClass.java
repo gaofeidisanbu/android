@@ -8,9 +8,11 @@ import com.example.lib.algorithm.SortAlgorithm;
 import com.example.lib.algorithm.StackAlgorithm;
 import com.example.lib.algorithm.TreeAlgorithm;
 import com.example.lib.load.SimpleClassLoader;
+import com.example.lib.thread.Semaphore;
 
 import java.util.Stack;
-import java.util.concurrent.Semaphore;
+
+import static com.example.lib.thread.SemaphoreKt.ThirdThreadABC;
 
 public class MainClass {
     final int a = 1;
@@ -36,8 +38,9 @@ public class MainClass {
 //            System.out.println(adapter());
 //            TreeAlgorithm.INSTANCE.run();
 //            new ThreadTest2().run();
-            CommonAlgorithm.INSTANCE.run();
+//            CommonAlgorithm.INSTANCE.run();
 //            SortAlgorithm.INSTANCE.run();
+           ThirdThreadABC();
         } catch (Exception e) {
             e.printStackTrace();
         }
