@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.gaofei.app.R;
+import com.gaofei.app.anr.CPU;
 import com.gaofei.app.fra.BaseDialogFragment;
 import com.gaofei.library.ProjectApplication;
 import com.gaofei.library.base.BaseAct;
@@ -21,6 +23,10 @@ import com.yangcong345.webpage.WebPageParam;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -38,6 +44,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TestAct extends BaseAct {
     private boolean isToolBarShow = false;
+    private static List<CPU> list = new ArrayList<>();
+    byte[] bytes1;
+
 
     static {
         System.loadLibrary("native-lib");
@@ -46,6 +55,10 @@ public class TestAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        File dir = getExternalFilesDir(null);
+        LogUtils.d(dir.toString());
+        Debug.startMethodTracing("shixintrace");
+        list.add(new CPU());
         EventBus.getDefault().register(this);
         setContentView(R.layout.act_test);
         TextView text = (TextView) findViewById(R.id.text);
@@ -58,6 +71,15 @@ public class TestAct extends BaseAct {
 //
 //                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
                 EventBus.getDefault().post(new MessageEvent());
+                try {
+                    byte[] bytes = new byte[100*10*1024*1024];
+                    bytes.toString();
+                }catch (OutOfMemoryError e)  {
+                    LogUtils.e(e);
+                    bytes1 = new byte[100*1024*1024];
+                    bytes1.toString();
+                }
+
             }
         });
 
@@ -113,6 +135,11 @@ public class TestAct extends BaseAct {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Debug.stopMethodTracing();
+    }
 }
 
 

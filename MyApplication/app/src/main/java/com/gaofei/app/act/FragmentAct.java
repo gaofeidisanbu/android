@@ -1,6 +1,7 @@
 package com.gaofei.app.act;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.gaofei.library.base.BaseFragment;
 
 public class FragmentAct extends BaseAct {
     private MyFragmentFra mFragment;
+    private static Fragment fragment;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +33,14 @@ public class FragmentAct extends BaseAct {
         Button detach = findViewById(R.id.detach);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mFragment = new MyFragmentFra();
+        fragment = mFragment;
+        mFragment.callback = new Runnable(){
+
+            @Override
+            public void run() {
+
+            }
+        };
         fragmentTransaction.replace(R.id.fragment, mFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
@@ -41,11 +51,13 @@ public class FragmentAct extends BaseAct {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                mFragment = new MyFragmentFra();
-                fragmentTransaction.replace(R.id.fragment, mFragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+//                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                mFragment = new MyFragmentFra();
+//                fragmentTransaction.replace(R.id.fragment, mFragment);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
+                Intent intent = new Intent(FragmentAct.this, TestAct.class);
+                startActivity(intent);
             }
         });
         hide.setOnClickListener(new View.OnClickListener() {
@@ -79,6 +91,8 @@ public class FragmentAct extends BaseAct {
     }
 
     public static class MyFragmentFra extends BaseFragment {
+        public Runnable callback;
+
         @Override
         public void onAttach(Context context) {
             super.onAttach(context);
@@ -93,8 +107,8 @@ public class FragmentAct extends BaseAct {
         @Override
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             super.onCreateView(inflater,container,savedInstanceState);
-            View binding = inflater.inflate( R.layout.fra_my_fragment, container, false);
-            return binding;
+            View view = inflater.inflate( R.layout.fra_my_fragment, container, false);
+            return view;
         }
 
         @Override

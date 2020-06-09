@@ -39,6 +39,7 @@ object CommonAlgorithm : Runnable {
             h /= 3;//减小间距
         }
         a.printArray()
+        common8()
     }
 
     /**
@@ -277,6 +278,27 @@ object CommonAlgorithm : Runnable {
         temp = a[left]
         a[left] = a[right]
         a[right] = temp
+    }
+
+
+    private fun common8() {
+        val array = arrayOf<Int>(10, -2, 5, 8, -4, 2, -3, 7, 12, -88, -23, 35)
+        val len = array.size
+        var i = len - 1
+        var j = len - 1
+        while (i >= 0) {
+            if (array[i] > 0) {
+                val temp = array[i]
+                array[i] = array[j]
+                array[j] = temp
+                i--
+                j--
+            } else {
+                i--
+            }
+        }
+        array.printArray()
+
     }
 
 
