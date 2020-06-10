@@ -18,8 +18,8 @@ public class BroadcastReceiverAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        IntentFilter intentFilter = new IntentFilter(BroadcastReceiverTest.ACTION);
-//        registerReceiver(new BroadcastReceiverTest(), intentFilter);
+        IntentFilter intentFilter = new IntentFilter(BroadcastReceiverTest.ACTION);
+        registerReceiver(new BroadcastReceiverTest(), intentFilter);
         setContentView( R.layout.act_broadcast_reveiver);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override

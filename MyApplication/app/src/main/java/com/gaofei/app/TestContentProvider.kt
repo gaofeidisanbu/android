@@ -12,19 +12,22 @@ class TestContentProvider: ContentProvider() {
     }
 
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+        LogUtils.d("TestContentProvider query "+ Thread.currentThread().name)
         return null
     }
 
     override fun onCreate(): Boolean {
-        LogUtils.d("TestContentProvider onCreate")
+        LogUtils.d("TestContentProvider onCreate "+ Thread.currentThread().name)
         return true
     }
 
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
+        LogUtils.d("TestContentProvider onCreate")
         return 1
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        LogUtils.d("TestContentProvider onCreate")
         return 0
     }
 

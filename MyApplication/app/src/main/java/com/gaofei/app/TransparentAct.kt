@@ -10,7 +10,8 @@ class TransparentAct: BaseAct() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_transparent)
         button.setOnClickListener {
-            val intent = Intent(it.context, TaskAffinityAct::class.java)
+            val intent = Intent(it.context, TransparentAct::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }

@@ -1,7 +1,9 @@
 package com.gaofei.app2;
 
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -23,9 +25,12 @@ public class Test2Activity extends BaseAct {
 //                intent.setAction("android.intent.action_Broadcast_Receiver_Test");
 //                sendBroadcast(intent);
 //                Add.fun();
-                Intent intent = new Intent("android.intent.action_Broadcast_Receiver_Test");
+//                Intent intent = new Intent("android.intent.action_Broadcast_Receiver_Test");
 //                intent.setPackage("com.gaofei.app");
-                sendBroadcast(intent);
+//                sendBroadcast(intent);
+                ContentResolver cr = getContentResolver();
+                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
+                cr.query(uri,null,null,null,null);
 
             }
         });

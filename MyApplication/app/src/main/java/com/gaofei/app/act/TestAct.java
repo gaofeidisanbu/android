@@ -1,8 +1,11 @@
 package com.gaofei.app.act;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -45,6 +48,7 @@ import io.reactivex.schedulers.Schedulers;
 public class TestAct extends BaseAct {
     private boolean isToolBarShow = false;
     private static List<CPU> list = new ArrayList<>();
+    private static List<Activity> list1 = new ArrayList<>();
     byte[] bytes1;
 
 
@@ -56,8 +60,9 @@ public class TestAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         File dir = getExternalFilesDir(null);
+        list1.add(this);
         LogUtils.d(dir.toString());
-        Debug.startMethodTracing("shixintrace");
+//        Debug.startMethodTracing("shixintrace");
         list.add(new CPU());
         EventBus.getDefault().register(this);
         setContentView(R.layout.act_test);
@@ -70,16 +75,18 @@ public class TestAct extends BaseAct {
 //                        "无法修改学校", true, true, true, true, 1, null);
 //
 //                BaseBridgeWebViewV2Activity.Companion.navigateTo(TestAct.this, webPageParam);
-                EventBus.getDefault().post(new MessageEvent());
-                try {
-                    byte[] bytes = new byte[100*10*1024*1024];
-                    bytes.toString();
-                }catch (OutOfMemoryError e)  {
-                    LogUtils.e(e);
-                    bytes1 = new byte[100*1024*1024];
-                    bytes1.toString();
-                }
-
+//                EventBus.getDefault().post(new MessageEvent());
+////                try {
+////                    byte[] bytes = new byte[100*10*1024*1024];
+////                    bytes.toString();
+////                }catch (OutOfMemoryError e)  {
+////                    LogUtils.e(e);
+////                    bytes1 = new byte[100*1024*1024];
+////                    bytes1.toString();
+////                }
+                ContentResolver cr = getContentResolver();
+                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
+                cr.query(uri,null,null,null,null);
             }
         });
 
@@ -138,7 +145,7 @@ public class TestAct extends BaseAct {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Debug.stopMethodTracing();
+//        Debug.stopMethodTracing();
     }
 }
 

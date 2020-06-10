@@ -76,20 +76,20 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">
-            <intent-filter>
-                <action android:name="android.intent.action_Broadcast_Receiver_Test" />
-            </intent-filter>
-        </receiver>
+<!--        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action_Broadcast_Receiver_Test" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
 
         <provider
             android:authorities="com.test.demo.fileprovider"
             android:exported="true"
             android:name="TestContentProvider"></provider>
 
-        <activity android:name="com.gaofei.app.TaskAffinityAct"   android:allowTaskReparenting="false" android:exported="true"> </activity>
+        <activity android:name="com.gaofei.app.TaskAffinityAct"  android:allowTaskReparenting="false" android:exported="true"> </activity>
 
-        <activity android:name=".TransparentAct" android:taskAffinity="com.gaofei.app.TransparentAct" />
+        <activity android:name=".TransparentAct"  android:taskAffinity="com.aa" />
     <activity android:name=".act.RXJavaAct" />
     </application>
 
