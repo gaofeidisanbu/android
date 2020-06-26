@@ -25,6 +25,7 @@ public class BroadcastReceiverAct extends BaseAct {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
+                intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 intent.setAction(BroadcastReceiverTest.ACTION);
                 sendBroadcast(intent);
             }

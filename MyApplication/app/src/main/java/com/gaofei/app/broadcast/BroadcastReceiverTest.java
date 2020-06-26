@@ -19,7 +19,7 @@ public class BroadcastReceiverTest extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         LogUtils.d(TAG, " processId = " + android.os.Process.myPid() + " threadId = " + Thread.currentThread().getId());
         try {
-            Thread.sleep(1000 * 20);
+            Thread.sleep(1000 * 30);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

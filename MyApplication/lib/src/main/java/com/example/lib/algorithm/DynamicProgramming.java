@@ -150,4 +150,19 @@ public class DynamicProgramming implements Runnable {
         System.out.println(dp[yLen - 1]);
     }
 
+    /**
+     * 股票买卖一次
+     * @param arr
+     * @return
+     */
+    private Integer fun8(int[] arr) {
+        int minBuy = arr[0];
+        int maxSell = 0;
+        for (int i = 1; i< arr.length; i++){
+            minBuy = Math.min(minBuy, arr[i]);
+            maxSell = Math.max(maxSell, arr[i] - minBuy);
+        }
+        return maxSell;
+    }
+
 }

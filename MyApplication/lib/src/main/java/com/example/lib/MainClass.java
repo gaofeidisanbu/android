@@ -40,7 +40,9 @@ public class MainClass {
 //            new ThreadTest2().run();
 //            CommonAlgorithm.INSTANCE.run();
 //            SortAlgorithm.INSTANCE.run();
-           ThirdThreadABC();
+//           ThirdThreadABC();
+            int sum = Integer.MAX_VALUE + Integer.MAX_VALUE;
+            System.out.println(sum);
         } catch (Exception e) {
             e.printStackTrace();
         }

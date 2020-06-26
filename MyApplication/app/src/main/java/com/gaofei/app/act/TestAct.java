@@ -50,6 +50,7 @@ public class TestAct extends BaseAct {
     private static List<CPU> list = new ArrayList<>();
     private static List<Activity> list1 = new ArrayList<>();
     byte[] bytes1;
+    static int count = 1;
 
 
     static {
@@ -59,15 +60,15 @@ public class TestAct extends BaseAct {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        File dir = getExternalFilesDir(null);
-        list1.add(this);
-        LogUtils.d(dir.toString());
+//        File dir = getExternalFilesDir(null);
+//        list1.add(this);
+//        LogUtils.d(dir.toString());
 //        Debug.startMethodTracing("shixintrace");
-        list.add(new CPU());
-        EventBus.getDefault().register(this);
+//        list.add(new CPU());
+//        EventBus.getDefault().register(this);
         setContentView(R.layout.act_test);
         TextView text = (TextView) findViewById(R.id.text);
-        text.setText(stringFromJNI());
+        text.setText(count++ + "aaaaaaa");
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,9 +85,15 @@ public class TestAct extends BaseAct {
 ////                    bytes1 = new byte[100*1024*1024];
 ////                    bytes1.toString();
 ////                }
-                ContentResolver cr = getContentResolver();
-                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
-                cr.query(uri,null,null,null,null);
+//                ContentResolver cr = getContentResolver();
+//                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
+//                cr.query(uri,null,null,null,null);
+                for (int i = 0; i < 10000; i++) {
+                    Intent intent = new Intent(TestAct.this, TestAct.class);
+                    intent.putExtra("count", 1 + "");
+                    startActivity(intent);
+                    LogUtils.d(TAG, "aaaaaaaa" +i);
+                }
             }
         });
 
@@ -108,7 +115,7 @@ public class TestAct extends BaseAct {
     @Override
     protected void onPause() {
         super.onPause();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
 
