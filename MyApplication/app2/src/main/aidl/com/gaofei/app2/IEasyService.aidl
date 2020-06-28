@@ -6,4 +6,5 @@ package com.gaofei.app2;
 interface IEasyService {
      void connect(String mes);
      void disConnect(String mes);
+     Bitmap getBitmap();
 }
