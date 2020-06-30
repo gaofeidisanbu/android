@@ -43,8 +43,8 @@ object TreeAlgorithm : Runnable {
         if (treeNode == null) {
             return
         }
-        list.add(treeNode)
         preOrderTraverse1(treeNode.leftChild, list)
+        list.add(treeNode)
         preOrderTraverse1(treeNode.rightChild, list)
     }
 
