@@ -7,8 +7,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.support.annotation.FloatRange
-import android.support.constraint.ConstraintLayout
+import androidx.annotation.FloatRange
+import androidx.constraintlayout.widget.ConstraintLayout
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater

@@ -6,7 +6,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.CallSuper;
+import androidx.annotation.CallSuper;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.webkit.WebSettings;

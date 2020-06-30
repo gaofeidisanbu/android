@@ -5,8 +5,8 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.Build
-import android.support.annotation.RequiresApi
-import android.support.v7.widget.LinearLayoutManager
+import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -102,8 +102,8 @@ class CityAnimationView : FrameLayout {
     private fun initCity1() {
         val list = ArrayList<City>()
         list.add(City(R.drawable.plan_preview_loading_city_2))
-        val llm = LinearLayoutManager(context)
-        llm.orientation = LinearLayoutManager.HORIZONTAL
+        val llm = androidx.recyclerview.widget.LinearLayoutManager(context)
+        llm.orientation = androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
         cityView1.layoutManager = llm
         cityView1.isNestedScrollingEnabled = false
         val adapter = City1Adapter()
@@ -115,8 +115,8 @@ class CityAnimationView : FrameLayout {
     private fun initCity2() {
         val list = ArrayList<City>()
         list.add(City(R.drawable.plan_preview_loading_city_1))
-        val llm = LinearLayoutManager(context)
-        llm.orientation = LinearLayoutManager.HORIZONTAL
+        val llm = androidx.recyclerview.widget.LinearLayoutManager(context)
+        llm.orientation = androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
         cityView2.isNestedScrollingEnabled = false
         cityView2.layoutManager = llm
         val adapter = City1Adapter()

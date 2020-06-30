@@ -1,17 +1,15 @@
 package com.gaofei.app.act;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.method.ScrollingMovementMethod;
+import androidx.annotation.Nullable;
+
 import android.view.View;
 
 import com.gaofei.app.R;
 import com.gaofei.library.base.BaseAct;
-import com.gaofei.library.utils.LogUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
 
 /**
  * Created by gaofei on 2017/9/18.

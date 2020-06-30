@@ -1,7 +1,7 @@
 package com.yangcong345.webpage.module
 
 import android.app.Activity
-import android.arch.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleObserver
 import com.yangcong345.webpage.IWebViewContainer
 import com.yangcong345.webpage.bridge.inter.WebViewService
 import java.io.Serializable

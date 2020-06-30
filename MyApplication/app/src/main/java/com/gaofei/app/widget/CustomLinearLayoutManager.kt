@@ -1,9 +1,9 @@
 package com.gaofei.app.widget
 
 import android.content.Context
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 
-class CustomLinearLayoutManager(context: Context, val isScrollEnabled: Boolean): LinearLayoutManager(context) {
+class CustomLinearLayoutManager(context: Context, val isScrollEnabled: Boolean): androidx.recyclerview.widget.LinearLayoutManager(context) {
 
 
     override fun canScrollHorizontally(): Boolean {

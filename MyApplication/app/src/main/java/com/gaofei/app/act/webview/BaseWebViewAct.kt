@@ -3,7 +3,7 @@ package com.gaofei.app.act.webview
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import android.text.TextUtils
 import android.webkit.*
 import com.gaofei.library.base.BaseAct

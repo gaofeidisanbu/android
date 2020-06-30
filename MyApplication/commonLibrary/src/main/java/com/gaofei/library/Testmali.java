@@ -1,7 +1,7 @@
 package com.gaofei.library;
 
 import android.os.Build;
-import android.support.annotation.RequiresApi;
+import androidx.annotation.RequiresApi;
 
 import java.util.function.Supplier;
 

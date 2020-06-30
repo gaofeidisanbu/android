@@ -1,45 +1,25 @@
 package com.gaofei.app.act;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
-import android.os.Handler;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.gaofei.app.R;
 import com.gaofei.app.anr.CPU;
-import com.gaofei.app.fra.BaseDialogFragment;
 import com.gaofei.library.ProjectApplication;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.FileUtils;
 import com.gaofei.library.utils.LogUtils;
-import com.yangcong345.webpage.BaseBridgeWebViewV2Activity;
-import com.yangcong345.webpage.WebPageParam;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by gaofei on 2017/6/29.

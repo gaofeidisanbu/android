@@ -2,12 +2,11 @@ package com.gaofei.app.widget;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.animation.LinearOutSlowInInterpolator;
+import androidx.annotation.RequiresApi;
+import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 /**

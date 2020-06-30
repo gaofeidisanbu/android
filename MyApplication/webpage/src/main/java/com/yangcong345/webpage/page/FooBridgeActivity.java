@@ -2,7 +2,7 @@ package com.yangcong345.webpage.page;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.yangcong345.webpage.BaseBridgeWebViewV2Activity;
 import com.yangcong345.webpage.R;

@@ -28,7 +28,7 @@
         android:visibility="gone"
         android:background="#F6F7F9">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center">
@@ -83,6 +83,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/failBack"
                 app:layout_constraintTop_toTopOf="@+id/failBack" />
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.ConstraintLayout>
     </FrameLayout>
 </RelativeLayout>

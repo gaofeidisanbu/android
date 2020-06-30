@@ -1,7 +1,7 @@
 package com.gaofei.app.act;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.gaofei.app.act.common.UserInfo;
 import com.gaofei.library.base.BaseAct;
