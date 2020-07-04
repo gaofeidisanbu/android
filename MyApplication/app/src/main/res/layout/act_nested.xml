@@ -35,7 +35,12 @@
             <ListView
                 android:id="@+id/list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="200dp"
+                android:visibility="visible"/>
+            <View
+                android:layout_width="200dp"
+                android:layout_height="120dp"
+                android:background="@color/yc_red3"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
