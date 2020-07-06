@@ -68,17 +68,24 @@ public class TestAct extends BaseAct {
 //                ContentResolver cr = getContentResolver();
 //                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
 //                cr.query(uri,null,null,null,null);
-                for (int i = 0; i < 10000; i++) {
-                    Intent intent = new Intent(TestAct.this, TestAct.class);
-                    intent.putExtra("count", 1 + "");
-                    startActivity(intent);
-                    LogUtils.d(TAG, "aaaaaaaa" +i);
-                }
+//                for (int i = 0; i < 10000; i++) {
+//                    Intent intent = new Intent(TestAct.this, TestAct.class);
+//                    intent.putExtra("count", 1 + "");
+//                    startActivity(intent);
+//                    LogUtils.d(TAG, "aaaaaaaa" +i);
+//                }
+
+                text.requestLayout();
+                text.invalidate();
             }
         });
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     private void testAnr() {
         int i = 0;

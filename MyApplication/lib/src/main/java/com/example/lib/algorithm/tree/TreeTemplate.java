@@ -15,26 +15,48 @@ class TreeNode {
     TreeNode(int x) {
         val = x;
     }
-
-
 }
 
 public class TreeTemplate {
 
     public static void main(String[] args) {
-        TreeNode treeNode1_1 = new TreeNode(9);
-        TreeNode treeNode1_2_1 = new TreeNode(15);
-        TreeNode treeNode1_2_2 = new TreeNode(7);
-        TreeNode treeNode1_2 = new TreeNode(20);
-        treeNode1_2.left = treeNode1_2_1;
-        treeNode1_2.right = treeNode1_2_2;
-        TreeNode root = new TreeNode(3);
-        root.left = treeNode1_1;
-        root.right = treeNode1_2;
-//        printlnList(tra(root));
-        System.out.println(new Solution().levelOrderBottom(root));
+//        TreeNode treeNode1_1 = new TreeNode(9);
+//        TreeNode treeNode1_2_1 = new TreeNode(15);
+//        TreeNode treeNode1_2_2 = new TreeNode(7);
+//        TreeNode treeNode1_2 = new TreeNode(20);
+//        treeNode1_2.left = treeNode1_2_1;
+//        treeNode1_2.right = treeNode1_2_2;
+//        TreeNode root = new TreeNode(3);
+//        root.left = treeNode1_1;
+//        root.right = treeNode1_2;
+        printlnTree(createTree(new Integer[] {1, null, 3, 4, 5, 6}));
 
 
+    }
+
+    public static TreeNode createTree(Integer[] integers) {
+        int len = integers.length;
+        if (len == 0 || integers[0] == null) {
+            return null;
+        }
+        int i = 1;
+        TreeNode root = new TreeNode(integers[0]);
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (i < len && !queue.isEmpty()) {
+            TreeNode temp = queue.poll();
+            if (integers[i] != null) {
+                temp.left = new TreeNode(integers[i]);
+                queue.add(temp.left);
+            }
+            i++;
+            if (i < len && integers[i] != null) {
+                temp.right = new TreeNode(integers[i]);
+                queue.add(temp.right);
+            }
+            i++;
+        }
+        return root;
     }
 
     public static List<Integer> tra(TreeNode root) {
@@ -55,6 +77,10 @@ public class TreeTemplate {
 
         }
         return list;
+    }
+
+    public static void printlnTree(TreeNode root) {
+        printlnList(tra(root));
     }
 
     public static void printlnList(List<Integer> list) {
