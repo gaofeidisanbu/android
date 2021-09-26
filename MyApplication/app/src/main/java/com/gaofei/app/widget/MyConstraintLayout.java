@@ -2,34 +2,31 @@ package com.gaofei.app.widget;
 
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
-import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
+import androidx.annotation.RequiresApi;
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 /**
  * Created by gaofei on 07/12/2017.
  */
 
-public class MyFrameLayout extends FrameLayout {
-    public MyFrameLayout(Context context) {
+public class MyConstraintLayout extends ConstraintLayout {
+    public MyConstraintLayout(Context context) {
         super(context);
     }
 
-    public MyFrameLayout(Context context, AttributeSet attrs) {
+    public MyConstraintLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public MyConstraintLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public MyFrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {

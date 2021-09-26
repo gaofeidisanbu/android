@@ -93,6 +93,7 @@
         <activity android:name=".act.OKHttpClientAct"   />
     <activity android:name=".act.RXJavaAct" />
     <activity android:name=".act.NestedAct" />
+    <activity android:name=".act.RecyclerCacheAct" />
     </application>
 
 </manifest>

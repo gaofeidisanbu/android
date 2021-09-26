@@ -10,6 +10,16 @@ import com.gaofei.app.R;
 import com.gaofei.app.broadcast.BroadcastReceiverTest;
 import com.gaofei.library.base.BaseAct;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.functions.Function;
+import io.reactivex.internal.functions.ObjectHelper;
+import io.reactivex.internal.operators.observable.ObservableZip;
+import io.reactivex.plugins.RxJavaPlugins;
+
 /**
  * Created by gaofei on 2017/9/1.
  */
@@ -28,8 +38,17 @@ public class BroadcastReceiverAct extends BaseAct {
                 intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
                 intent.setAction(BroadcastReceiverTest.ACTION);
                 sendBroadcast(intent);
+                Iterable<Observable<String>> list = new ArrayList<>();
+                Observable.zip(list, new Function<Object[], Object>() {
+                    @Override
+                    public Object apply(Object[] objects) throws Exception {
+                        return null;
+                    }
+                });
+
             }
         });
 
     }
+
 }

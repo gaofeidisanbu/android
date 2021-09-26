@@ -1,36 +1,37 @@
 package com.gaofei.app.act
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import androidx.lifecycle.LiveDataReactiveStreams
 import com.gaofei.app.R
 import com.gaofei.library.base.BaseAct
-import com.gaofei.library.utils.LogUtils
+import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.functions.Function
 import kotlinx.android.synthetic.main.act_rxjava.*
+import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.reflect.jvm.internal.impl.load.kotlin.JvmType
 
 class RXJavaAct : BaseAct() {
     var i = 0
-    private var disposable: Disposable? = null
+
+    @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_rxjava)
         button.setOnClickListener {
-            disposable = Observable.fromCallable {
-                Thread.sleep(100000)
-               return@fromCallable arrayListOf<Any>()
-            }.subscribeOn(Schedulers.io())
-                    .subscribe {
-                        LogUtils.d(i)
-                    }
         }
+
+
+    }
+
+    public fun request() {
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        disposable?.dispose()
     }
 
 }

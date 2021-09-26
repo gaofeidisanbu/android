@@ -10,6 +10,8 @@ import com.example.lib.algorithm.TreeAlgorithm;
 import com.example.lib.load.SimpleClassLoader;
 import com.example.lib.thread.Semaphore;
 
+import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Stack;
 
 import static com.example.lib.thread.SemaphoreKt.ThirdThreadABC;
@@ -28,7 +30,7 @@ public class MainClass {
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
-//            TempTest.INSTANCE.run();
+            TempTest.INSTANCE.run();
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
@@ -41,12 +43,18 @@ public class MainClass {
 //            CommonAlgorithm.INSTANCE.run();
 //            SortAlgorithm.INSTANCE.run();
 //           ThirdThreadABC();
-            int sum = Integer.MAX_VALUE + Integer.MAX_VALUE;
-            System.out.println(sum);
+            String aa = "0";
+            String bb = "0";
+            System.out.println(aa == bb);
+
+            String cc = "-1";
+            String dd = "-1";
+            System.out.println(cc == dd);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public static Integer adapter() {
         try {

@@ -31,6 +31,7 @@ import com.gaofei.app.act.OKHttpClientAct;
 import com.gaofei.app.act.PermissionAct;
 import com.gaofei.app.act.ProcessAct;
 import com.gaofei.app.act.RXJavaAct;
+import com.gaofei.app.act.RecyclerCacheAct;
 import com.gaofei.app.act.RecyclerSwipeAct;
 import com.gaofei.app.act.ReferenceAct;
 import com.gaofei.app.act.ReflectAct;
@@ -68,11 +69,11 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
             TouchEventAct.class, ViewPagerAct.class, FragmentAct.class, EditTextAct.class, DataBindingAct.class,
             BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class, WebViewTransferPageAct.class,
             AIDLActivity.class, ReferenceAct.class, GLSurfaceAct.class, TaskAffinityAct.class, TransparentAct.class, RXJavaAct.class, TestAct.class,
-            OKHttpClientAct.class, NestedAct.class};
+            OKHttpClientAct.class, NestedAct.class, RecyclerCacheAct.class};
     private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "webView",
             "注解", "截屏", "layout", "广播", "进程信息", "权限", "反射", "touchEvent",
             "ViewPager", "fragment", "editText", "dataBinding", "弹幕动画", "canvas",
-            "clock", "anr", "webView", "AIDL", "", "glSurface", "TaskAffinity", "透明activity", "rxjava", "普通测试", "okhttp", "nested"};
+            "clock", "anr", "webView", "AIDL", "", "glSurface", "TaskAffinity", "透明activity", "rxjava", "普通测试", "okhttp", "nested", "recyclerCache"};
     private Handler mHandler = new Handler();
 
     @Override

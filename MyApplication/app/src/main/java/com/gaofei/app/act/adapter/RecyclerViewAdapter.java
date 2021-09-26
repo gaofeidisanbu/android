@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.gaofei.app.R;
 import com.gaofei.library.utils.CommonUtils;
+import com.gaofei.library.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
     @Override
     public RecyclerViewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerViewViewHolder(LayoutInflater.from(mContext).inflate(R.layout.recycler_view_item,null));
+        RecyclerViewViewHolder viewViewHolder = new RecyclerViewViewHolder(LayoutInflater.from(mContext).inflate(R.layout.recycler_view_item,null));
+        LogUtils.d(TAG, " onCreateViewHolder hashCode = "+viewViewHolder.hashCode());
+        return viewViewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewViewHolder holder, int position) {
+        LogUtils.d(TAG, " onBindViewHolder hashCode = "+holder.hashCode()+ " position = "+position);
         String str = mList.get(position);
         holder.mTextView.setText(str);
     }
@@ -78,7 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super.getItemOffsets(outRect, view, parent, state);
             int count = parent.getLayoutManager().getItemCount();
             int pos = parent.getChildLayoutPosition(view);
-            Log.d(TAG,"pos = "+pos);
+//            Log.d(TAG,"pos = "+pos);
 //            boolean lastSecond = parent.getChildLayoutPosition(view) == count - 2;
 //            outRect.bottom = last || lastSecond ? 0 : dividerHeight;
         }
