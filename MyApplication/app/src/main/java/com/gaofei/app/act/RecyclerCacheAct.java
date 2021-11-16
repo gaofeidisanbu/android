@@ -26,7 +26,7 @@ import java.util.List;
  */
 
 public class RecyclerCacheAct extends BaseAct {
-    private RecyclerView mRecyclerView;
+//    private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private boolean isCurrRequest = false;
@@ -35,17 +35,24 @@ public class RecyclerCacheAct extends BaseAct {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_recycler_cache);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        mAdapter = new RecyclerViewAdapter(this);
-        mAdapter.add(getData());
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.addItemDecoration(new RecyclerViewAdapter.MyItemDecoration(this));
-        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+//        mAdapter = new RecyclerViewAdapter(this);
+//        mAdapter.add(getData());
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.addItemDecoration(new RecyclerViewAdapter.MyItemDecoration(this));
+//        mRecyclerView.setAdapter(mAdapter);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                mAdapter.add("0000");
-                mAdapter.notifyDataSetChanged();
+                LogUtils.d("RecyclerViewAdapter", "  notifyDataSetChanged");
+//                mAdapter.notifyDataSetChanged();
+            }
+        });
+        findViewById(R.id.aaa).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.d("RecyclerViewAdapter", "  aaa ");
             }
         });
     }
@@ -54,7 +61,7 @@ public class RecyclerCacheAct extends BaseAct {
     private List<String> getData() {
         List<String> list = new ArrayList<>();
         int count = mAdapter.getItemCount() + 1;
-        for (int i = count; i < 15 + count; i++) {
+        for (int i = count; i < 40 + count; i++) {
             list.add(" i = " + i + " " + i + " " + i + " " + i + " " + i + " " + i + " " + i);
         }
         return list;

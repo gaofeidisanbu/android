@@ -12,6 +12,8 @@ import android.view.View;
  */
 
 public class MyView extends View{
+    private static final String TAG = "MyView";
+
     public MyView(Context context) {
         super(context);
     }
@@ -30,71 +32,23 @@ public class MyView extends View{
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        setMeasuredDimension(getDefaultSize(getSuggestedMinimumWidth(), widthMeasureSpec),
-                getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec));
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-//    public static int getDefaultSize(int size, int measureSpec) {
-//        int result = size;
-//        int specMode = MeasureSpec.getMode(measureSpec);
-//        int specSize = MeasureSpec.getSize(measureSpec);
-//
-//        switch (specMode) {
-//            case MeasureSpec.UNSPECIFIED:
-//                result = size;
-//                break;
-//            case MeasureSpec.AT_MOST:
-//            case MeasureSpec.EXACTLY:
-//                result = 100;
-//                break;
-//        }
-//        return result;
-//    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        boolean is =  super.dispatchTouchEvent(event);
+        Log.d(TAG,"dispatchTouchEvent is = "+is+ " action = "+EventHelper.getEventName(event));
+        return is;
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.i("HelloEventMultiPoint", "Total pointer count is " + event.getPointerCount());
-
-        String actionString = actionToString(event.getAction());
-        Log.i("HelloEventMultiPoint", "Main action is " + actionString);
-
-        int maskedAction = event.getActionMasked();
-        int pointId = event.getActionIndex();
-        Log.i("HelloEventMultiPoint", "Masked action is " + actionToString(maskedAction) + "\tpointId is " + pointId);
-        Log.i("HelloEventMultiPoint", "====================");
-        return true;
+        boolean is =  super.onTouchEvent(event);
+        Log.d(TAG,"onTouchEvent is = "+is+ " action = "+EventHelper.getEventName(event));
+        return is;
     }
 
-    private String actionToString(int action) {
-        String actionString = null;
-        switch (action) {
-            case MotionEvent.ACTION_CANCEL:
-                actionString = "ACTION_CANCEL";
-                break;
-            case MotionEvent.ACTION_DOWN:
-                actionString = "ACTION_DOWN";
-                break;
-            case MotionEvent.ACTION_MOVE:
-                actionString = "ACTION_MOVE";
-                break;
-            case MotionEvent.ACTION_OUTSIDE:
-                actionString = "ACTION_OUTSIDE";
-                break;
-            case MotionEvent.ACTION_UP:
-                actionString = "ACTION_UP";
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                actionString = "ACTION_POINTER_DOWN";
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                actionString = "ACITON_POINTER_UP";
-                break;
-            default:
-                actionString = "" + action;
-        }
-
-        return actionString;
-    }
 }

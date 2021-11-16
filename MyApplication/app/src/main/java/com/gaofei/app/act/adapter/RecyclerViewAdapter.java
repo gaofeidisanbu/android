@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.gaofei.app.R;
+import com.gaofei.app.widget.MyTextView;
+import com.gaofei.app.widget.MyView;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
 
@@ -61,7 +63,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public RecyclerViewViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.text);
+            mTextView = (MyTextView) itemView.findViewById(R.id.text);
+            View view = (MyView) itemView.findViewById(R.id.view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
         }
     }
 

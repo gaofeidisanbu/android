@@ -5,19 +5,99 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
+    <com.gaofei.app.widget.MyNestedScrollView
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:background="#e6e6e6"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:background="#e6e6e6"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/recycler">
+
+                <com.gaofei.app.widget.MyTextView
+                    android:id="@+id/aaa"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red1"
+                    android:text="aaaaaaa"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red2"
+                    android:text="bbbbb"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red3"
+                    android:text="ccccc"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red3"
+                    android:text="ddddd"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red3"
+                    android:text="ffff"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@color/yc_red3"
+                    android:text="eeeee"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/yc_red4"/>
+
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.gaofei.app.widget.MyNestedScrollView>
+
+    <com.gaofei.app.widget.MyTextView
         android:id="@+id/button"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="160dp"
+        android:background="@color/yc_red2"
         android:text="刷新"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

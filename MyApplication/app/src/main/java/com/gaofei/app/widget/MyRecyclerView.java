@@ -2,27 +2,29 @@ package com.gaofei.app.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+
+import androidx.annotation.Nullable;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by gaofei on 2017/8/10.
  */
 
-public class MyTextView extends AppCompatTextView{
-    private final static String TAG = "MyTextView";
-    public MyTextView(Context context) {
+public class MyRecyclerView extends RecyclerView {
+    private final static String TAG = "Test11:MyRecyclerView";
+    public MyRecyclerView(Context context) {
         super(context);
     }
 
-    public MyTextView(Context context, @Nullable AttributeSet attrs) {
+    public MyRecyclerView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public MyRecyclerView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -39,17 +41,16 @@ public class MyTextView extends AppCompatTextView{
         Log.d(TAG,"onLayout");
     }
 
+
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        Log.d(TAG,"onDraw");
+    public boolean onInterceptTouchEvent(MotionEvent event) {
+        boolean is =  super.onInterceptTouchEvent(event);
+        Log.d(TAG,"onInterceptTouchEvent is = "+is+ " action = "+EventHelper.getEventName(event));
+        return is;
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_CANCEL) {
-            Log.d(TAG,"ACTION_CANCEL ");
-        }
         boolean is =  super.dispatchTouchEvent(event);
         Log.d(TAG,"dispatchTouchEvent is = "+is+ " action = "+EventHelper.getEventName(event));
         return is;
