@@ -5,6 +5,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.WindowInsets;
 import android.widget.FrameLayout;
 
 import androidx.annotation.RequiresApi;
@@ -57,5 +58,8 @@ public class MyConstraintLayout extends ConstraintLayout {
         return super.onInterceptHoverEvent(event);
     }
 
-
+    @Override
+    public WindowInsets onApplyWindowInsets(WindowInsets insets) {
+        return super.onApplyWindowInsets(insets);
+    }
 }

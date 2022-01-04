@@ -67,4 +67,28 @@ public class MyTextView extends AppCompatTextView{
     public void draw(Canvas canvas) {
         super.draw(canvas);
     }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        Log.d(TAG,"onAttachedToWindow");
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        Log.d(TAG,"onDetachedFromWindow");
+    }
+
+    @Override
+    public void onStartTemporaryDetach() {
+        super.onStartTemporaryDetach();
+        Log.d(TAG,"onStartTemporaryDetach");
+    }
+
+    @Override
+    public void onFinishTemporaryDetach() {
+        super.onFinishTemporaryDetach();
+        Log.d(TAG,"onFinishTemporaryDetach");
+    }
 }

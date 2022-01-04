@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.Scroller;
 
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.gaofei.app.R;
 

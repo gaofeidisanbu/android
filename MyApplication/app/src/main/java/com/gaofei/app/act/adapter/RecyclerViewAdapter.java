@@ -29,6 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context mContext;
     public RecyclerViewAdapter(Context context){
         this.mContext = context;
+        setHasStableIds(true);
     }
     @Override
     public RecyclerViewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,6 +48,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return mList.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mList.get(position).hashCode();
     }
 
     public void add(List<String> data) {
