@@ -133,8 +133,8 @@ class GrowthChatView : ConstraintLayout {
     }
 
     private fun updateChatItem() {
-        mChatGroupList.forEach { chatGroup ->
-            chatGroup.chatGroupItem.forEach { chatGroupItem ->
+        for (chatGroup in mChatGroupList) {
+            for (chatGroupItem in chatGroup.chatGroupItem) {
                 updateChatGroupItemTop(chatGroup, chatGroupItem)
             }
         }
@@ -200,8 +200,8 @@ class GrowthChatView : ConstraintLayout {
         val dWidth = measuredWidth
         val dHeight = measuredHeight
         if (dWidth > 0 && dHeight > 0) {
-            mChatGroupList.forEach { chatGroup ->
-                chatGroup.chatGroupItem.forEach { chatGroupItem ->
+            for (chatGroup in mChatGroupList) {
+                for (chatGroupItem in chatGroup.chatGroupItem) {
                     drawChatRect(canvas, chatGroup, chatGroupItem)
                     drawChatArc(canvas, chatGroup, chatGroupItem)
                     drawChatText(canvas, chatGroup, chatGroupItem)

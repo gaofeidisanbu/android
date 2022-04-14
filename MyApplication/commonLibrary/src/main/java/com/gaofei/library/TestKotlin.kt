@@ -46,7 +46,7 @@ private fun clazz() {
     var canvasActivity = java.util.ArrayList<Any>()
     val listClass = java.util.List::class.java
 
-    aa.forEach {
+    for (it in aa) {
         println("${it}")
         println("${(it as Class<*>).isAssignableFrom(canvasActivity::class.java)}")
     }

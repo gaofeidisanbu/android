@@ -9,11 +9,12 @@ import com.facebook.stetho.Stetho;
 import com.gaofei.library.base.IApplicationInterface;
 import com.gaofei.library.utils.CommonUtils;
 import com.gaofei.library.utils.LogUtils;
-import com.squareup.leakcanary.LeakCanary;
 
 
 import java.util.LinkedList;
 import java.util.List;
+
+import leakcanary.LeakCanary;
 
 /**
  * Created by gaofei on 2017/5/26.
@@ -50,12 +51,12 @@ public class ProjectApplication implements IApplicationInterface {
         Thread.UncaughtExceptionHandler exceptionHandler = Thread.getDefaultUncaughtExceptionHandler();
         LogUtils.d(exceptionHandler.getClass().getName());
         Thread.setDefaultUncaughtExceptionHandler(new CrashHandler(exceptionHandler));
-        if (LeakCanary.isInAnalyzerProcess(mApplication)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(mApplication);
+//        if (LeakCanary.isInAnalyzerProcess(mApplication)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(mApplication);
 
 
     }

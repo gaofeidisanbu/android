@@ -38,6 +38,7 @@ import com.yangcong345.webpage.toast.OmToastManager
 import com.yangcong345.webpage.view.YCBridgeWebViewV2
 import com.yangcong345.webpage.view.YCLoadBridgeWebViewV2
 import kotlinx.android.synthetic.main.fragment_bridge_webview.*
+import kotlin.let as let1
 
 
 private const val FILE_CHOOSER_RESULT_CODE = 10001
@@ -164,7 +165,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
     private fun initToolbar() {
         val isShowToolbar = mParams?.isShowToolbar ?: true
         showToolbar(isShowToolbar)
-        mToolbarStyle?.let {
+        val let = mToolbarStyle?.let1 {
             if (isShowToolbar) {
                 rlToolbar.setBackgroundColor(getColor(resources, it.toolbarBackgroundColor, null))
                 ivImageLeft.setImageResource(it.leftImageId)
@@ -193,7 +194,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
                 val h5Module = mLoadWebView?.getWebView()?.installModule(activity, mLoadWebView!!.getWebView(), mModuleName, mModuleContextData, this)
                 initModule(h5Module)
             }
-            ModuleType.INFO -> mModuleInfo?.let {
+            ModuleType.INFO -> mModuleInfo?.let1 {
                 val h5Module = mLoadWebView?.getWebView()?.installModule(activity, mLoadWebView!!.getWebView(), it, mModuleContextData, this)
                 initModule(h5Module)
             }
@@ -209,7 +210,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
         if (mIH5Module is IUrlH5Module) {
             (mIH5Module as IUrlH5Module).setModuleUrl(mParams?.url ?: "")
         }
-        h5Module?.let {
+        h5Module?.let1 {
             this.lifecycle.addObserver(h5Module)
         }
         this.mUrl = mIH5Module?.getModuleUrl() ?: ""
@@ -227,7 +228,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
             }
         })
 
-        mLoadWebView?.getWebView()?.let {
+        mLoadWebView?.getWebView()?.let1 {
             NavigationHandler(this).register(it)
             BrowserNavHandler(this).register(it)
         }
@@ -297,7 +298,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
     }
 
     override fun browserTitle(data: MutableMap<String, String>?) {
-        data?.get("title")?.let {
+        data?.get("title")?.let1 {
             setCustomTitle(it)
         }
     }
@@ -408,7 +409,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
             return
         val results = mutableListOf<Uri>()
         if (resultCode == Activity.RESULT_OK) {
-            data?.let {
+            data?.let1 {
                 val dataString = it.dataString
                 val clipData = it.clipData
                 if (clipData != null) {

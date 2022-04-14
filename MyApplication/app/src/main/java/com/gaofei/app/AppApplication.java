@@ -6,9 +6,10 @@ import android.content.Context;
 import android.util.Log;
 import android.webkit.WebView;
 
+//import com.example.myapp.MyEventBusIndex;
+//import com.example.myapp.MyEventBusIndex;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.gaofei.app.act.webview.WebViewPool;
-import com.gaofei.library.MyEventBusIndex;
 import com.gaofei.library.base.ProjectProxy;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,7 +35,7 @@ public class AppApplication extends Application {
         ProjectProxy.getInstance().onCreate();
         Log.d("ProjectApplication", "------->onCreate");
         Fresco.initialize(this);
-        EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
+//        EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
 // Now the default instance uses the given index. Use it like this:
         EventBus eventBus = EventBus.getDefault();
 

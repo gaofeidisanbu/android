@@ -18,7 +18,9 @@ class WebViewActivity : BaseWebViewAct() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
        val url =  intent?.getStringExtra("url")
-        mWebView.loadUrl(url)
+        if (url != null) {
+            mWebView.loadUrl(url)
+        }
     }
 
     override fun onPause() {

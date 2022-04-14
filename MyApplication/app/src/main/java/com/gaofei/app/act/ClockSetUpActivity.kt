@@ -22,7 +22,7 @@ import java.util.*
 private var CLOCK_LOCAL_DATA = "clock_local_data"
 private fun getPreferences(context: Context): String {
     val sp = context.getSharedPreferences(CLOCK_LOCAL_DATA, 0)
-    return sp.getString(CLOCK_LOCAL_DATA, "")
+    return sp.getString(CLOCK_LOCAL_DATA, "")!!
 }
 
 private fun getLocalClockData(context: Context): ClockStatus {
@@ -135,7 +135,7 @@ class ClockSetUpActivity : BaseAct() {
 
     private fun getPreferences(): String {
         val sp = this.getSharedPreferences(CLOCK_LOCAL_DATA, 0)
-        return sp.getString(CLOCK_LOCAL_DATA, "")
+        return sp.getString(CLOCK_LOCAL_DATA, "")!!
     }
 
     private fun initClockView() {

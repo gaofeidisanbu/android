@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
 
     <application
         android:name="com.gaofei.app.AppApplication"
@@ -20,7 +19,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.gaofei.app.MainActivity">
+        <activity android:name="com.gaofei.app.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,45 +38,45 @@
         <activity
             android:name="com.gaofei.app.act.LayoutAct"
             android:launchMode="singleTask" />
-        <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" />
-        <activity android:name="com.gaofei.app.act.SetUpAct" />
-        <activity android:name="com.gaofei.app.act.ProcessAct" />
-        <activity android:name="com.gaofei.app.act.PermissionAct" />
-        <activity android:name="com.gaofei.app.act.ReflectAct" />
-        <activity android:name="com.gaofei.app.act.TouchEventAct" />
-        <activity android:name="com.gaofei.app.act.ViewPagerAct" />
-        <activity android:name="com.gaofei.app.act.FragmentAct" />
-        <activity android:name="com.gaofei.app.act.EditTextAct" />
-        <activity android:name="com.gaofei.app.act.DataBindingAct" />
-        <activity android:name="com.gaofei.app.act.TaskActivity" />
-        <activity android:name="com.gaofei.app.act.AnrAct" />
-        <activity android:name="com.gaofei.app.act.webview.WebViewActivity" android:process=".webView"/>
-        <activity android:name="com.gaofei.app.act.webview.WebViewTransferPageAct" />
-        <activity android:name="com.gaofei.app.act.webview.GlobalWebViewActivity" />
+        <activity android:name="com.gaofei.app.act.BroadcastReceiverAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.SetUpAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.ProcessAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.PermissionAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.ReflectAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.TouchEventAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.ViewPagerAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.FragmentAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.EditTextAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.DataBindingAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.TaskActivity" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.AnrAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.webview.WebViewActivity" android:process=".webView" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.webview.WebViewTransferPageAct" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.webview.GlobalWebViewActivity" android:exported="false"/>
         <activity android:name="com.gaofei.app.act.AIDLActivity" />
         <activity android:name="com.gaofei.app.act.ReferenceAct" />
         <activity android:name="com.gaofei.app.act.GLSurfaceAct" />
-        <receiver android:name="com.gaofei.app.anr.TestBroadCastReceiver" >
+        <receiver android:name="com.gaofei.app.anr.TestBroadCastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="TestBroadCastReceiver"/>
             </intent-filter>
         </receiver>
         <activity
             android:name=".CanvasActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
         <activity
             android:name="com.gaofei.app.act.BarrageAnimationAct"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.gaofei.app.act.ClockSetUpActivity" />
-        <activity android:name="com.gaofei.app.act.ClockStartActivity"  android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.ClockSetUpActivity" android:exported="false"/>
+        <activity android:name="com.gaofei.app.act.ClockStartActivity"  android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
 
-        <receiver android:name=".act.ClockBroadcastReceiver">
+        <receiver android:name=".act.ClockBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="SIGN_IN_CLOCK"></action>
             </intent-filter>
         </receiver>
 
-        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest">
+        <receiver android:name="com.gaofei.app.broadcast.BroadcastReceiverTest" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action_Broadcast_Receiver_Test" />
             </intent-filter>
@@ -89,11 +89,11 @@
 
         <activity android:name="com.gaofei.app.TaskAffinityAct"  android:allowTaskReparenting="false" android:exported="true"> </activity>
 
-        <activity android:name=".TransparentAct"  android:taskAffinity="com.aa" />
-        <activity android:name=".act.OKHttpClientAct"   />
-    <activity android:name=".act.RXJavaAct" />
-    <activity android:name=".act.NestedAct" />
-    <activity android:name=".act.RecyclerCacheAct" />
+        <activity android:name=".TransparentAct"  android:taskAffinity="com.aa" android:exported="false" />
+        <activity android:name=".act.OKHttpClientAct"   android:exported="false"/>
+    <activity android:name=".act.RXJavaAct" android:exported="false"/>
+    <activity android:name=".act.NestedAct" android:exported="false"/>
+    <activity android:name=".act.RecyclerCacheAct" android:exported="false"/>
     </application>
 
 </manifest>
