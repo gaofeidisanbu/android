@@ -4,7 +4,6 @@
     <application >
         <activity
             android:name="com.yangcong345.webpage.BaseBridgeWebViewV2Activity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

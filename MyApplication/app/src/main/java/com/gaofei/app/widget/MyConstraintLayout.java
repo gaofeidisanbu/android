@@ -2,12 +2,15 @@ package com.gaofei.app.widget;
 
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -61,5 +64,26 @@ public class MyConstraintLayout extends ConstraintLayout {
     @Override
     public WindowInsets onApplyWindowInsets(WindowInsets insets) {
         return super.onApplyWindowInsets(insets);
+    }
+
+    @Nullable
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Parcelable parcelable = super.onSaveInstanceState();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("super", parcelable);
+        bundle.putSerializable("test", "test");
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        Parcelable supera = null;
+        if (state instanceof Bundle) {
+            supera = ((Bundle) state).getParcelable("super");
+            String test = ((Bundle) state).getString("test");
+            Log.d("aaa",test );
+        }
+        super.onRestoreInstanceState(supera);
     }
 }

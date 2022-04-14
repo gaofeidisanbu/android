@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gaofei.app.R;
 import com.gaofei.app.anr.CPU;
@@ -18,6 +21,8 @@ import com.gaofei.library.utils.LogUtils;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +51,14 @@ public class TestAct extends BaseAct {
 //        Debug.startMethodTracing("shixintrace");
 //        list.add(new CPU());
 //        EventBus.getDefault().register(this);
+        Bundle s = (Bundle)null;
         setContentView(R.layout.act_test);
         TextView text = (TextView) findViewById(R.id.text);
         text.setText(count++ + "aaaaaaa");
+        Object a = null;
+        if( a != null && a instanceof Integer) {
+        }
+
         text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

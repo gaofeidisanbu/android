@@ -36,3 +36,6 @@
 -renamesourcefileattribute TbsSdkJava
 -keepattributes SourceFile,LineNumberTable
 #@proguard_debug_end
+-keepclassmembers class com.gaofei.app.act.TestInstance {
+  public  <init>(java.lang.Integer);
+}

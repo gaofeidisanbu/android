@@ -87,9 +87,25 @@ public class TestMain {
     }
 
     private static void  clazz() {
-        ArrayList canvasActivity = new java.util.ArrayList<Object>();
-        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
-        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
+//        ArrayList canvasActivity = new java.util.ArrayList<Object>();
+//        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
+//        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
+        String str = "gaofei\uD83D\uDC69\u200D❤️\u200D\uD83D\uDC69";
+        int len = realStringLength(str);
+        System.out.println("len = "+len);
+    }
+
+    private static int realStringLength(String str) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.isHighSurrogate(c) || Character.isLowSurrogate(c)) {
+                i++;
+            }
+            count++;
+        }
+
+        return count;
     }
 
 

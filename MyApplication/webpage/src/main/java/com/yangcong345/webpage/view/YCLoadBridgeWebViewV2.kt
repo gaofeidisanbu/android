@@ -143,7 +143,7 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
         webView1.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             val uri = Uri.parse(url)
             val intent = Intent(Intent.ACTION_VIEW, uri)
-            if (intent.resolveActivity(mContext?.packageManager) != null) {
+            if (intent.resolveActivity(mContext?.packageManager!!) != null) {
                 mContext!!.startActivity(intent)
             }
         }
@@ -203,7 +203,7 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
 
     fun loadPage(url: String?) {
         this.mUrl = url
-        webView1.loadUrl(mUrl)
+        mUrl?.let { webView1.loadUrl(it) }
 //        webView1.reload()
     }
 

@@ -43,18 +43,46 @@ public class MainClass {
 //            CommonAlgorithm.INSTANCE.run();
 //            SortAlgorithm.INSTANCE.run();
 //           ThirdThreadABC();
-            String aa = "0";
-            String bb = "0";
-            System.out.println(aa == bb);
-
-            String cc = "-1";
-            String dd = "-1";
-            System.out.println(cc == dd);
+//            String aa = "0";
+//            String bb = "0";
+//            System.out.println(aa == bb);
+//
+//            String cc = "-1";
+//            String dd = "-1";
+//            System.out.println(cc == dd);
+            clazz();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private static void  clazz() {
+//        ArrayList canvasActivity = new java.util.ArrayList<Object>();
+//        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
+//        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
+        String str = "1\uD83D\uDC69\u200D\uD83D\uDC69\u200D\uD83D\uDC66\u200D\uD83D\uDC66";
+        int len = realStringLength(str);
+        System.out.println("len = "+len+" str len = "+str.length()+" str = "+str);
+    }
+
+    private static int realStringLength(String str) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            if (Character.isHighSurrogate(c)) {
+                System.out.println("c = "+c);
+                i++;
+            }
+
+            if ( Character.isLowSurrogate(c)) {
+                System.out.println("c = "+c);
+                i++;
+            }
+            count++;
+        }
+
+        return count;
+    }
 
     public static Integer adapter() {
         try {

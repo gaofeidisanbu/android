@@ -68,4 +68,9 @@ public class MyRecyclerView extends RecyclerView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
     }
+
+    @Override
+    protected float getTopFadingEdgeStrength() {
+        return 1f;
+    }
 }
