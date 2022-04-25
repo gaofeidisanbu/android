@@ -94,6 +94,7 @@
     <activity android:name=".act.RXJavaAct" android:exported="false"/>
     <activity android:name=".act.NestedAct" android:exported="false"/>
     <activity android:name=".act.RecyclerCacheAct" android:exported="false"/>
+    <activity android:name=".act.SlotMachineAct" android:exported="false"/>
     </application>
 
 </manifest>
