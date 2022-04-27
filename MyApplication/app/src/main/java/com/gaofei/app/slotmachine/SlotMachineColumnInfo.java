@@ -1,12 +1,14 @@
 package com.gaofei.app.slotmachine;
 
+import java.util.List;
+
 /**
  * Created by gaofei3 on 2022/4/24
  * Describe: 老虎机每一列信息
  */
 public class SlotMachineColumnInfo {
     private int columnIndex;
-    private SlotMachineElementInfo[] slotMachineElementInfoArray;
+    private List<SlotMachineElementInfo> slotMachineElementInfoList;
 
     public int getColumnIndex() {
         return columnIndex;
@@ -16,11 +18,11 @@ public class SlotMachineColumnInfo {
         this.columnIndex = columnIndex;
     }
 
-    public SlotMachineElementInfo[] getSlotMachineElementInfoArray() {
-        return slotMachineElementInfoArray;
+    public List<SlotMachineElementInfo> getSlotMachineElementInfoList() {
+        return slotMachineElementInfoList;
     }
 
-    public void setSlotMachineElementInfoArray(SlotMachineElementInfo[] slotMachineElementInfoArray) {
-        this.slotMachineElementInfoArray = slotMachineElementInfoArray;
+    public void setSlotMachineElementInfoArray(List<SlotMachineElementInfo> slotMachineElementInfoList) {
+        this.slotMachineElementInfoList = slotMachineElementInfoList;
     }
 }

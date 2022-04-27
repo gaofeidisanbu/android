@@ -5,15 +5,15 @@ package com.gaofei.app.slotmachine;
  * Describe: 老虎机元素信息
  */
 public class SlotMachineElementInfo {
-    private int id;
+    private int index;
     private String key;
 
-    public int getId() {
-        return id;
+    public int getIndex() {
+        return index;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public String getKey() {
