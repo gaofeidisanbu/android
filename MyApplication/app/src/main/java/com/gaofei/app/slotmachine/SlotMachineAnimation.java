@@ -74,7 +74,7 @@ public class SlotMachineAnimation extends ValueAnimator {
      * @return
      */
     private int calculateTotalRound() {
-        return 5;
+        return 0;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SlotMachineAnimation extends ValueAnimator {
         this.mTotalScrollRange = (mLength * mTotalRound + mEndIndexInList) * mElementHeight;
         setFloatValues(0, 1f, 1.1f, 1f);
         setInterpolator(new AccelerateDecelerateInterpolator());
-        setDuration(50 * 1000);
+        setDuration(10 * 1000);
         addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {

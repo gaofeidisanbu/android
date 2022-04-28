@@ -21,6 +21,8 @@ import java.util.Map;
 public class SlotMachinePlayer {
     private final static int LENGTH = 3;
     private final Map<String, Bitmap> mCacheBitmap = new HashMap<>();
+    private Context mContext;
+    private AnimatorSet mAnimatorSet;
     private List<SlotMachineElementInfo> mColumnInfo0;
     private int mStartIndex0;
     private float mStartOffset0;
@@ -33,7 +35,6 @@ public class SlotMachinePlayer {
     private SlotMachineCanvas mCanvas;
     private boolean isInitSuccess;
     private OnPlayerListener mOnPlayerListener;
-    private Context mContext;
 
     public SlotMachinePlayer(Context context, SlotMachineCanvas canvas) {
         this.mContext = context;
@@ -52,41 +53,78 @@ public class SlotMachinePlayer {
 
 
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener, @NonNull OnPlayerListener onPlayerListener) {
+        if (mAnimatorSet != null && mAnimatorSet.isRunning()) {
+            return;
+        }
         this.mOnPlayerListener = onPlayerListener;
-        SlotMachineAnimation slotMachineAnimation0 = createSlotMachineAnimation(mColumnInfo0, mStartIndex0, 4);
-        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(mColumnInfo2, mStartIndex1, 4);
-        SlotMachineAnimation slotMachineAnimation2 = createSlotMachineAnimation(mColumnInfo2, mStartIndex2, 4);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(slotMachineAnimation0, slotMachineAnimation1, slotMachineAnimation2);
-        animatorSet.start();
+        SlotMachineAnimation slotMachineAnimation0 = createSlotMachineAnimation(mColumnInfo0, mStartIndex0, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationUpdate(SlotMachineElementInfo startElementInfo, float offset) {
+                SlotMachinePlayer.this.mStartIndex0 = startElementInfo.getIndex();
+                SlotMachinePlayer.this.mStartOffset0 = offset;
+                doFrameUpdate();
+            }
+
+            @Override
+            public void onAnimationEnd() {
+
+            }
+        });
+        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(mColumnInfo2, mStartIndex1, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationUpdate(SlotMachineElementInfo startElementInfo, float offset) {
+                SlotMachinePlayer.this.mStartIndex1 = startElementInfo.getIndex();
+                SlotMachinePlayer.this.mStartOffset1 = offset;
+                doFrameUpdate();
+            }
+
+            @Override
+            public void onAnimationEnd() {
+
+            }
+        });
+        SlotMachineAnimation slotMachineAnimation2 = createSlotMachineAnimation(mColumnInfo2, mStartIndex2, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+            @Override
+            public void onAnimationStart() {
+
+            }
+
+            @Override
+            public void onAnimationUpdate(SlotMachineElementInfo startElementInfo, float offset) {
+                SlotMachinePlayer.this.mStartIndex2 = startElementInfo.getIndex();
+                SlotMachinePlayer.this.mStartOffset2 = offset;
+                doFrameUpdate();
+            }
+
+            @Override
+            public void onAnimationEnd() {
+
+            }
+        });
+        mAnimatorSet = new AnimatorSet();
+        mAnimatorSet.playTogether(slotMachineAnimation0, slotMachineAnimation1, slotMachineAnimation2);
+        mAnimatorSet.start();
     }
 
 
-    private SlotMachineAnimation createSlotMachineAnimation(List<SlotMachineElementInfo> slotMachineElementInfoList, int startIndex, int endIndex) {
+    private SlotMachineAnimation createSlotMachineAnimation(List<SlotMachineElementInfo> slotMachineElementInfoList, int startIndex, int endIndex, SlotMachineAnimation.OnSlotMachineAnimationListener slotMachineAnimationListener) {
         return SlotMachineAnimation
                 .newBuilder()
                 .setElementInfoList(slotMachineElementInfoList)
                 .setElementSize(mCanvas.getWidth(), mCanvas.getHeight())
                 .setStartIndex(startIndex)
                 .setEndIndex(endIndex)
-                .setSlotMachineAnimationListener(new SlotMachineAnimation.OnSlotMachineAnimationListener() {
-                    @Override
-                    public void onAnimationStart() {
-
-                    }
-
-                    @Override
-                    public void onAnimationUpdate(SlotMachineElementInfo startElementInfo, float offset) {
-                        SlotMachinePlayer.this.mStartIndex0 = startElementInfo.getIndex();
-                        SlotMachinePlayer.this.mStartOffset0 = offset;
-                        doFrameUpdate();
-                    }
-
-                    @Override
-                    public void onAnimationEnd() {
-
-                    }
-                }).builder();
+                .setSlotMachineAnimationListener(slotMachineAnimationListener).builder();
     }
 
     private void doFrameUpdate() {
@@ -129,7 +167,9 @@ public class SlotMachinePlayer {
         int height = mCanvas.getHeight();
         float x = (width / 3f) * columnIndex;
         float y = height - (height * (rowIndex + 1) / 3f - startOffset);
-        mCanvas.draw(getBitmap(elementInfo.getKey()), x, y, 1, 1f);
+        float centerX = (x + x + width / 3f) / 2f;
+        float centerY = (y + y + height / 3f) / 2f;
+        mCanvas.draw(getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f);
     }
 
     private Bitmap getBitmap(String url) {
