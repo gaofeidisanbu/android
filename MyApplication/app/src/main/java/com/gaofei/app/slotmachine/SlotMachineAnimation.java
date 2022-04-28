@@ -1,6 +1,7 @@
 package com.gaofei.app.slotmachine;
 
 import android.animation.ValueAnimator;
+import android.util.Log;
 import android.util.Pair;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * Describe: 老虎机动画
  */
 public class SlotMachineAnimation extends ValueAnimator {
+    private final static String TAG = "SlotMachineAnimation";
     private final List<SlotMachineElementInfo> mMachineElementInfoList = new ArrayList<>();
     private OnSlotMachineAnimationListener mSlotMachineAnimationListener;
     private int mStartIndex;
@@ -74,7 +76,7 @@ public class SlotMachineAnimation extends ValueAnimator {
      * @return
      */
     private int calculateTotalRound() {
-        return 0;
+        return 2;
     }
 
     @Override
@@ -82,9 +84,9 @@ public class SlotMachineAnimation extends ValueAnimator {
         this.mCurrRound = 0;
         this.mTotalRound = calculateTotalRound();
         this.mTotalScrollRange = (mLength * mTotalRound + mEndIndexInList) * mElementHeight;
-        setFloatValues(0, 1f, 1.1f, 1f);
+        setFloatValues(0, 1f, 1.01f, 1);
         setInterpolator(new AccelerateDecelerateInterpolator());
-        setDuration(10 * 1000);
+        setDuration(30 * 1000);
         addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -92,6 +94,7 @@ public class SlotMachineAnimation extends ValueAnimator {
                 SlotMachineElementInfo machineElementInfo = mMachineElementInfoList.get(pair.first);
                 SlotMachineAnimation.this.mCurrStartIndex = machineElementInfo.getIndex();
                 SlotMachineAnimation.this.mStartOffset = pair.second;
+                Log.d(TAG, " mCurrStartIndex = "+mCurrStartIndex);
                 if (mSlotMachineAnimationListener != null) {
                     mSlotMachineAnimationListener.onAnimationUpdate(machineElementInfo, pair.second);
                 }

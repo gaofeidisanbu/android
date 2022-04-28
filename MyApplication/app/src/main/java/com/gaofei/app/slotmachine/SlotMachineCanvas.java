@@ -2,11 +2,13 @@ package com.gaofei.app.slotmachine;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
+import android.text.TextPaint;
 
 import androidx.annotation.NonNull;
 
@@ -27,6 +29,8 @@ public class SlotMachineCanvas {
     private Bitmap mCache;
     //透明度
     private Paint mAlphaPaint;
+    //文本
+    private Paint mTextPaint;
 
     protected SlotMachineCanvas() {
 
@@ -69,6 +73,9 @@ public class SlotMachineCanvas {
 
         mAlphaPaint = new Paint();
         mAlphaPaint.setAlpha(255);
+        mTextPaint = new TextPaint();
+        mTextPaint.setTextSize(36);
+        mTextPaint.setColor(Color.RED);
         return 0;
     }
 
@@ -123,7 +130,7 @@ public class SlotMachineCanvas {
         return false;
     }
 
-    public int draw(Bitmap content, float x, float y, float scale, float alpha) {
+    public int draw(Bitmap content, float x, float y, float scale, float alpha, int index) {
         if( null == content ) {
             return -1;
         }
@@ -151,7 +158,6 @@ public class SlotMachineCanvas {
         //计算绘制位置
         float drawX = x - anchorX;
         float drawY = y - anchorY;
-
         //原始大小
         if( 1.0f == scale ) {
             //从中心位置开始画
@@ -172,6 +178,7 @@ public class SlotMachineCanvas {
                 mCanvas.drawBitmap(content, drawX, drawY, mAlphaPaint);
             }
         }
+        mCanvas.drawText(index+"", drawX, drawY, mTextPaint);
         return 0;
     }
 

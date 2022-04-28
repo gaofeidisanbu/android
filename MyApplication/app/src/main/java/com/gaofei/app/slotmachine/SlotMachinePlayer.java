@@ -57,6 +57,7 @@ public class SlotMachinePlayer {
             return;
         }
         this.mOnPlayerListener = onPlayerListener;
+        //mStartIndex2 + 4有问题
         SlotMachineAnimation slotMachineAnimation0 = createSlotMachineAnimation(mColumnInfo0, mStartIndex0, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
             @Override
             public void onAnimationStart() {
@@ -121,7 +122,7 @@ public class SlotMachinePlayer {
         return SlotMachineAnimation
                 .newBuilder()
                 .setElementInfoList(slotMachineElementInfoList)
-                .setElementSize(mCanvas.getWidth(), mCanvas.getHeight())
+                .setElementSize(mCanvas.getWidth() / LENGTH, mCanvas.getHeight() / LENGTH)
                 .setStartIndex(startIndex)
                 .setEndIndex(endIndex)
                 .setSlotMachineAnimationListener(slotMachineAnimationListener).builder();
@@ -156,8 +157,10 @@ public class SlotMachinePlayer {
         for (int i = 0; i < drawLen; i++) {
             SlotMachineElementInfo slotMachineElementInfo = slotMachineElementInfoList.get(currIndex);
             draw(slotMachineElementInfo, columnIndex, i, startOffset);
-            if (currIndex + 1 >= len) {
+            if (currIndex + 1 == len) {
                 currIndex = 0;
+            } else {
+                currIndex++;
             }
         }
     }
@@ -169,7 +172,7 @@ public class SlotMachinePlayer {
         float y = height - (height * (rowIndex + 1) / 3f - startOffset);
         float centerX = (x + x + width / 3f) / 2f;
         float centerY = (y + y + height / 3f) / 2f;
-        mCanvas.draw(getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f);
+        mCanvas.draw(getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f,elementInfo.getIndex());
     }
 
     private Bitmap getBitmap(String url) {
