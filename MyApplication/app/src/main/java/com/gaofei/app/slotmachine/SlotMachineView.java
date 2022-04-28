@@ -8,6 +8,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 /**
  * Created by gaofei3 on 2022/4/24
  * Describe: 老虎机View
@@ -36,17 +38,33 @@ public class SlotMachineView extends View {
 
     private void init(Context context) {
         mSlotMachineControl = new SlotMachineControl(context);
-        mPlayer = new SlotMachinePlayer();
         mCanvas = new SlotMachineCanvas();
+        mPlayer = new SlotMachinePlayer(context, mCanvas);
+        setWillNotDraw(false);
+    }
+
+    public void setData(@NonNull List<SlotMachineElementInfo> columnInfo0, @NonNull List<SlotMachineElementInfo> columnInfo1, @NonNull List<SlotMachineElementInfo> columnInfo2) {
+        mPlayer.init( columnInfo0, columnInfo1, columnInfo2);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        int result;
-        if( !mCanvas.invalid() ) {
-            result = mCanvas.resize(getWidth(), getHeight());
+        if (mCanvas.invalid()) {
+            int result = mCanvas.initialize(getWidth(), getHeight());
             if( 0 != result ) {
+                throw new RuntimeException("fuck!");
+            }
+        }
+        int result;
+        if (!mCanvas.invalid()) {
+            result = mCanvas.resize(getWidth(), getHeight());
+            if (0 != result) {
                 mCanvas.release();
             }
         }
@@ -65,11 +83,7 @@ public class SlotMachineView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        synchronized (mCanvas) {
-            if (!mCanvas.invalid()) {
-                mCanvas.bitblt(canvas, true);
-            }
-        }
+        mPlayer.onDraw(canvas);
     }
 
 

@@ -37,6 +37,7 @@ import com.gaofei.app.act.ReferenceAct;
 import com.gaofei.app.act.ReflectAct;
 import com.gaofei.app.act.ScreenshotAct;
 import com.gaofei.app.act.SetUpAct;
+import com.gaofei.app.act.SlotMachineAct;
 import com.gaofei.app.act.TestAct;
 import com.gaofei.app.act.TouchEventAct;
 import com.gaofei.app.act.ViewPagerAct;
@@ -69,11 +70,11 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
             TouchEventAct.class, ViewPagerAct.class, FragmentAct.class, EditTextAct.class, DataBindingAct.class,
             BarrageAnimationAct.class, CanvasActivity.class, ClockSetUpActivity.class, AnrAct.class, WebViewTransferPageAct.class,
             AIDLActivity.class, ReferenceAct.class, GLSurfaceAct.class, TaskAffinityAct.class, TransparentAct.class, RXJavaAct.class, TestAct.class,
-            OKHttpClientAct.class, NestedAct.class, RecyclerCacheAct.class};
+            OKHttpClientAct.class, NestedAct.class, RecyclerCacheAct.class, SlotMachineAct.class};
     private String[] buttonArr = {"键盘", "Recycler和刷新", "异常", "webView",
             "注解", "截屏", "layout", "广播", "进程信息", "权限", "反射", "touchEvent",
             "ViewPager", "fragment", "editText", "dataBinding", "弹幕动画", "canvas",
-            "clock", "anr", "webView", "AIDL", "", "glSurface", "TaskAffinity", "透明activity", "rxjava", "普通测试", "okhttp", "nested", "recyclerCache"};
+            "clock", "anr", "webView", "AIDL", "", "glSurface", "TaskAffinity", "透明activity", "rxjava", "普通测试", "okhttp", "nested", "recyclerCache", "老虎机"};
     private Handler mHandler = new Handler();
 
     @Override
