@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -51,14 +52,15 @@ public class SlotMachinePlayer {
         return true;
     }
 
-
+    private static final int ANIMATION_DELAY = 600;
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener, @NonNull OnPlayerListener onPlayerListener) {
         if (mAnimatorSet != null && mAnimatorSet.isRunning()) {
             return;
         }
         this.mOnPlayerListener = onPlayerListener;
+        Log.d(SlotMachineAnimation.TAG, "startSpin");
         //mStartIndex2 + 4有问题
-        SlotMachineAnimation slotMachineAnimation0 = createSlotMachineAnimation(mColumnInfo0, mStartIndex0, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+        SlotMachineAnimation slotMachineAnimation0 = createSlotMachineAnimation(0, mColumnInfo0, mStartIndex0, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
             @Override
             public void onAnimationStart() {
 
@@ -76,7 +78,7 @@ public class SlotMachinePlayer {
 
             }
         });
-        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(mColumnInfo2, mStartIndex1, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(1,mColumnInfo2, mStartIndex1, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
             @Override
             public void onAnimationStart() {
 
@@ -94,7 +96,8 @@ public class SlotMachinePlayer {
 
             }
         });
-        SlotMachineAnimation slotMachineAnimation2 = createSlotMachineAnimation(mColumnInfo2, mStartIndex2, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+        slotMachineAnimation1.setStartDelay(ANIMATION_DELAY);
+        SlotMachineAnimation slotMachineAnimation2 = createSlotMachineAnimation(2, mColumnInfo2, mStartIndex2, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
             @Override
             public void onAnimationStart() {
 
@@ -112,16 +115,18 @@ public class SlotMachinePlayer {
 
             }
         });
+        slotMachineAnimation2.setStartDelay(ANIMATION_DELAY * 2);
         mAnimatorSet = new AnimatorSet();
         mAnimatorSet.playTogether(slotMachineAnimation0, slotMachineAnimation1, slotMachineAnimation2);
+        mAnimatorSet.playTogether(slotMachineAnimation0);
         mAnimatorSet.start();
     }
 
 
-    private SlotMachineAnimation createSlotMachineAnimation(List<SlotMachineElementInfo> slotMachineElementInfoList, int startIndex, int endIndex, SlotMachineAnimation.OnSlotMachineAnimationListener slotMachineAnimationListener) {
+    private SlotMachineAnimation createSlotMachineAnimation(int columnIndex, List<SlotMachineElementInfo> slotMachineElementInfoList, int startIndex, int endIndex, SlotMachineAnimation.OnSlotMachineAnimationListener slotMachineAnimationListener) {
         return SlotMachineAnimation
                 .newBuilder()
-                .setElementInfoList(slotMachineElementInfoList)
+                .setElementInfoList(slotMachineElementInfoList, columnIndex)
                 .setElementSize(mCanvas.getWidth() / LENGTH, mCanvas.getHeight() / LENGTH)
                 .setStartIndex(startIndex)
                 .setEndIndex(endIndex)
@@ -143,8 +148,8 @@ public class SlotMachinePlayer {
     private void draw() {
         mCanvas.clear(0);
         draw(mColumnInfo0, 0, mStartIndex0, mStartOffset0);
-        draw(mColumnInfo0, 1, mStartIndex1, mStartOffset1);
-        draw(mColumnInfo0, 2, mStartIndex2, mStartOffset2);
+        draw(mColumnInfo1, 1, mStartIndex1, mStartOffset1);
+        draw(mColumnInfo2, 2, mStartIndex2, mStartOffset2);
     }
 
     private void draw(@NonNull List<SlotMachineElementInfo> slotMachineElementInfoList, int columnIndex, int startIndex, float startOffset) {
@@ -180,7 +185,9 @@ public class SlotMachinePlayer {
         if (bitmap != null) {
             return bitmap;
         }
-        return BitmapFactory.decodeResource(mContext.getResources(), R.drawable.app_icon);
+        bitmap =  BitmapFactory.decodeResource(mContext.getResources(), R.drawable.app_icon);
+        mCacheBitmap.put(url, bitmap);
+        return bitmap;
     }
 
 

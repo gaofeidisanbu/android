@@ -43,7 +43,7 @@ public class SlotMachineAct extends BaseAct {
         for (int i = 0; i < 50; i++) {
             SlotMachineElementInfo slotMachineElementInfo = new SlotMachineElementInfo();
             slotMachineElementInfo.setIndex(i);
-            slotMachineElementInfo.setKey(i+"");
+            slotMachineElementInfo.setKey(R.drawable.app_icon+"");
             list.add(slotMachineElementInfo);
         }
         return list;
