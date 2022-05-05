@@ -20,7 +20,7 @@ public class SlotMachineSurfaceView extends SurfaceView implements SurfaceHolder
     private boolean isDrawing = false;
     private SlotMachineControl mSlotMachineControl;
     private SlotMachinePlayer mPlayer;
-    private SlotMachineCanvas mCanvas;
+    private SlotMachineCanvasHelper mCanvas;
 
     public SlotMachineSurfaceView(Context context) {
         this(context, null, 0, 0);
@@ -41,7 +41,7 @@ public class SlotMachineSurfaceView extends SurfaceView implements SurfaceHolder
 
     private void init(Context context) {
         mSlotMachineControl = new SlotMachineControl(context);
-        mCanvas = new SlotMachineCanvas();
+        mCanvas = new SlotMachineCanvasHelper();
         mPlayer = new SlotMachinePlayer(context, mCanvas);
         setWillNotDraw(false);
         mHolder = getHolder();
@@ -78,7 +78,7 @@ public class SlotMachineSurfaceView extends SurfaceView implements SurfaceHolder
     }
 
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener) {
-        mPlayer.startSpin(playInfo, listener, new OnPlayerListener() {
+        mPlayer.startSpin(playInfo, listener, new OnSlotMachinePlayerListener() {
             @Override
             public void onFrameUpdate() {
                 invalidate();

@@ -21,26 +21,43 @@ import java.util.Map;
  */
 public class SlotMachinePlayer {
     private final String TAG = "SlotMachinePlayer";
+    //老虎机每列元素个数
     private final static int LENGTH = 3;
+    //相临列动画执行时间间隔
+    private static final int ANIMATION_DELAY = 600;
+    //老虎机图片缓存
     private final Map<String, Bitmap> mCacheBitmap = new HashMap<>();
     private Context mContext;
-    private AnimatorSet mAnimatorSet;
+    //第一列元素信息
     private List<SlotMachineElementInfo> mColumnInfo0;
+    //第一列开始索引
     private int mStartIndex0;
+    //第一列开始便宜
     private float mStartOffset0;
+    //第二列元素信息
     private List<SlotMachineElementInfo> mColumnInfo1;
+    //第二列开始索引
     private int mStartIndex1;
+    //第二列开始便宜
     private float mStartOffset1;
+    //第三列元素信息
     private List<SlotMachineElementInfo> mColumnInfo2;
+    //第三列开始索引
     private int mStartIndex2;
+    //第三列开始便宜
     private float mStartOffset2;
-    private SlotMachineCanvas mCanvas;
+    //老虎机Canvas帮助类
+    private SlotMachineCanvasHelper mCanvasHelper;
+    //播放器是否初始化成功
     private boolean isInitSuccess;
-    private OnPlayerListener mOnPlayerListener;
+    //动画帧回调
+    private OnSlotMachinePlayerListener mOnPlayerListener;
+    //动画
+    private AnimatorSet mAnimatorSet;
 
-    public SlotMachinePlayer(Context context, SlotMachineCanvas canvas) {
+    public SlotMachinePlayer(Context context, SlotMachineCanvasHelper canvas) {
         this.mContext = context;
-        this.mCanvas = canvas;
+        this.mCanvasHelper = canvas;
     }
 
     public boolean init(@NonNull List<SlotMachineElementInfo> columnInfo0, @NonNull List<SlotMachineElementInfo> columnInfo1, @NonNull List<SlotMachineElementInfo> columnInfo2) {
@@ -53,9 +70,8 @@ public class SlotMachinePlayer {
         return true;
     }
 
-    private static final int ANIMATION_DELAY = 600;
 
-    public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener, @NonNull OnPlayerListener onPlayerListener) {
+    public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener, @NonNull OnSlotMachinePlayerListener onPlayerListener) {
         if (mAnimatorSet != null && mAnimatorSet.isRunning()) {
             return;
         }
@@ -128,7 +144,7 @@ public class SlotMachinePlayer {
         return SlotMachineAnimation
                 .newBuilder()
                 .setElementInfoList(slotMachineElementInfoList, columnIndex)
-                .setElementSize(mCanvas.getWidth() / LENGTH, mCanvas.getHeight() / LENGTH)
+                .setElementSize(mCanvasHelper.getWidth() / LENGTH, mCanvasHelper.getHeight() / LENGTH)
                 .setStartIndex(startIndex)
                 .setEndIndex(endIndex)
                 .setSlotMachineAnimationListener(slotMachineAnimationListener).builder();
@@ -172,12 +188,11 @@ public class SlotMachinePlayer {
     private void draw(Canvas canvas, @NonNull SlotMachineElementInfo elementInfo, int columnIndex, int rowIndex, float startOffset) {
         int width = canvas.getWidth();
         int height = canvas.getHeight();
-        Log.d(TAG, "center width = "+width+ " height = "+height);
         float x = (width / 3f) * columnIndex;
         float y = height - (height * (rowIndex + 1) / 3f - startOffset);
         float centerX = (x + x + width / 3f) / 2f;
         float centerY = (y + y + height / 3f) / 2f;
-        mCanvas.draw(canvas, getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f, elementInfo.getIndex());
+        mCanvasHelper.draw(canvas, getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f, elementInfo.getIndex());
     }
 
 

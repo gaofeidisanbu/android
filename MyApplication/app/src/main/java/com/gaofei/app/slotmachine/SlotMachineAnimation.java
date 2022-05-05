@@ -23,27 +23,44 @@ public class SlotMachineAnimation {
     public final static String TAG = "SlotMachineAnimation";
     private final List<SlotMachineElementInfo> mMachineElementInfoList = new ArrayList<>();
     private OnSlotMachineAnimationListener mSlotMachineAnimationListener;
+    //开始索引
     private int mStartIndex;
+    //结束索引
     private int mEndIndex;
+    /**
+     * 动画结束索引，在{#mMachineElementInfoList}索引
+     */
     private int mEndIndexInList;
+    //元素宽度
     private int mElementWidth;
+    //元素高度
     private int mElementHeight;
-    private int mLength;
+    //元素个数
+    private int mElementLength;
+    //轮次
     private int mTotalRound;
+    //当前轮次
     private int mCurrRound = 0;
+    //动画总共滚动距离
     private float mTotalScrollRange;
+    //当前索引
     private int mCurrStartIndex = mStartIndex;
+    //开始位置偏移（底部第一个元素）
     private float mStartOffset = 0;
     //回弹距离
     private int mSpringBackDistance;
+    //动画延迟执行时间
     private int mStartDelay;
 
     private SlotMachineAnimation(@NonNull Builder builder) {
-        this.mSpringBackDistance = DimenUtils.dp2px(20);
         this.mStartIndex = builder.mStartIndex;
         this.mEndIndex = builder.mEndIndex;
+        this.mSlotMachineAnimationListener = builder.slotMachineAnimationListener;
+        this.mElementWidth = builder.elementWidth;
+        this.mElementHeight = builder.elementHeight;
         List<SlotMachineElementInfo> elementInfoList = builder.elementInfoList;
         int len = elementInfoList.size();
+        //方便计算，把mStartIndex移动到索引0位置
         int startIndexInList = -1;
         for (int i = 0; i < len; i++) {
             SlotMachineElementInfo temp = elementInfoList.get(i);
@@ -55,10 +72,12 @@ public class SlotMachineAnimation {
         if (startIndexInList == -1) {
             throw new IllegalArgumentException("mStartIndex = " + mStartIndex);
         }
+        mMachineElementInfoList.clear();
         this.mMachineElementInfoList.addAll(elementInfoList.subList(mStartIndex, len));
         if (mStartIndex > 0) {
             this.mMachineElementInfoList.addAll(elementInfoList.subList(0, mStartIndex));
         }
+        //寻找在list里结束索引位置
         int endIndexInList = -1;
         for (int i = 0; i < len; i++) {
             SlotMachineElementInfo temp = mMachineElementInfoList.get(i);
@@ -71,18 +90,16 @@ public class SlotMachineAnimation {
             throw new IllegalArgumentException("mEndIndex = " + mEndIndex);
         }
         this.mEndIndexInList = endIndexInList;
-        this.mSlotMachineAnimationListener = builder.slotMachineAnimationListener;
-        this.mElementWidth = builder.elementWidth;
-        this.mElementHeight = builder.elementHeight;
-        this.mLength = mMachineElementInfoList.size();
-
+        this.mElementLength = mMachineElementInfoList.size();
+        this.mSpringBackDistance = DimenUtils.dp2px(20);
     }
 
     public Animator getAnimator() {
         Log.d(TAG, " start ");
         this.mCurrRound = 0;
         this.mTotalRound = calculateTotalRound();
-        this.mTotalScrollRange = (mLength * mTotalRound + mEndIndexInList) * mElementHeight;
+        //计算总共滚动的距离
+        this.mTotalScrollRange = (mElementLength * mTotalRound + mEndIndexInList) * mElementHeight;
         ValueAnimator firstAnimator = ValueAnimator.ofFloat(0, 1f);
         firstAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
         firstAnimator.setDuration(1000);
@@ -94,7 +111,6 @@ public class SlotMachineAnimation {
                 SlotMachineElementInfo machineElementInfo = mMachineElementInfoList.get(pair.first);
                 SlotMachineAnimation.this.mCurrStartIndex = machineElementInfo.getIndex();
                 SlotMachineAnimation.this.mStartOffset = pair.second;
-                Log.d(TAG, " mCurrStartIndex = " + mCurrStartIndex + " count = " + count++);
                 if (mSlotMachineAnimationListener != null) {
                     mSlotMachineAnimationListener.onAnimationUpdate(machineElementInfo, pair.second);
                 }
@@ -123,18 +139,17 @@ public class SlotMachineAnimation {
 
 
     /**
-     * 计算总共轮次
+     * 计算总共动画执行轮次
      *
-     * @return
+     * @return 轮次数
      */
     private int calculateTotalRound() {
         return 2;
     }
 
-    private int count = 0;
 
     private Pair<Integer, Float> calculateScrollPosition(float currScrollRange) {
-        int scrollNum = (int) ((currScrollRange / mElementHeight)) % mLength;
+        int scrollNum = (int) ((currScrollRange / mElementHeight)) % mElementLength;
         float offset = (int) (currScrollRange % mElementHeight);
         int currPosition = scrollNum;
         return Pair.create(currPosition, offset);

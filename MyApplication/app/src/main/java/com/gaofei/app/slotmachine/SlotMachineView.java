@@ -3,7 +3,6 @@ package com.gaofei.app.slotmachine;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,7 @@ public class SlotMachineView extends View {
     private static final String TAG = "SlotMachineView";
     private SlotMachineControl mSlotMachineControl;
     private SlotMachinePlayer mPlayer;
-    private SlotMachineCanvas mCanvas;
+    private SlotMachineCanvasHelper mCanvas;
 
     public SlotMachineView(Context context) {
         this(context, null, 0, 0);
@@ -40,7 +39,7 @@ public class SlotMachineView extends View {
 
     private void init(Context context) {
         mSlotMachineControl = new SlotMachineControl(context);
-        mCanvas = new SlotMachineCanvas();
+        mCanvas = new SlotMachineCanvasHelper();
         mPlayer = new SlotMachinePlayer(context, mCanvas);
         setWillNotDraw(false);
     }
@@ -54,9 +53,33 @@ public class SlotMachineView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (mCanvas.invalid()) {
+            int result = mCanvas.initialize(getWidth(), getHeight());
+            if( 0 != result ) {
+                throw new RuntimeException("fuck!");
+            }
+        }
+        int result;
+        if (!mCanvas.invalid()) {
+            result = mCanvas.resize(getWidth(), getHeight());
+            if (0 != result) {
+                mCanvas.release();
+            }
+        }
+        return;
+    }
 
+
+    /**
+     * 开始转动老虎机
+     * @param playInfo
+     * @param listener
+     */
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener) {
-        mPlayer.startSpin(playInfo, listener, new OnPlayerListener() {
+        mPlayer.startSpin(playInfo, listener, new OnSlotMachinePlayerListener() {
             @Override
             public void onFrameUpdate() {
                 invalidate();
@@ -75,9 +98,7 @@ public class SlotMachineView extends View {
                 throw new RuntimeException("fuck!");
             }
         }
-        Log.d(TAG, "before width = "+canvas.getWidth()+ " height = "+canvas.getHeight()+" hashCode = "+canvas.hashCode());
         mPlayer.onDraw(canvas);
-        Log.d(TAG, "after width = "+canvas.getWidth()+ " height = "+canvas.getHeight());
     }
 
 

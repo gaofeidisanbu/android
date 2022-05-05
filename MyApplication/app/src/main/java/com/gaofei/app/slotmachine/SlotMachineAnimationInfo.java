@@ -6,6 +6,6 @@ package com.gaofei.app.slotmachine;
  */
 public class SlotMachineAnimationInfo {
     private int id;
-    private int witch;
+    private int width;
     private int height;
 }
