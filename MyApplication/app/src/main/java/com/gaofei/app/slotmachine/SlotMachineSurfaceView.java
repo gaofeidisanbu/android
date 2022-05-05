@@ -3,8 +3,8 @@ package com.gaofei.app.slotmachine;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,25 +15,26 @@ import java.util.List;
  * Created by gaofei3 on 2022/4/24
  * Describe: 老虎机View
  */
-public class SlotMachineView extends View {
-    private static final String TAG = "SlotMachineView";
+public class SlotMachineSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
+    private SurfaceHolder mHolder;
+    private boolean isDrawing = false;
     private SlotMachineControl mSlotMachineControl;
     private SlotMachinePlayer mPlayer;
     private SlotMachineCanvas mCanvas;
 
-    public SlotMachineView(Context context) {
+    public SlotMachineSurfaceView(Context context) {
         this(context, null, 0, 0);
     }
 
-    public SlotMachineView(Context context, @Nullable AttributeSet attrs) {
+    public SlotMachineSurfaceView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0, 0);
     }
 
-    public SlotMachineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SlotMachineSurfaceView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         this(context, attrs, defStyleAttr, 0);
     }
 
-    public SlotMachineView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SlotMachineSurfaceView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
@@ -43,6 +44,9 @@ public class SlotMachineView extends View {
         mCanvas = new SlotMachineCanvas();
         mPlayer = new SlotMachinePlayer(context, mCanvas);
         setWillNotDraw(false);
+        mHolder = getHolder();
+        mHolder.addCallback(this);
+
     }
 
     public void setData(@NonNull List<SlotMachineElementInfo> columnInfo0, @NonNull List<SlotMachineElementInfo> columnInfo1, @NonNull List<SlotMachineElementInfo> columnInfo2) {
@@ -54,6 +58,24 @@ public class SlotMachineView extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (mCanvas.invalid()) {
+//            int result = mCanvas.initialize(getWidth(), getHeight());
+//            if( 0 != result ) {
+                throw new RuntimeException("fuck!");
+//            }
+        }
+        int result;
+//        if (!mCanvas.invalid()) {
+//            result = mCanvas.resize(getWidth(), getHeight());
+//            if (0 != result) {
+//                mCanvas.release();
+//            }
+//        }
+//        return;
+    }
 
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener) {
         mPlayer.startSpin(playInfo, listener, new OnPlayerListener() {
@@ -64,21 +86,30 @@ public class SlotMachineView extends View {
         });
     }
 
-
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCanvas.invalid()) {
-            int result = mCanvas.initialize(getWidth(), getHeight());
-            if( 0 != result ) {
-                throw new RuntimeException("fuck!");
-            }
-        }
-        Log.d(TAG, "before width = "+canvas.getWidth()+ " height = "+canvas.getHeight()+" hashCode = "+canvas.hashCode());
         mPlayer.onDraw(canvas);
-        Log.d(TAG, "after width = "+canvas.getWidth()+ " height = "+canvas.getHeight());
     }
 
 
+    @Override
+    public void surfaceRedrawNeeded(@NonNull SurfaceHolder surfaceHolder) {
+        isDrawing = true;
+    }
+
+    @Override
+    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+
+    }
+
+    @Override
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
+        isDrawing = false;
+    }
 }

@@ -20,6 +20,7 @@ import java.util.Map;
  * Describe:老虎机播放器
  */
 public class SlotMachinePlayer {
+    private final String TAG = "SlotMachinePlayer";
     private final static int LENGTH = 3;
     private final Map<String, Bitmap> mCacheBitmap = new HashMap<>();
     private Context mContext;
@@ -53,6 +54,7 @@ public class SlotMachinePlayer {
     }
 
     private static final int ANIMATION_DELAY = 600;
+
     public void startSpin(@NonNull SlotMachinePlayInfo playInfo, @NonNull OnSlotMachinePlayerListener listener, @NonNull OnPlayerListener onPlayerListener) {
         if (mAnimatorSet != null && mAnimatorSet.isRunning()) {
             return;
@@ -78,7 +80,7 @@ public class SlotMachinePlayer {
 
             }
         });
-        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(1,mColumnInfo2, mStartIndex1, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
+        SlotMachineAnimation slotMachineAnimation1 = createSlotMachineAnimation(1, mColumnInfo2, mStartIndex1, mStartIndex2 + 4, new SlotMachineAnimation.OnSlotMachineAnimationListener() {
             @Override
             public void onAnimationStart() {
 
@@ -117,8 +119,7 @@ public class SlotMachinePlayer {
         });
         slotMachineAnimation2.setStartDelay(ANIMATION_DELAY * 2);
         mAnimatorSet = new AnimatorSet();
-        mAnimatorSet.playTogether(slotMachineAnimation0, slotMachineAnimation1, slotMachineAnimation2);
-        mAnimatorSet.playTogether(slotMachineAnimation0);
+        mAnimatorSet.playTogether(slotMachineAnimation0.getAnimator(), slotMachineAnimation1.getAnimator(), slotMachineAnimation2.getAnimator());
         mAnimatorSet.start();
     }
 
@@ -140,19 +141,17 @@ public class SlotMachinePlayer {
     }
 
     public void onDraw(@NonNull Canvas canvas) {
-        draw();
-        mCanvas.bitblt(canvas, false);
+        draw(canvas);
     }
 
 
-    private void draw() {
-        mCanvas.clear(0);
-        draw(mColumnInfo0, 0, mStartIndex0, mStartOffset0);
-        draw(mColumnInfo1, 1, mStartIndex1, mStartOffset1);
-        draw(mColumnInfo2, 2, mStartIndex2, mStartOffset2);
+    private void draw(Canvas canvas) {
+        draw(canvas, mColumnInfo0, 0, mStartIndex0, mStartOffset0);
+        draw(canvas, mColumnInfo1, 1, mStartIndex1, mStartOffset1);
+        draw(canvas, mColumnInfo2, 2, mStartIndex2, mStartOffset2);
     }
 
-    private void draw(@NonNull List<SlotMachineElementInfo> slotMachineElementInfoList, int columnIndex, int startIndex, float startOffset) {
+    private void draw(Canvas canvas, @NonNull List<SlotMachineElementInfo> slotMachineElementInfoList, int columnIndex, int startIndex, float startOffset) {
         int drawLen = 3;
         if (startOffset != 0) {
             drawLen = 4;
@@ -161,7 +160,7 @@ public class SlotMachinePlayer {
         int currIndex = startIndex;
         for (int i = 0; i < drawLen; i++) {
             SlotMachineElementInfo slotMachineElementInfo = slotMachineElementInfoList.get(currIndex);
-            draw(slotMachineElementInfo, columnIndex, i, startOffset);
+            draw(canvas, slotMachineElementInfo, columnIndex, i, startOffset);
             if (currIndex + 1 == len) {
                 currIndex = 0;
             } else {
@@ -170,22 +169,24 @@ public class SlotMachinePlayer {
         }
     }
 
-    private void draw(@NonNull SlotMachineElementInfo elementInfo, int columnIndex, int rowIndex, float startOffset) {
-        int width = mCanvas.getWidth();
-        int height = mCanvas.getHeight();
+    private void draw(Canvas canvas, @NonNull SlotMachineElementInfo elementInfo, int columnIndex, int rowIndex, float startOffset) {
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        Log.d(TAG, "center width = "+width+ " height = "+height);
         float x = (width / 3f) * columnIndex;
         float y = height - (height * (rowIndex + 1) / 3f - startOffset);
         float centerX = (x + x + width / 3f) / 2f;
         float centerY = (y + y + height / 3f) / 2f;
-        mCanvas.draw(getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f,elementInfo.getIndex());
+        mCanvas.draw(canvas, getBitmap(elementInfo.getKey()), centerX, centerY, 1, 1f, elementInfo.getIndex());
     }
+
 
     private Bitmap getBitmap(String url) {
         Bitmap bitmap = mCacheBitmap.get(url);
         if (bitmap != null) {
             return bitmap;
         }
-        bitmap =  BitmapFactory.decodeResource(mContext.getResources(), R.drawable.app_icon);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.app_icon);
         mCacheBitmap.put(url, bitmap);
         return bitmap;
     }

@@ -1,5 +1,7 @@
 package com.gaofei.app.slotmachine;
 
+import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.util.Log;
 import android.util.Pair;
@@ -8,6 +10,8 @@ import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.NonNull;
 
+import com.gaofei.library.utils.DimenUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +19,7 @@ import java.util.List;
  * Created by gaofei3 on 2022/4/26
  * Describe: 老虎机动画
  */
-public class SlotMachineAnimation extends ValueAnimator {
+public class SlotMachineAnimation {
     public final static String TAG = "SlotMachineAnimation";
     private final List<SlotMachineElementInfo> mMachineElementInfoList = new ArrayList<>();
     private OnSlotMachineAnimationListener mSlotMachineAnimationListener;
@@ -30,8 +34,12 @@ public class SlotMachineAnimation extends ValueAnimator {
     private float mTotalScrollRange;
     private int mCurrStartIndex = mStartIndex;
     private float mStartOffset = 0;
+    //回弹距离
+    private int mSpringBackDistance;
+    private int mStartDelay;
 
     private SlotMachineAnimation(@NonNull Builder builder) {
+        this.mSpringBackDistance = DimenUtils.dp2px(20);
         this.mStartIndex = builder.mStartIndex;
         this.mEndIndex = builder.mEndIndex;
         List<SlotMachineElementInfo> elementInfoList = builder.elementInfoList;
@@ -70,6 +78,49 @@ public class SlotMachineAnimation extends ValueAnimator {
 
     }
 
+    public Animator getAnimator() {
+        Log.d(TAG, " start ");
+        this.mCurrRound = 0;
+        this.mTotalRound = calculateTotalRound();
+        this.mTotalScrollRange = (mLength * mTotalRound + mEndIndexInList) * mElementHeight;
+        ValueAnimator firstAnimator = ValueAnimator.ofFloat(0, 1f);
+        firstAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+        firstAnimator.setDuration(1000);
+        firstAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                float currScrollRange = mTotalScrollRange * (Float) valueAnimator.getAnimatedValue();
+                Pair<Integer, Float> pair = calculateScrollPosition(currScrollRange);
+                SlotMachineElementInfo machineElementInfo = mMachineElementInfoList.get(pair.first);
+                SlotMachineAnimation.this.mCurrStartIndex = machineElementInfo.getIndex();
+                SlotMachineAnimation.this.mStartOffset = pair.second;
+                Log.d(TAG, " mCurrStartIndex = " + mCurrStartIndex + " count = " + count++);
+                if (mSlotMachineAnimationListener != null) {
+                    mSlotMachineAnimationListener.onAnimationUpdate(machineElementInfo, pair.second);
+                }
+            }
+        });
+        ValueAnimator secondAnimator = ValueAnimator.ofFloat(mTotalScrollRange, mTotalScrollRange + mSpringBackDistance, mTotalScrollRange);
+        secondAnimator.setInterpolator(new LinearInterpolator());
+        secondAnimator.setDuration(200);
+        secondAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                Pair<Integer, Float> pair = calculateScrollPosition((Float) valueAnimator.getAnimatedValue());
+                SlotMachineElementInfo machineElementInfo = mMachineElementInfoList.get(pair.first);
+                SlotMachineAnimation.this.mCurrStartIndex = machineElementInfo.getIndex();
+                SlotMachineAnimation.this.mStartOffset = pair.second;
+                if (mSlotMachineAnimationListener != null) {
+                    mSlotMachineAnimationListener.onAnimationUpdate(machineElementInfo, pair.second);
+                }
+            }
+        });
+        AnimatorSet animationSet = new AnimatorSet();
+        animationSet.setStartDelay(mStartDelay);
+        animationSet.playSequentially(firstAnimator, secondAnimator);
+        return animationSet;
+    }
+
 
     /**
      * 计算总共轮次
@@ -80,46 +131,11 @@ public class SlotMachineAnimation extends ValueAnimator {
         return 2;
     }
 
-    @Override
-    public void start() {
-        Log.d(TAG, " start ");
-        this.mCurrRound = 0;
-        this.mTotalRound = calculateTotalRound();
-        this.mTotalScrollRange = (mLength * mTotalRound + mEndIndexInList) * mElementHeight;
-        setFloatValues(0, 1f);
-        setInterpolator(new AccelerateDecelerateInterpolator());
-        setDuration(6 * 1000);
-        addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                Pair<Integer, Float> pair = calculateScrollPosition((Float) valueAnimator.getAnimatedValue());
-                SlotMachineElementInfo machineElementInfo = mMachineElementInfoList.get(pair.first);
-                SlotMachineAnimation.this.mCurrStartIndex = machineElementInfo.getIndex();
-                SlotMachineAnimation.this.mStartOffset = pair.second;
-                Log.d(TAG, " mCurrStartIndex = "+mCurrStartIndex);
-                if (mSlotMachineAnimationListener != null) {
-                    mSlotMachineAnimationListener.onAnimationUpdate(machineElementInfo, pair.second);
-                }
-            }
-        });
-        super.start();
-    }
-    float preValue = 0;
-    private float a = 1f;
-    private float b = 1 + (1 - a);
-    private Pair<Integer, Float> calculateScrollPosition(float value) {
-        if (value <= a) {
-//            value = value * (b/ a);
-        }
-        if (value > a) {
-//            value = b - (value - a);
-        }
-        float currScrollRange = mTotalScrollRange * value;
+    private int count = 0;
+
+    private Pair<Integer, Float> calculateScrollPosition(float currScrollRange) {
         int scrollNum = (int) ((currScrollRange / mElementHeight)) % mLength;
         float offset = (int) (currScrollRange % mElementHeight);
-//        Log.d(TAG, " scrollNum = "+scrollNum+ " offset = "+offset+" value = "+value);
-        Log.d(TAG, " diff = "+(value - preValue) + " value = "+value);
-        preValue = value;
         int currPosition = scrollNum;
         return Pair.create(currPosition, offset);
     }
@@ -135,6 +151,10 @@ public class SlotMachineAnimation extends ValueAnimator {
 
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    public void setStartDelay(int startDelay) {
+        this.mStartDelay = startDelay;
     }
 
     public static class Builder {
