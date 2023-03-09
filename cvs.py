@@ -5,13 +5,13 @@ retentionFile = "./cvs/retention.csv"
 revenueFile = "./cvs/revenue.csv"
 resultFile = "./cvs/new.csv"
 
-day1User = 'sessions - Unique users - day 1'
-retentionDay1 = "retention day2"
+retentionDay1User = 'sessions - Unique users - day 1 - partial'
+roasRetentionDay1 = "retention day1 "
+roasRetentionDay1Percent = "retention day1 percent"
 
 
 def sort(df, f):
     df.sort_values(by=['Media Source', 'Campaign', 'Cohort Day'], inplace=True, ascending=True)
-    df.to_csv(f, index=False)
 
 
 def format_float(df):
@@ -20,16 +20,19 @@ def format_float(df):
 
 
 def calculate_row(row):
-    return str(row[day1User]) + "(" + str((format_float(row[day1User] / row['Users']))) + "%" + ")"
+    return str((format_float(row[retentionDay1User] / row['Users']))) + "%"
 
 
-def percent(df, f):
+def retention_percent(df, f):
     # 计算 sessions - Unique users - day 1 列和 Users 列的百分比
 
-    if retentionDay1 in df.columns:
-        df.drop(retentionDay1, axis=1, inplace=True)
+    drop_column(df, roasRetentionDay1Percent)
+    df[roasRetentionDay1Percent] = df.apply(lambda row: calculate_row(row), axis=1)
 
-    df[retentionDay1] = df.apply(lambda row: calculate_row(row), axis=1)
+
+def drop_column(df, f):
+    if f in df.columns:
+        df.drop(f, axis=1, inplace=True)
 
 
 # 读取 roas.csv 文件
@@ -41,20 +44,23 @@ retention_df = pd.read_csv(retentionFile)
 # 读取 revenue.csv 文件
 revenue_df = pd.read_csv(revenueFile)
 
-percent(retention_df, retentionFile)
+retention_percent(retention_df, retentionFile)
 
 sort(roas_df, roasFile)
 sort(retention_df, retentionFile)
 sort(revenue_df, revenueFile)
 
 # 获取 retention_df 中的 H 列数据
-h_column = retention_df[retentionDay1]
+retentionDay1User_column = retention_df[retentionDay1User]
 
-if retentionDay1 in roas_df.columns:
-    roas_df.drop(retentionDay1, axis=1, inplace=True)
+# 获取 retention_df 中的 H 列数据
+retentionDay1User_percent_column = retention_df[roasRetentionDay1Percent]
 
-# 将 H 列数据插入到 roas_df 中的 G 列后面
-roas_df.insert(loc=7, column=retentionDay1, value=h_column)
+drop_column(roas_df, roasRetentionDay1)
+roas_df.insert(loc=7, column=roasRetentionDay1, value=retentionDay1User_column)
+
+drop_column(roas_df, roasRetentionDay1Percent)
+roas_df.insert(loc=8, column=roasRetentionDay1Percent, value=retentionDay1User_percent_column)
 
 # 保存修改后的 roas.csv 文件
 roas_df.to_csv(resultFile, index=False)
