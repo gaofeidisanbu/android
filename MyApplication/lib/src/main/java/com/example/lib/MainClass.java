@@ -62,8 +62,8 @@ public class MainClass {
 //        ArrayList canvasActivity = new java.util.ArrayList<Object>();
 //        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
 //        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
-        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0—9]+[13579ace]$", "c2b07e8f67ec234b"));
-        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0—9]+[24680bdf]$", "c2b07e8f67ec234b"));
+        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0-9]+[13579ace]$", "c2b07e8f67ec234b"));
+        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0-9]+[24680bdf]$", "c2b07e8f67ec234b"));
     }
 
     private static int realStringLength(String str) {
