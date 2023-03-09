@@ -32,9 +32,9 @@
 
 #@proguard_debug_start
 # ------------------ Keep LineNumbers and properties ---------------- #
--keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
--renamesourcefileattribute TbsSdkJava
--keepattributes SourceFile,LineNumberTable
+#-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
+#-renamesourcefileattribute SourceFile
+#-keepattributes SourceFile,LineNumberTable
 #@proguard_debug_end
 -keepclassmembers class com.gaofei.app.act.TestInstance {
   public  <init>(java.lang.Integer);

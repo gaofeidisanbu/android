@@ -13,6 +13,8 @@ import com.example.lib.thread.Semaphore;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.example.lib.thread.SemaphoreKt.ThirdThreadABC;
 
@@ -30,7 +32,7 @@ public class MainClass {
 //            StackAlgorithm.INSTANCE.run();
 //            ArrayAlgorithm.INSTANCE.run();
 //            RXJava.INSTANCE.run();
-            TempTest.INSTANCE.run();
+//            TempTest.INSTANCE.run();
 //            RecursionAlgorithm.INSTANCE.run();
 //            Algorithm algorithm = new Algorithm();
 //            algorithm.run();
@@ -60,9 +62,8 @@ public class MainClass {
 //        ArrayList canvasActivity = new java.util.ArrayList<Object>();
 //        System.out.print(canvasActivity.getClass().isAssignableFrom(List.class));
 //        System.out.print(List.class.isAssignableFrom(canvasActivity.getClass()));
-        String str = "1\uD83D\uDC69\u200D\uD83D\uDC69\u200D\uD83D\uDC66\u200D\uD83D\uDC66";
-        int len = realStringLength(str);
-        System.out.println("len = "+len+" str len = "+str.length()+" str = "+str);
+        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0—9]+[13579ace]$", "c2b07e8f67ec234b"));
+        System.out.println("aaaaaaa "+Pattern.matches("[a-zA-Z0—9]+[24680bdf]$", "c2b07e8f67ec234b"));
     }
 
     private static int realStringLength(String str) {

@@ -92,13 +92,7 @@ public class SlotMachineView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (mCanvas.invalid()) {
-            int result = mCanvas.initialize(getWidth(), getHeight());
-            if( 0 != result ) {
-                throw new RuntimeException("fuck!");
-            }
-        }
-        mPlayer.onDraw(canvas);
+        mPlayer.doDraw(canvas);
     }
 
 

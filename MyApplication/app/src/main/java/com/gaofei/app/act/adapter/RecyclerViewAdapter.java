@@ -41,6 +41,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(RecyclerViewViewHolder holder, int position) {
         LogUtils.d(TAG, " onBindViewHolder hashCode = "+holder.hashCode()+ " position = "+position);
+        holder.itemView.setTag(position);
         String str = mList.get(position);
         holder.mTextView.setText(str);
     }

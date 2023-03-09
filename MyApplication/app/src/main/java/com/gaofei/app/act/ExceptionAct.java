@@ -9,9 +9,6 @@ import com.gaofei.app.R;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.LogUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Created by gaofei on 2017/6/20.
  */
@@ -38,68 +35,27 @@ public class ExceptionAct extends BaseAct {
 //                    Log.e("ycmaaa", "cdaaaaaaaaa", e);
 //                }
 //
-//                ExceptionTest exception = new ExceptionTest();
-//                exception.fun4(null);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-
-                    }
-                }).start();
+                ExceptionTest exception = new ExceptionTest();
+                exception.fun4(null);
+//                final Thread mainThread = Thread.currentThread();
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                        throw new RuntimeException("Thread");
+//                        try {
+//                            Thread.sleep(1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        Log.i("aaa", mainThread.getState().toString());
+//                    }
+//                }).start();
                 LogUtils.d("aaa "+Thread.currentThread().getId());
                 throw new RuntimeException("test");
 
             }
         });
 
-    }
-
-
-    public static class ExceptionTest {
-
-
-        public void fun(String s) {
-            try {
-                fun2(s);
-            } catch (Exception e) {
-                RuntimeException exception = new RuntimeException("dddddddddddd");
-                exception.fillInStackTrace().initCause(e);
-                throw exception;
-            }
-
-        }
-
-        public void fun3(String s) {
-            try {
-                fun2(s);
-            } catch (Exception e) {
-                RuntimeException exception = new RuntimeException("dddddddddddd");
-                exception.initCause(e);
-                throw exception;
-            }
-        }
-
-        public void fun2(String s) throws JSONException {
-            s.toString();
-        }
-
-        public void fun4(String s) {
-            try {
-                fun5(s);
-            } catch (JSONException e) {
-//                Log.e("ycmaaa", "caaaaaaaaaad", e);
-                throw  new IllegalArgumentException("cc", e);
-            } catch (Exception e) {
-//                Log.e("ycmaaa", "caaaaaaaaaad", e);
-                throw new IllegalArgumentException("cc", e);
-            }
-        }
-
-
-        public void fun5(String s) throws JSONException {
-            new JSONObject(s);
-        }
     }
 
 

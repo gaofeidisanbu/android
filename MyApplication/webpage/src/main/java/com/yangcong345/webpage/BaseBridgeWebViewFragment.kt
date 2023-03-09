@@ -15,6 +15,8 @@ import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat
+import androidx.navigation.fragment.DialogFragmentNavigator
 import com.yangcong345.webpage.BaseBridgeWebViewV2Activity.Companion.KEY_IS_START_ACTIVITY_FOR_RESULT
 import com.yangcong345.webpage.BaseBridgeWebViewV2Activity.Companion.KEY_MODULE_CONTEXT_DATA
 import com.yangcong345.webpage.BaseBridgeWebViewV2Activity.Companion.KEY_MODULE_INFO
@@ -240,7 +242,6 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
 
     @CallSuper
     protected open fun init() {
-
     }
 
 

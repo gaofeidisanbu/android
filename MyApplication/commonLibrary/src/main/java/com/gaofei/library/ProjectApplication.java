@@ -14,7 +14,6 @@ import com.gaofei.library.utils.LogUtils;
 import java.util.LinkedList;
 import java.util.List;
 
-import leakcanary.LeakCanary;
 
 /**
  * Created by gaofei on 2017/5/26.

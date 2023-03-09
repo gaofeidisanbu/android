@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
     <Button
         android:id="@+id/text"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@color/yc_red4"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -156,7 +156,7 @@ public class SlotMachinePlayer {
         }
     }
 
-    public void onDraw(@NonNull Canvas canvas) {
+    public void doDraw(@NonNull Canvas canvas) {
         draw(canvas);
     }
 

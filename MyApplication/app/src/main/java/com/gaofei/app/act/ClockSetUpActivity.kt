@@ -8,6 +8,8 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.NumberPicker
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.navigation.fragment.DialogFragmentNavigator
 import com.gaofei.app.R
 import com.gaofei.library.ProjectApplication
 import com.gaofei.library.base.BaseAct

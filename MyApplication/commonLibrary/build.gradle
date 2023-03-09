@@ -51,8 +51,8 @@ dependencies {
     api 'com.facebook.fresco:animated-webp:2.3.0'
     api 'com.facebook.fresco:animated-gif:2.3.0'
     api 'pl.droidsonroids.gif:android-gif-drawable:1.2.16'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.8.1'
+//    implementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:2.8.1'
     api 'android.arch.lifecycle:reactivestreams:1.1.1'
     api "androidx.recyclerview:recyclerview:1.2.1"
     api 'androidx.constraintlayout:constraintlayout:2.1.3'

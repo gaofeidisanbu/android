@@ -89,7 +89,7 @@ public class SlotMachineSurfaceView extends SurfaceView implements SurfaceHolder
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mPlayer.onDraw(canvas);
+        mPlayer.doDraw(canvas);
     }
 
 

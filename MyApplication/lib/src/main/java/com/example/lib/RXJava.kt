@@ -64,7 +64,6 @@ object RXJava : Runnable {
 //        Observable.interval(10, TimeUnit.SECONDS, Schedulers.trampoline())
 //                .subscribe(COn)
 
-        method(ITest { })
     }
 
 

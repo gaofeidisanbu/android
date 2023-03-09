@@ -1,19 +1,38 @@
 package com.example.lib;
 
 
-import java.io.FileWriter;
+public class TestTest {
+    private String str = "1";
 
-public class TestTest implements Runnable {
-
-    public Object shutdown( Object object) {
-        Object ob = object;
-        return ob;
+    public TestTest() {
     }
 
-    @Override
-    public void run() {
+    public void main(String[] args) {
+        fun1(new Runnable() {
+            @Override
+            public void run() {
 
+            }
+        });
+        Runnable runnable = () -> {
+            System.out.println(str);
+        };
+        fun1(runnable);
+        fun2(() -> {
+            this.str = "fun2_2";
+            System.out.println(str);
+        });
     }
+
+    public void fun1(Runnable test) {
+        test.run();
+    }
+
+
+    public void fun2(Runnable test) {
+        test.run();
+    }
+
 }
 
 

@@ -36,7 +36,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         // 这种方式写文件不太好，有可能丢失exception日志
         LogUtils.d("aaa "+Thread.currentThread().getId());
         createLogs(e);
-        mDefaultUncaughtExceptionHandler.uncaughtException(t, e);
+//        mDefaultUncaughtExceptionHandler.uncaughtException(t, e);
     }
 
     /**

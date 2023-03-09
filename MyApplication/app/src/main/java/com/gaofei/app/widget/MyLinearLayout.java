@@ -34,7 +34,7 @@ public class MyLinearLayout extends LinearLayout{
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(TAG,"before onMeasure");
+        Log.d(TAG,"before onMeasure tag = "+getTag() );
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         Log.d(TAG,"after onMeasure");
     }
@@ -42,13 +42,13 @@ public class MyLinearLayout extends LinearLayout{
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         super.onLayout(changed, l, t, r, b);
-        Log.d(TAG,"onLayout");
+        Log.d(TAG,"onLayout tag = "+getTag());
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(TAG,"onDraw");
+        Log.d(TAG,"onDraw tag = "+getTag());
     }
 
     @Override

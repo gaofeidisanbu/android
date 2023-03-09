@@ -52,10 +52,12 @@ public class RecyclerCacheAct extends BaseAct {
             }
         });
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+        mRecyclerView.setHasFixedSize(false);
         mAdapter = new RecyclerViewAdapter(this);
         mAdapter.add(getData());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        mRecyclerView.getRecycledViewPool().setMaxRecycledViews(0, 100);
+//        mRecyclerView.setItemAnimator(null);
         mRecyclerView.addItemDecoration(new RecyclerViewAdapter.MyItemDecoration(this));
         mRecyclerView.setAdapter(mAdapter);
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
@@ -64,7 +66,7 @@ public class RecyclerCacheAct extends BaseAct {
 //                mAdapter.add("0000");
                 LogUtils.d("RecyclerViewAdapter", "  notifyDataSetChanged");
 //                findViewById(R.id.aaa).invalidate();
-                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyItemChanged(0);
 
             }
         });
@@ -80,7 +82,7 @@ public class RecyclerCacheAct extends BaseAct {
     private List<String> getData() {
         List<String> list = new ArrayList<>();
         int count = mAdapter.getItemCount() + 1;
-        for (int i = count; i < 40 + count; i++) {
+        for (int i = count; i < 3 + count; i++) {
             list.add(" i = " + i + " " + i + " " + i + " " + i + " " + i + " " + i + " " + i);
         }
         return list;

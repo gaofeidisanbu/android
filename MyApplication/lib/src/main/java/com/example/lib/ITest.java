@@ -1,5 +1,6 @@
 package com.example.lib;
 
 public interface ITest {
-    void method();
+    void method(String a);
+    void method2(String a);
 }
