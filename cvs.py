@@ -43,9 +43,9 @@ revenue_df = pd.read_csv(revenueFile)
 
 percent(retention_df, retentionFile)
 
-# sort(roas_df, roasFile)
-# sort(retention_df, retentionFile)
-# sort(revenue_df, revenueFile)
+sort(roas_df, roasFile)
+sort(retention_df, retentionFile)
+sort(revenue_df, revenueFile)
 
 # 获取 retention_df 中的 H 列数据
 h_column = retention_df[retentionDay1]
