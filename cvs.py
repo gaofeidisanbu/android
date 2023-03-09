@@ -62,5 +62,19 @@ roas_df.insert(loc=7, column=roasRetentionDay1, value=retentionDay1User_column)
 drop_column(roas_df, roasRetentionDay1Percent)
 roas_df.insert(loc=8, column=roasRetentionDay1Percent, value=retentionDay1User_percent_column)
 
+
+# 提取包含关键字的列
+revenue_cols = [col for col in revenue_df.columns if 'revenue - sum - day' in col.lower()]
+
+# 将提取的列插入到 roas_df 中
+for col in revenue_cols:
+    roas_df[col] = revenue_df[col]
+
 # 保存修改后的 roas.csv 文件
 roas_df.to_csv(resultFile, index=False)
+
+
+
+
+
+
