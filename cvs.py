@@ -12,6 +12,7 @@ roasRetentionDay1Percent = "retention day1 percent"
 
 def sort(df, f):
     df.sort_values(by=['Media Source', 'Campaign', 'Cohort Day'], inplace=True, ascending=True)
+    df.to_csv(f, index=False)
 
 
 def format_float(df):
