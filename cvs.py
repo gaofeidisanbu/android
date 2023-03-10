@@ -1,5 +1,5 @@
 import datetime
-
+import sys
 import pandas as pd
 import numpy as np
 
@@ -17,7 +17,6 @@ clearAfterFile = "./cvs/clear_after.csv"
 retentionDay1User = 'sessions - Unique users - day 1 - partial'
 roasRetentionDay1 = "retention day1 "
 roasRetentionDay1Percent = "retention day1 percent"
-
 
 
 def sort(df, f):
@@ -43,10 +42,7 @@ def retention_day0_percent(df, f):
     df[roasRetentionDay1Percent] = df.apply(lambda df_row: calculate_row(df_row), axis=1)
 
 
-def clear_table(df, f, v):
-    # 获取当前日期
-    curr_day_str = datetime.now().strftime('%Y/%-m/%-d')
-    curr_day = datetime.now()
+def clear_table(df, f, v, days, end_date):
     # 遍历每一行
     for index, row in df.iterrows():
         # 获取该行的Cohort Day
@@ -55,7 +51,7 @@ def clear_table(df, f, v):
         # print("start "+n_day_str)
 
         # 循环30次
-        for i in range(30):
+        for i in range(days):
             # 获取临时字符串变量temp
             temp = f(i)
 
@@ -64,7 +60,7 @@ def clear_table(df, f, v):
             # print("column_day_str " + column_day_str + " curr_day " + curr_day_str)
 
             # 如果 column_day 大于 curr_day，且该行的 temp 列存在，则清空该行的 temp 列
-            if column_day > curr_day and temp in df.columns:
+            if column_day > end_date and temp in df.columns:
                 df.at[index, temp] = v
                 # print("clear column_day_str " + column_day_str)
 
@@ -103,11 +99,7 @@ def merge_retention_to_roas(roas_df, retention_df):
 
     drop_column(roas_df, roasRetentionDay1)
     # 将retention_df表的索引重置
-    # 将retention_day0_user_percent_column列的索引重置
-    retention_day0_user_percent_column = retention_day0_user_percent_column.reset_index(drop=True)
     roas_df.insert(loc=7, column=roasRetentionDay1, value=retention_day0_user_column)
-    roas_df.to_csv("./cvs/roas_temp.csv", index=False)
-    print(retention_day0_user_column)
 
     drop_column(roas_df, roasRetentionDay1Percent)
     roas_df.insert(loc=8, column=roasRetentionDay1Percent, value=retention_day0_user_percent_column)
@@ -123,14 +115,24 @@ def merge_revenue_to_roas(roas_df, revenue_df):
         roas_df[col] = revenue_df[col]
 
 
-def clear_roas(roas_df):
+def clear_roas(roas_df, days, end_date):
     roas_df.to_csv(clearBeforeFile, index=False)
-    clear_table(roas_df, get_roas_column, np.NAN)
-    clear_table(roas_df, get_revenue_column, 0)
+    clear_table(roas_df, get_roas_column, np.NAN, days, end_date)
+    # clear_table(roas_df, get_revenue_column, 0)
     roas_df.to_csv(clearAfterFile, index=False)
 
 
 def main():
+    days = 28
+    end_date = datetime.now() - timedelta(days=3)
+    if len(sys.argv) > 1:
+        days = sys.argv[1]
+        print("days:", days)
+    if len(sys.argv) > 2:
+        end_date_str = sys.argv[2]
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        print("end_date_str:", end_date_str)
+    print("end_date:", end_date)
     # 读取 roas.csv 文件
     roas_df = pd.read_csv(roasFile)
 
@@ -140,9 +142,13 @@ def main():
     # 读取 revenue.csv 文件
     revenue_df = pd.read_csv(revenueFile)
     sort_all_table(roas_df, retention_df, revenue_df)
+    # 重置索引
+    roas_df = roas_df.reset_index(drop=True)
+    retention_df = retention_df.reset_index(drop=True)
+    revenue_df = revenue_df.reset_index(drop=True)
     merge_retention_to_roas(roas_df, retention_df)
     merge_revenue_to_roas(roas_df, revenue_df)
-    clear_roas(roas_df)
+    clear_roas(roas_df, days, end_date)
 
 
 # 函数入口
