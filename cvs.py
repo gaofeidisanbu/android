@@ -2,6 +2,7 @@ import datetime
 import sys
 import pandas as pd
 import numpy as np
+import os
 
 from datetime import datetime, timedelta
 
@@ -11,8 +12,10 @@ revenueFile = "./cvs/revenue.csv"
 roasSortFile = "./cvs/roas_sort.csv"
 retentionSortFile = "./cvs/retention_sort.csv"
 revenueSortFile = "./cvs/revenue_sort.csv"
-clearBeforeFile = "./cvs/clear_before.csv"
-clearAfterFile = "./cvs/clear_after.csv"
+# clearBeforeFile = "./cvs/clear_before.csv"
+# clearAfterFile = "./cvs/clear_after.csv"
+resultCSVFile = "./cvs/result.csv"
+resultExcelFile = "./cvs/result.xlsx"
 
 retentionDay1User = 'sessions - Unique users - day 1 - partial'
 roasRetentionDay1 = "retention day1 "
@@ -20,8 +23,8 @@ roasRetentionDay1Percent = "retention day1 percent"
 
 
 def sort(df, f):
-    df.sort_values(by=['Media Source', 'Campaign', 'Cohort Day'], inplace=True, ascending=True)
-    df.to_csv(f, index=False)
+    df.sort_values(by=['Media Source', 'Campaign', 'Campaign Id', 'Cohort Day'], inplace=True, ascending=True)
+    # df.to_csv(f, index=False)
     return df
 
 
@@ -116,15 +119,64 @@ def merge_revenue_to_roas(roas_df, revenue_df):
 
 
 def clear_roas(roas_df, days, end_date):
-    roas_df.to_csv(clearBeforeFile, index=False)
+    # roas_df.to_csv(clearBeforeFile, index=False)
     clear_table(roas_df, get_roas_column, np.NAN, days, end_date)
     # clear_table(roas_df, get_revenue_column, 0)
-    roas_df.to_csv(clearAfterFile, index=False)
+    # roas_df.to_csv(clearAfterFile, index=False)
+
+
+# 定义排序函数
+def sort_table(table):
+    # 获取Cohort Day列的最大值和最小值
+    max_date = table["Cohort Day"].max()
+    min_date = table["Cohort Day"].min()
+    # 返回一个元组，用于排序
+    return (max_date, min_date)
+
+
+def split_table(df, days):
+
+    # 分割表格，按Media Source和campaign分组
+    groups = df.groupby(["Media Source", "Campaign", "Campaign Id"])
+
+    # 存储分割结果的列表
+    split_table_list = []
+
+    # 遍历每个分组
+    for group_name, group_data in groups:
+        # 将分组结果存入split_table_list
+        split_table_list.append(group_data)
+
+    # 对split_table_list排序
+    sorted_table_list = sorted(split_table_list, key=sort_table, reverse=True)
+
+    # 在每个表格最后一行插入空行
+    for table in split_table_list:
+        table.loc[len(table)] = [None] * len(table.columns)
+
+    merged_table = pd.concat(sorted_table_list)
+    merged_table = merged_table.reset_index(drop=True)
+
+    # 获取需要重命名的列列表
+    old_cols = [get_roas_column(i) for i in range(days)]
+
+    # 构造新列名列表
+    new_cols = [f'roas_day{i}' for i in range(days)]
+
+    # 使用字典将旧列名和新列名对应起来，实现批量重命名
+    col_rename_dict = dict(zip(old_cols, new_cols))
+    merged_table = merged_table.rename(columns=col_rename_dict)
+
+    # 输出到文件
+    merged_table.to_csv(resultCSVFile, index=False)
+
+    # 将DataFrame保存为excel文件
+    merged_table.to_excel(resultExcelFile, index=False)
 
 
 def main():
-    days = 28
-    end_date = datetime.now() - timedelta(days=3)
+    days = 31
+    end_date = datetime.now() - timedelta(days=2)
     if len(sys.argv) > 1:
         days = sys.argv[1]
         print("days:", days)
@@ -134,13 +186,13 @@ def main():
         print("end_date_str:", end_date_str)
     print("end_date:", end_date)
     # 读取 roas.csv 文件
-    roas_df = pd.read_csv(roasFile)
+    roas_df = pd.read_csv(roasFile, dtype={'Campaign Id': str})
 
     # 读取 retention.csv 文件
-    retention_df = pd.read_csv(retentionFile)
+    retention_df = pd.read_csv(retentionFile, dtype={'Campaign Id': str})
 
     # 读取 revenue.csv 文件
-    revenue_df = pd.read_csv(revenueFile)
+    revenue_df = pd.read_csv(revenueFile, dtype={'Campaign Id': str})
     sort_all_table(roas_df, retention_df, revenue_df)
     # 重置索引
     roas_df = roas_df.reset_index(drop=True)
@@ -149,6 +201,7 @@ def main():
     merge_retention_to_roas(roas_df, retention_df)
     merge_revenue_to_roas(roas_df, revenue_df)
     clear_roas(roas_df, days, end_date)
+    split_table(roas_df, days)
 
 
 # 函数入口
