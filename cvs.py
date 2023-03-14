@@ -211,6 +211,8 @@ def format_excel(df):
         roas_day30_idx = df.columns.get_loc(roas_day30_key) + 1
 
     # 配置格式
+    red_font = Font(color='FFFF99')
+    light_pink = Font(color='FFD9EC')
     light_red_fill = PatternFill(start_color='FFFF99', end_color='FFFF99', fill_type='solid')
     light_pink_fill = PatternFill(start_color='FFD9EC', end_color='FFD9EC', fill_type='solid')
 
@@ -229,6 +231,13 @@ def format_excel(df):
         roas_day14_cell.fill = light_pink_fill
         roas_day21_cell.fill = light_pink_fill
         roas_day30_cell.fill = light_pink_fill
+
+        # retention_day1_cell.font = red_font
+        # roas_day0_cell.font = light_pink
+        # roas_day7_cell.font = light_pink
+        # roas_day14_cell.font = light_pink
+        # roas_day21_cell.font = light_pink
+        # roas_day30_cell.font = light_pink
 
     # 保存Excel文件
     workbook.save(resultExcelFile)
