@@ -5,6 +5,8 @@ import numpy as np
 import os
 
 from datetime import datetime, timedelta
+import openpyxl
+from openpyxl.styles import Font, PatternFill
 
 roasFile = "./cvs/roas.csv"
 retentionFile = "./cvs/retention.csv"
@@ -154,6 +156,12 @@ def split_table(df, days):
     for table in split_table_list:
         table.loc[len(table)] = [None] * len(table.columns)
 
+    # # 遍历排序后的表格，并保存到本地
+    # for i, table in enumerate(sorted_table_list):
+    #     # 将表格保存到本地
+    #     filename = f"{i}.csv"
+    #     table.to_csv(filename, index=False)
+
     merged_table = pd.concat(sorted_table_list)
     merged_table = merged_table.reset_index(drop=True)
 
@@ -171,7 +179,60 @@ def split_table(df, days):
     merged_table.to_csv(resultCSVFile, index=False)
 
     # 将DataFrame保存为excel文件
-    merged_table.to_excel(resultExcelFile, index=False)
+    # merged_table.to_excel(resultExcelFile, index=False)
+    format_excel(merged_table)
+
+
+def format_excel(df):
+    df.to_excel(resultExcelFile, index=False)
+
+    # 打开Excel文件
+    workbook = openpyxl.load_workbook(resultExcelFile)
+    worksheet = workbook.active
+
+    retention_day1_percent_key = 'retention day1 percent'
+    roas_day0_key = 'roas_day0'
+    roas_day7_key = 'roas_day7'
+    roas_day14_key = 'roas_day14'
+    roas_day21_key = 'roas_day21'
+    roas_day30_key = 'roas_day30'
+    # 根据列名找到对应的列索引
+    if retention_day1_percent_key in df.columns:
+        retention_day1_idx = df.columns.get_loc(retention_day1_percent_key) + 1
+    if roas_day0_key in df.columns:
+        roas_day0_idx = df.columns.get_loc(roas_day0_key) + 1
+    if roas_day7_key in df.columns:
+        roas_day7_idx = df.columns.get_loc(roas_day7_key) + 1
+    if roas_day14_key in df.columns:
+        roas_day14_idx = df.columns.get_loc(roas_day14_key) + 1
+    if roas_day21_key in df.columns:
+        roas_day21_idx = df.columns.get_loc(roas_day21_key) + 1
+    if roas_day30_key in df.columns:
+        roas_day30_idx = df.columns.get_loc(roas_day30_key) + 1
+
+    # 配置格式
+    light_red_fill = PatternFill(start_color='FFFF99', end_color='FFFF99', fill_type='solid')
+    light_pink_fill = PatternFill(start_color='FFD9EC', end_color='FFD9EC', fill_type='solid')
+
+    # 遍历每一行，对指定列应用格式
+    for row in worksheet.iter_rows(min_row=2, min_col=1):
+        retention_day1_cell = row[retention_day1_idx - 1]
+        roas_day0_cell = row[roas_day0_idx - 1]
+        roas_day7_cell = row[roas_day7_idx - 1]
+        roas_day14_cell = row[roas_day21_idx - 1]
+        roas_day21_cell = row[roas_day14_idx - 1]
+        roas_day30_cell = row[roas_day30_idx - 1]
+
+        retention_day1_cell.fill = light_red_fill
+        roas_day0_cell.fill = light_pink_fill
+        roas_day7_cell.fill = light_pink_fill
+        roas_day14_cell.fill = light_pink_fill
+        roas_day21_cell.fill = light_pink_fill
+        roas_day30_cell.fill = light_pink_fill
+
+    # 保存Excel文件
+    workbook.save(resultExcelFile)
+
 
 
 def main():
