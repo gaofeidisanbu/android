@@ -51,6 +51,18 @@ print("WebDriverWait 1")
 # 获取所有 Artist 的链接
 artist_links = driver.find_elements(By.XPATH, artist_xpath)
 
+
+def get_image_name(image_url_str):
+    # 使用/作为分隔符，将URL分解为部分
+    url_parts = image_url_str.split('/')
+    # 如果URL只有一个部分，则返回该部分作为图像名称
+    if len(url_parts) == 1:
+        return url_parts[0]
+    # 否则，返回最后两个部分作为图像名称
+    else:
+        return url_parts[-2]+url_parts[-1]
+
+
 # 对于每个 Artist
 for i, artist_link in enumerate(artist_links):
     print(f'Processing Artist {i + 1}/{len(artist_links)}')
@@ -80,25 +92,26 @@ for i, artist_link in enumerate(artist_links):
         print("gallery_name="+gallery_name)
         # 点击链接进入作品集的页面
         gallery_link.click()
-        image_xpath='//img[@class="giphy-gif-img giphy-img-loaded"]'
+        image_xpath = '//img[@class="giphy-gif-img giphy-img-loaded"]'
         # 等待作品集页面加载完成
         WebDriverWait(driver, 100).until(
             EC.presence_of_all_elements_located((By.XPATH, image_xpath)))
         image_links = driver.find_elements(By.XPATH, image_xpath)
         num_images = min(max_images_per_gallery, len(image_links))
+        print('num_images len='+str(num_images))
         for k in range(num_images):
             image_link = image_links[k]
             image_url = image_link.get_attribute('src')
-
+            print("image_url=" + image_url)
             # 获取图片名字
-            image_name = image_url.split('/')[-1]
-
+            image_name = get_image_name(image_url)
             # 下载图片
             for retry in range(max_download_retries):
                 try:
                     with request.urlopen(image_url, timeout=download_timeout) as response, open(
                             f'{gallery_folder}/{image_name}', 'wb') as f:
                         f.write(response.read())
+                        print("finish image_name=" + image_name)
                     break
                 except URLError as e:
                     print('reason', e.reason)
