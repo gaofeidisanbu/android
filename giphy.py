@@ -31,12 +31,33 @@ class TagResponse:
         self.results = results
 
 
-def request_url(url, timeout=60):
-    try:
-        response = requests.get(url, timeout=timeout)
-        return response.text
-    except Exception as e:
-        logging.error(f"An error occurred while requesting {url}: {e}")
+def request_url(url, timeout=600):
+    # 设置日志格式
+    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
+
+    # 设置重试次数
+    MAX_RETRIES = 3
+    retries = 0
+    while retries < MAX_RETRIES:
+        try:
+            # 发送请求并设置超时时间
+            start_time = datetime.datetime.now()  # 获取当前时间
+            response = requests.get(url, timeout=timeout)
+            end_time = datetime.datetime.now()  # 获取下载结束时间
+            delta_time = end_time - start_time  # 计算时间差
+            print('request_url ------- delta_time ', delta_time.seconds)
+            print('request_url ------- end ', url)
+            # 如果返回码为200，表示请求成功，返回响应内容
+            if response.status_code == 200:
+                return response.content
+        except requests.exceptions.RequestException as e:
+            # 发生异常时记录日志并重试
+            logging.error(f'Request failed: {str(e)}. Retry {retries + 1}/{MAX_RETRIES}')
+            retries += 1
+            time.sleep(5)  # 等待5秒后重试
+    # 重试多次后仍然失败，记录日志并返回None
+    logging.error(f'Request failed after {MAX_RETRIES} retries: {url}')
+    return None
 
 
 def parse_image_tag(tag_str):
@@ -74,7 +95,6 @@ def download_tag_image(response: TagResponse, parent_fold):
 
 def download_image(url, parent_fold, file_name):
     print('download_image ------- start ', url)
-    start_time = datetime.datetime.now()  # 获取当前时间
     os.makedirs(parent_fold, exist_ok=True)
 
     # Get the file extension from the URL.
@@ -90,22 +110,45 @@ def download_image(url, parent_fold, file_name):
         print(f"Image already exists locally: {file_path}")
     else:
         # Make a request to the URL to get the image data.
-        response = requests.get(url)
-        # Write the image data to the file.
-        with open(file_path, 'wb') as file:
-            file.write(response.content)
-    end_time = datetime.datetime.now()  # 获取下载结束时间
-    delta_time = end_time - start_time  # 计算时间差
-    print('download_image ------- delta_time ', delta_time.seconds)
-    print('download_image ------- end ', url)
+        # 设置日志格式
+        logging.basicConfig(format='download_image %(asctime)s %(levelname)s %(message)s', level=logging.INFO)
+        # 设置重试次数
+        MAX_RETRIES = 3
+        retries = 0
+        for i in range(MAX_RETRIES):
+            try:
+                start_time = datetime.datetime.now()  # 获取当前时间
+                # 发送请求并设置超时时间
+                response = requests.get(url, timeout=600)
+                # 如果返回码为200，表示请求成功，返回响应内容
+                if response.status_code == 200:
+                    # Write the image data to the file.
+                    with open(file_path, 'wb') as file:
+                        file.write(response.content)
+                    end_time = datetime.datetime.now()  #e 获取下载结束时间
+                    delta_time = end_time - start_time  # 计算时间差
+                    print('download_image ------- delta_time ', delta_time.seconds)
+                    print('download_image ------- end ', url)
+                    return
+            except requests.exceptions.RequestException as e:
+                # 发生异常时记录日志并重试
+                logging.error(f'download_image Request failed: {str(e)}. Retry {retries + 1}/{MAX_RETRIES}')
+                retries += 1
+                time.sleep(5)  # 等待5秒后重试
+        # 重试多次后仍然失败，记录日志并返回None
+        logging.error(f'download_image Request failed after image name {file_path} {MAX_RETRIES} retries: {url}')
 
 
 def download_tag_2(url, parent_fold):
     print('download_tag_2 start ', url)
     response_str = request_url(url)
-    response = parse_image_tag(response_str)
-    download_tag_image(response, parent_fold)
-    print('download_tag_2 end ', url)
+    if response_str is not None:
+        response = parse_image_tag(response_str)
+        download_tag_image(response, parent_fold)
+        print('download_tag_2 end ', url)
+    else:
+        print('download_tag_2 end error', url)
+
     return response
 
 
@@ -128,54 +171,63 @@ def download_tag(url, parent_fold):
 def download_category(url):
     print("download_category start", url)
     response_str = request_url(url)
-    category_dict = json.loads(response_str)
-    display_name = category_dict.get("display_name")
-    print('download_category display name ', display_name)
-    childrens_dict = category_dict.get('children')
-    count = 0
-    for children_dict in childrens_dict:
-        children_id = children_dict.get('id')
-        children_name = children_dict.get('display_name')
-        children_slug = children_dict.get('slug')
-        children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
-        print('download_category children name ', children_name)
-        download_tag(children_url, os.path.join(display_name, children_name))
-        count = count + 1
-        if count > 100:
-            break
-    print("download_category end", url)
+    if response_str is not None:
+        category_dict = json.loads(response_str)
+        display_name = category_dict.get("display_name")
+        print('download_category display name ', display_name)
+        childrens_dict = category_dict.get('children')
+        count = 0
+        for children_dict in childrens_dict:
+            children_id = children_dict.get('id')
+            children_name = children_dict.get('display_name')
+            children_slug = children_dict.get('slug')
+            children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
+            print('download_category children name ', children_name)
+            download_tag(children_url, os.path.join(display_name, children_name))
+            count = count + 1
+            if count > 100:
+                break
+        print("download_category end", url)
+    else:
+        print("download_category error", url)
 
 
 def download_emotion_param(url, parent_fold):
     print("download_emotion start", url)
     response_str = request_url(url)
-    category_dict = json.loads(response_str)
-    display_name = parent_fold
-    print('download_emotion display name ', display_name)
-    childrens_dict = category_dict.get('data')
-    count = 0
-    for result_dict in childrens_dict:
-        id_str = result_dict.get('id')
-        title = result_dict.get('title')
-        images_dict = result_dict.get('images')
-        original_dict = images_dict.get('original')
-        original = ImageOriginal(original_dict['url'], original_dict['webp'])
-        images = Images(original)
-        result = Result(id_str, title, images)
-        download_result(result, parent_fold)
-        count = count + 1
-        if count > 50:
-            break
-    print("download_category end", url)
+    if response_str is not None:
+        category_dict = json.loads(response_str)
+        display_name = parent_fold
+        print('download_emotion display name ', display_name)
+        childrens_dict = category_dict.get('data')
+        count = 0
+        for result_dict in childrens_dict:
+            id_str = result_dict.get('id')
+            title = result_dict.get('title')
+            images_dict = result_dict.get('images')
+            original_dict = images_dict.get('original')
+            original = ImageOriginal(original_dict['url'], original_dict['webp'])
+            images = Images(original)
+            result = Result(id_str, title, images)
+            download_result(result, parent_fold)
+            count = count + 1
+            if count > 50:
+                break
+        print("download_category end", url)
+    else:
+        print("download_category error", url)
 
 
 def download_emotion():
-    emotion_list = ['reaction', 'love', 'happy', 'sad', 'excited', 'angry', 'shocked', 'hungry', 'scared', 'tired', 'surprised',
-            'drunk', 'bored', 'sassy', 'frustrated', 'nervous', 'pain', 'sick', 'disappointed', 'lonely', 'stressed',
-            'suspicious', 'embarrassed', 'unimpressed', 'relaxed', 'inspired']
+    emotion_list = ['reaction', 'love', 'happy', 'sad', 'excited', 'angry', 'shocked', 'hungry', 'scared', 'tired',
+                    'surprised',
+                    'drunk', 'bored', 'sassy', 'frustrated', 'nervous', 'pain', 'sick', 'disappointed', 'lonely',
+                    'stressed',
+                    'suspicious', 'embarrassed', 'unimpressed', 'relaxed', 'inspired']
     for name in emotion_list:
         download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=0&type=gifs&sort=&q={name}&api_key'
-                     '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4', os.path.join("emotion", name))
+                               '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4',
+                               os.path.join("emotion", name))
         download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=25&type=gifs&sort=&q={name}&api_key'
                                '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4',
                                os.path.join("emotion", name))
