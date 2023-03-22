@@ -238,7 +238,7 @@ def download_category(url, category):
         response_dict = json.loads(response_str)
         datas_dict = response_dict.get('data')
         for data in datas_dict:
-            name = data.get('name')
+            name = data.get('name_encoded')
             download_search(name, 0, os.path.join(category, name))
             download_search(name, 25, os.path.join(category, name))
     print("download_category end", category)
@@ -253,7 +253,7 @@ def download_categories():
         response_dict = json.loads(response_str)
         datas_dict = response_dict.get('data')
         for data in datas_dict:
-            category = data.get('name')
+            category = data.get('name_encoded')
             url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
                 f'&pingback_id=186fda3de4e75f6b '
             download_category(url, category)
