@@ -125,7 +125,7 @@ def download_image(url, parent_fold, file_name):
                     # Write the image data to the file.
                     with open(file_path, 'wb') as file:
                         file.write(response.content)
-                    end_time = datetime.datetime.now()  #e 获取下载结束时间
+                    end_time = datetime.datetime.now()  # e 获取下载结束时间
                     delta_time = end_time - start_time  # 计算时间差
                     print('download_image ------- delta_time ', delta_time.seconds)
                     print('download_image ------- end ', url)
@@ -168,7 +168,7 @@ def download_tag(url, parent_fold):
     print('download_tag end ', url)
 
 
-def download_category(url):
+def download_artists(url):
     print("download_category start", url)
     response_str = request_url(url)
     if response_str is not None:
@@ -192,8 +192,10 @@ def download_category(url):
         print("download_category error", url)
 
 
-def download_emotion_param(url, parent_fold):
-    print("download_emotion start", url)
+def download_search(key, offset, parent_fold):
+    url = f'https://api.giphy.com/v1/gifs/search?offset={offset}&type=gifs&sort=&q={key}&api_key' \
+        f'=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4'
+    print("download_emotion key", key)
     response_str = request_url(url)
     if response_str is not None:
         category_dict = json.loads(response_str)
@@ -213,9 +215,9 @@ def download_emotion_param(url, parent_fold):
             count = count + 1
             if count > 50:
                 break
-        print("download_category end", url)
+        print("download_category key", key)
     else:
-        print("download_category error", url)
+        print("download_category error", key)
 
 
 def download_emotion():
@@ -225,16 +227,42 @@ def download_emotion():
                     'stressed',
                     'suspicious', 'embarrassed', 'unimpressed', 'relaxed', 'inspired']
     for name in emotion_list:
-        download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=0&type=gifs&sort=&q={name}&api_key'
-                               '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4',
-                               os.path.join("emotion", name))
-        download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=25&type=gifs&sort=&q={name}&api_key'
-                               '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4',
-                               os.path.join("emotion", name))
+        download_search(0, name, os.path.join("emotion", name))
+        download_search(25, name, os.path.join("emotion", name))
+
+
+def download_category(url, category):
+    print("download_category start", category)
+    response_str = request_url(url)
+    if response_str is not None:
+        response_dict = json.loads(response_str)
+        datas_dict = response_dict.get('data')
+        for data in datas_dict:
+            name = data.get('name')
+            download_search(name, 0, os.path.join(category, name))
+            download_search(name, 25, os.path.join(category, name))
+    print("download_category end", category)
+
+
+def download_categories():
+    print("download_categories start")
+    url = 'https://api.giphy.com/v1/gifs/categories?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id' \
+          '=186fda3de4e75f6b '
+    response_str = request_url(url)
+    if response_str is not None:
+        response_dict = json.loads(response_str)
+        datas_dict = response_dict.get('data')
+        for data in datas_dict:
+            category = data.get('name')
+            url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
+                f'&pingback_id=186fda3de4e75f6b '
+            download_category(url, category)
+    print("download_animal end")
 
 
 def main():
-    download_emotion()
+    # download_emotion()
+    download_categories()
     # download_category('https://giphy.com/api/v4/channels/11267284/')
 
 
