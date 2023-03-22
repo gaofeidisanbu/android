@@ -3,6 +3,8 @@ import logging
 import json
 import os
 import requests
+import datetime
+import time
 
 
 class ImageOriginal:
@@ -29,9 +31,9 @@ class TagResponse:
         self.results = results
 
 
-def request_url(url):
+def request_url(url, timeout=60):
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=timeout)
         return response.text
     except Exception as e:
         logging.error(f"An error occurred while requesting {url}: {e}")
@@ -61,8 +63,8 @@ def parse_image_tag(tag_str):
 
 def download_result(result: Result, parent_fold):
     if result.images.original:
-        download_image(result.images.original.url, os.path.join(parent_fold, result.id_str, 'original'))
-        download_image(result.images.original.webp, os.path.join(parent_fold, result.id_str, 'original'))
+        # download_image(result.images.original.url, os.path.join(parent_fold, result.id_str, 'original'))
+        download_image(result.images.original.webp, os.path.join(parent_fold, result.id_str, 'original'), 'webp')
 
 
 def download_tag_image(response: TagResponse, parent_fold):
@@ -70,12 +72,13 @@ def download_tag_image(response: TagResponse, parent_fold):
         download_result(result, parent_fold)
 
 
-def download_image(url, parent_fold):
+def download_image(url, parent_fold, file_name):
     print('download_image ------- start ', url)
+    start_time = datetime.datetime.now()  # 获取当前时间
     os.makedirs(parent_fold, exist_ok=True)
 
     # Get the file extension from the URL.
-    file_extension = url.split('.')[-1]
+    file_extension = file_name
 
     # Generate a filename for the image using the file extension.
     filename = f'image.{file_extension}'
@@ -91,7 +94,9 @@ def download_image(url, parent_fold):
         # Write the image data to the file.
         with open(file_path, 'wb') as file:
             file.write(response.content)
-
+    end_time = datetime.datetime.now()  # 获取下载结束时间
+    delta_time = end_time - start_time  # 计算时间差
+    print('download_image ------- delta_time ', delta_time.seconds)
     print('download_image ------- end ', url)
 
 
@@ -104,7 +109,7 @@ def download_tag_2(url, parent_fold):
     return response
 
 
-max_count = 100
+max_count = 50
 
 
 def download_tag(url, parent_fold):
@@ -120,8 +125,65 @@ def download_tag(url, parent_fold):
     print('download_tag end ', url)
 
 
+def download_category(url):
+    print("download_category start", url)
+    response_str = request_url(url)
+    category_dict = json.loads(response_str)
+    display_name = category_dict.get("display_name")
+    print('download_category display name ', display_name)
+    childrens_dict = category_dict.get('children')
+    count = 0
+    for children_dict in childrens_dict:
+        children_id = children_dict.get('id')
+        children_name = children_dict.get('display_name')
+        children_slug = children_dict.get('slug')
+        children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
+        print('download_category children name ', children_name)
+        download_tag(children_url, os.path.join(display_name, children_name))
+        count = count + 1
+        if count > 100:
+            break
+    print("download_category end", url)
+
+
+def download_emotion_param(url, parent_fold):
+    print("download_emotion start", url)
+    response_str = request_url(url)
+    category_dict = json.loads(response_str)
+    display_name = parent_fold
+    print('download_emotion display name ', display_name)
+    childrens_dict = category_dict.get('data')
+    count = 0
+    for result_dict in childrens_dict:
+        id_str = result_dict.get('id')
+        title = result_dict.get('title')
+        images_dict = result_dict.get('images')
+        original_dict = images_dict.get('original')
+        original = ImageOriginal(original_dict['url'], original_dict['webp'])
+        images = Images(original)
+        result = Result(id_str, title, images)
+        download_result(result, parent_fold)
+        count = count + 1
+        if count > 50:
+            break
+    print("download_category end", url)
+
+
+def download_emotion():
+    emotion_list = ['reaction', 'love', 'happy', 'sad', 'excited', 'angry', 'shocked', 'hungry', 'scared', 'tired', 'surprised',
+            'drunk', 'bored', 'sassy', 'frustrated', 'nervous', 'pain', 'sick', 'disappointed', 'lonely', 'stressed',
+            'suspicious', 'embarrassed', 'unimpressed', 'relaxed', 'inspired']
+    for name in emotion_list:
+        download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=0&type=gifs&sort=&q={name}&api_key'
+                     '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4', os.path.join("emotion", name))
+        download_emotion_param(f'https://api.giphy.com/v1/gifs/search?offset=25&type=gifs&sort=&q={name}&api_key'
+                               '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4',
+                               os.path.join("emotion", name))
+
+
 def main():
-    download_tag('https://giphy.com/api/v4/channels/11313767/feed/?offset=0', "./gif")
+    download_emotion()
+    # download_category('https://giphy.com/api/v4/channels/11267284/')
 
 
 main()
