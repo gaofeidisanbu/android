@@ -50,7 +50,6 @@ class TagResponse:
         self.results = results
 
 
-
 def request_url(url, timeout=600):
     # 设置日志格式
     logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
@@ -104,7 +103,15 @@ def parse_image_tag(tag_str):
 
 def download_result(result: Result, parent_fold):
     if result.images.original:
-        download_image(result.images.original.webp, parent_fold, result.image_name)
+        # Get the file extension from the URL.
+        parsed_link = urlparse(result.images.original.webp)
+        path = parsed_link.path
+        file_extension = path.split('.')[-1]
+        # Generate a filename for the image using the file extension.
+        filename = f'{result.image_name}.{file_extension}'
+        download_image(result.images.original.webp, parent_fold, filename)
+        image_resize(parent_fold, filename)
+        image_zip(parent_fold, filename)
 
 
 def download_tag_image(response: TagResponse, parent_fold):
@@ -266,18 +273,10 @@ def download_categories():
 
 def download_image(url, parent_fold, file_name):
     print('download_image ------- start ', url)
+    parent_fold = os.path.join(parent_fold, 'origin')
     os.makedirs(parent_fold, exist_ok=True)
-
-    # Get the file extension from the URL.
-    parsed_link = urlparse(url)
-    path = parsed_link.path
-    file_extension = path.split('.')[-1]
-
-    # Generate a filename for the image using the file extension.
-    filename = f'{file_name}.{file_extension}'
-
     # Combine the parent folder path and filename to create the full file path.
-    file_path = os.path.join(parent_fold, filename)
+    file_path = os.path.join(parent_fold, file_name)
 
     if os.path.exists(file_path):
         print(f"Image already exists locally: {file_path}")
@@ -316,8 +315,6 @@ def download_image(url, parent_fold, file_name):
 
 def download_related():
     list_url = ['https://api.giphy.com/v1/videos/related?gif_id=artj92V8o75VPL7AeQ&api_key'
-                '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870d4cd3af20c73',
-                'https://api.giphy.com/v1/gifs/related?gif_id=K8GGpdT9gJ2rUI5CEo&api_key'
                 '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870d4cd3af20c73']
     index = 0
     for url in list_url:
@@ -325,22 +322,26 @@ def download_related():
         index = index + 1
 
 
-def image_resize(url):
+def image_resize(parent_fold, file_name):
     # 打开webp动图文件
-    im = iio.imread(url)
-
-    # 获取帧数
-    num_frames = im.shape[0]
-
+    origin_url = os.path.join(parent_fold, 'origin', file_name)
+    if os.path.exists(origin_url) is not None:
+        print(f"image_resize not exists : {origin_url}")
+        return False
+    resize_fold = os.path.join(parent_fold, 'resize')
+    resize_url = os.path.join(resize_fold, file_name)
+    os.makedirs(resize_fold, exist_ok=True)
+    if os.path.exists(resize_url):
+        print(f"image_resize already exists locally: {resize_url}")
+        return True
     # 循环遍历每一帧
-    with Image.open(url) as im_pillow:
+    with Image.open(origin_url) as im_pillow:
         frames = []
         for frame in ImageSequence.Iterator(im_pillow):
             # 裁剪图片，使其等比例缩放并填充至512x512大小
             width, height = frame.size
             ratio = max(512 / width, 512 / height)
             new_size = (int(width * ratio), int(height * ratio))
-            print(f"image_resize {width} {height}")
             # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
             background = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
             paste_pos = ((512 - new_size[0]) // 2, (512 - new_size[1]) // 2)
@@ -349,16 +350,66 @@ def image_resize(url):
 
             # 将每一帧添加到帧列表中
             frames.append(background)
-
         # 保存图片
-        # frames[0].save('output.webp', format='webp', save_all=True, append_images=frames[1:])
+        frames[0].save(resize_url, format='webp', save_all=True,
+                       append_images=frames[1:])
+        # image_zip(parent_fold, file_name)
+    return True
+
+
+def image_zip(parent_fold, file_name):
+    resize_url = os.path.join(parent_fold, 'resize', file_name)
+    zip_fold = os.path.join(parent_fold, 'compressed')
+    zip_url = os.path.join(zip_fold, file_name)
+    if os.path.exists(resize_url):
+        print("image_zip")
+    else:
+        print(f"image_zip not exists : {resize_url}")
+        return False
+    os.makedirs(os.path.join(zip_fold), exist_ok=True)
+    if os.path.exists(zip_url):
+        print(f"image_zip already exists locally: {zip_url}")
+        return True
+    # 打开webp动图
+    animated_image = Image.open(resize_url)
+
+    # 获取动图的帧数和帧率
+    frames = []
+    try:
+        while True:
+            frame = animated_image.copy()
+            frames.append(frame)
+            animated_image.seek(len(frames))  # 帧数索引从1开始
+    except EOFError:
+        pass
+    fps = animated_image.info['fps']
+    duration = animated_image.info['duration']
+    total_frames = len(frames)
+
+    # 如果帧率大于20，则降低帧率
+    if fps > 20:
+        target_fps = 20
+        target_duration = int(duration * fps / target_fps)
+        target_frames = int(total_frames * target_fps / fps)
+
+        new_frames = []
+        for i in range(target_frames):
+            frame_index = int(i * total_frames / target_frames)
+            new_frames.append(frames[frame_index])
+
+        frames = new_frames
+        fps = target_fps
+        duration = target_duration
+
+    # 将压缩后的帧写入新的webp动图
+    frames[0].save(zip_url, save_all=True, append_images=frames[1:], duration=duration, loop=0, fps=fps)
+
+    return True
 
 
 def main():
     # download_categories()
-    # download_related()
-    # image_resize('test.webp')
-    image_resize('output.webp')
+    download_related()
 
 
 main()
