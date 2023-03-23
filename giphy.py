@@ -5,9 +5,12 @@ import os
 import requests
 import datetime
 import time
-from PIL import Image
+from PIL import Image, WebPImagePlugin, ImageSequence, ImageOps
 from urllib.parse import urlparse
 from collections import OrderedDict
+import imageio
+import imageio.v3 as iio
+from PIL.Image import Resampling
 
 
 class ImageList:
@@ -46,58 +49,6 @@ class TagResponse:
         self.next_url = next_url
         self.results = results
 
-
-def image_resize(url):
-    # 打开WebP图像
-    image = Image.open(url)
-
-    # 获取图像的宽度和高度
-    width, height = image.size
-
-    # 如果宽度或高度小于512，则将其居中展示，并将多余的部分透明化
-    if width < 512 or height < 512:
-        # 计算裁剪框的左上角坐标和右下角坐标
-        left = (width - min(width, 512)) // 2
-        upper = (height - min(height, 512)) // 2
-        right = left + min(width, 512)
-        lower = upper + min(height, 512)
-
-        # 裁剪图像
-        image = image.crop((left, upper, right, lower))
-
-        # 创建一个带有透明背景的新图像
-        new_image = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-
-        # 将裁剪后的图像粘贴到新图像的中心
-        x = (512 - min(width, 512)) // 2
-        y = (512 - min(height, 512)) // 2
-        new_image.paste(image, (x, y))
-
-        # 保存新图像
-        new_image.save("example_resized.webp")
-
-    # 如果宽度和高度都大于或等于512，则进行等比缩放
-    else:
-        # 计算缩放比例
-        ratio = min(512 / width, 512 / height)
-
-        # 计算缩放后的宽度和高度
-        new_width = int(width * ratio)
-        new_height = int(height * ratio)
-
-        # 缩放图像
-        image = image.resize((new_width, new_height), Image.ANTIALIAS)
-
-        # 创建一个带有透明背景的新图像
-        new_image = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
-
-        # 将缩放后的图像粘贴到新图像的中心
-        x = (512 - new_width) // 2
-        y = (512 - new_height) // 2
-        new_image.paste(image, (x, y))
-
-        # 保存新图像
-        new_image.save("example_resized.webp")
 
 
 def request_url(url, timeout=600):
@@ -374,9 +325,40 @@ def download_related():
         index = index + 1
 
 
+def image_resize(url):
+    # 打开webp动图文件
+    im = iio.imread(url)
+
+    # 获取帧数
+    num_frames = im.shape[0]
+
+    # 循环遍历每一帧
+    with Image.open(url) as im_pillow:
+        frames = []
+        for frame in ImageSequence.Iterator(im_pillow):
+            # 裁剪图片，使其等比例缩放并填充至512x512大小
+            width, height = frame.size
+            ratio = max(512 / width, 512 / height)
+            new_size = (int(width * ratio), int(height * ratio))
+            print(f"image_resize {width} {height}")
+            # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
+            background = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
+            paste_pos = ((512 - new_size[0]) // 2, (512 - new_size[1]) // 2)
+            frame = frame.resize(new_size, resample=Image.LANCZOS)
+            background.paste(frame, paste_pos)
+
+            # 将每一帧添加到帧列表中
+            frames.append(background)
+
+        # 保存图片
+        # frames[0].save('output.webp', format='webp', save_all=True, append_images=frames[1:])
+
+
 def main():
     # download_categories()
-    download_related()
+    # download_related()
+    # image_resize('test.webp')
+    image_resize('output.webp')
 
 
 main()
