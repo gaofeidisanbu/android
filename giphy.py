@@ -14,6 +14,9 @@ import imageio.v3 as iio
 from PIL.Image import Resampling
 from io import BytesIO
 
+from PIL import Image, ImageSequence
+import io
+
 
 class ImageList:
     def __init__(self, ordered_dict: OrderedDict):
@@ -320,18 +323,23 @@ def download_image(url, parent_fold, file_name):
 def download_related():
     list_gif_item = [
         {
-            "key": "Love emoji01",
-            "gif_id": "qmekG3ZzKyFFGNhqUR",
+            "key": "Love girls",
+            "gif_id": "Aizbg1tltyEQOHYelA",
             "type": "gifs"
         },
         {
-            "key": "Love emoji 02",
-            "gif_id": "RsysBYhKENQE8",
+            "key": "Love bro",
+            "gif_id": "1lhU8KAVwmVVu",
             "type": "gifs"
         },
         {
-            "key": "Love sticker01",
-            "gif_id": "PmuLLvty3SDOIaEh77",
+            "key": "love cat",
+            "gif_id": "9DkE0NfRGx7YGDXUu3",
+            "type": "gifs"
+        },
+        {
+            "key": "love dog",
+            "gif_id": "NudZEGlYGLkZ2",
             "type": "gifs"
         },
         {
@@ -340,18 +348,48 @@ def download_related():
             "type": "gifs"
         },
         {
-            "key": "Love Tom and Jerry",
-            "gif_id": "5dUllWbKVlaqmMTvHb",
+            "key": "angry face",
+            "gif_id": "UTX8UTKmpjQgo",
             "type": "gifs"
         },
         {
-            "key": "love Disney",
-            "gif_id": "hpQcDH5EfJRwxm03Uh",
+            "key": "Angry cartoon 1",
+            "gif_id": "11tTNkNy1SdXGg",
             "type": "gifs"
         },
         {
-            "key": "Love movie star",
-            "gif_id": "R6gvnAxj2ISzJdbA63",
+            "key": "Angry cartoon 2",
+            "gif_id": "11tTNkNy1SdXGg",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cartoon 3",
+            "gif_id": "qDfgfLkj47lDi",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry dog",
+            "gif_id": "uLwolChOTYn4s",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cat",
+            "gif_id": "bcqAMUTUHoLDy",
+            "type": "gifs"
+        },
+        {
+            "key": "Cry baby",
+            "gif_id": "lwYxf0qKEjnoI",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry emoji",
+            "gif_id": "11xVhnKOKtAj5e",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry sticker",
+            "gif_id": "RPfW9Yz9bixi4xGHii",
             "type": "gifs"
         }
     ]
@@ -418,33 +456,86 @@ def image_zip(parent_fold, file_name):
         print(f"image_zip already exists locally: {zip_url}")
         # return True
 
-    image = Image.open(resize_url)
-    frames = []
-    try:
-        while True:
-            frames.append(image.copy())
-            image.seek(len(frames))
-    except EOFError:
-        pass
-
-    total_size = os.path.getsize(resize_url)
-    if total_size > 500 * 1024:
-        # 需要进行压缩
-        compressed_frames = []
-        for frame in frames:
-            output = BytesIO()
-            frame.save(output, "webp", quality=90)
-            while output.tell() > 500 * 1024:
-                output = BytesIO()
-                frame.save(output, "webp", quality=80)
-            output.seek(0)
-            compressed_frames.append(Image.open(output))
-        compressed_frames[0].save(zip_url, save_all=True, append_images=compressed_frames[1:], format="webp")
-    else:
-        # 不需要进行压缩
-        image.save(zip_url)
+    compress_webp_animation(resize_url, zip_url)
+    # save_webp_frames(resize_url, zip_fold)
     print("image_zip end")
     return True
+
+
+def save_webp_frames(input_path, output_prefix):
+    # 打开webp动图文件
+    with open(input_path, "rb") as f:
+        data = f.read()
+
+    # 打开动图并获取其帧
+    im = Image.open(io.BytesIO(data))
+    for i, frame in enumerate(ImageSequence.Iterator(im)):
+        # 将每一帧保存为webp静图
+        frame.save(output_prefix + str(i) + ".webp", "webp")
+
+
+def compress_webp_animation(input_filepath, output_filepath):
+    # 打开WebP动画文件并获取帧数
+    with Image.open(input_filepath) as im:
+        frames = []
+        for frame in ImageSequence.Iterator(im):
+            frames.append(frame)
+        num_frames = len(frames)
+
+        # 获取原始文件大小
+        original_size = os.path.getsize(input_filepath)
+
+        # 如果原始文件大小已经小于等于500k，则无需进行压缩
+        if original_size <= 500 * 1024:
+            os.rename(input_filepath, output_filepath)
+            return
+
+        # 压缩每一帧并保存到新的WebP动画文件中
+        new_frames = []
+        total_size = 0
+        for i in range(num_frames):
+            frame = frames[i]
+
+            # 获取原始帧的大小
+            original_frame_size = len(frame.info['webp'])
+
+            # 如果原始帧的大小已经小于等于500k，则无需进行压缩
+            if original_frame_size <= 500 * 1024 / num_frames:
+                new_frames.append(frame)
+                total_size += original_frame_size
+                continue
+
+            # 压缩帧并获取压缩后的大小
+            new_frame = frame.copy()
+            while True:
+                # 压缩帧
+                new_frame.save("temp.webp", "webp", save_all=True, lossless=False, quality=75)
+
+                # 获取压缩后的大小
+                new_size = os.path.getsize("temp.webp")
+                if new_size <= 500 * 1024 / num_frames:
+                    break
+
+                # 调整压缩质量并重新压缩
+                new_frame.save("temp.webp", "webp", save_all=True, lossless=False, quality=50)
+
+            # 将压缩后的帧添加到新的帧列表中
+            new_frames.append(new_frame)
+            total_size += new_size
+
+        # 保存新的WebP动画文件
+        im.save(output_filepath, save_all=True, optimize=True, quality_mode='keep', quality_level=100, lossless=False,
+                loop=0, duration=im.info['duration'], disposal=im.info['disposal'], background=im.info['background'],
+                icc_profile=im.info['icc_profile'], exif=im.info['exif'], append_images=new_frames)
+
+        # 删除临时文件
+        os.remove("temp.webp")
+
+        # 输出压缩结果
+        new_size = os.path.getsize(output_filepath)
+        compression_ratio = original_size / new_size
+        print(
+            f"Compression complete: original size = {original_size / 1024:.2f} KB, compressed size = {new_size / 1024:.2f} KB, compression ratio = {compression_ratio:.2f}")
 
 
 def main():
