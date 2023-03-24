@@ -8,9 +8,11 @@ import time
 from PIL import Image, WebPImagePlugin, ImageSequence, ImageOps
 from urllib.parse import urlparse
 from collections import OrderedDict
+import subprocess
 import imageio
 import imageio.v3 as iio
 from PIL.Image import Resampling
+from io import BytesIO
 
 
 class ImageList:
@@ -111,7 +113,6 @@ def download_result(result: Result, parent_fold):
         filename = f'{result.image_name}.{file_extension}'
         download_image(result.images.original.webp, parent_fold, filename)
         image_resize(parent_fold, filename)
-        image_zip(parent_fold, filename)
 
 
 def download_tag_image(response: TagResponse, parent_fold):
@@ -184,7 +185,7 @@ def download_search(name, offset, parent_fold):
 
 
 def download_type(url, parent_fold):
-    print("download_type name url = ", url)
+    print("download_type start name url = ", url)
     response_str = request_url(url)
     if response_str is not None:
         try:
@@ -192,24 +193,27 @@ def download_type(url, parent_fold):
             display_name = parent_fold
             print('download_type display name ', display_name)
             childrens_dict = category_dict.get('data')
-            count = 0
-            for result_dict in childrens_dict:
-                id_str = result_dict.get('id')
-                title = result_dict.get('title')
-                images_dict = result_dict.get('images')
-                original = get_meet_image_url(images_dict)
-                if original is not None:
-                    images = Images(original)
-                    result = Result(id_str, title, images, count)
-                    download_result(result, parent_fold)
-                    count = count + 1
-                    if count > 50:
-                        break
-            print("download_type name")
+            if len(childrens_dict) != 0:
+                count = 0
+                for result_dict in childrens_dict:
+                    id_str = result_dict.get('id')
+                    title = result_dict.get('title')
+                    images_dict = result_dict.get('images')
+                    original = get_meet_image_url(images_dict)
+                    if original is not None:
+                        images = Images(original)
+                        result = Result(id_str, title, images, count)
+                        download_result(result, parent_fold)
+                        count = count + 1
+                        if count > 50:
+                            break
+                print("download_type end")
+            else:
+                print("download_type len 0")
         except json.JSONDecodeError:
             print('download_type Invalid JSON string')
-        except KeyError:
-            print('download_type Missing property')
+        except KeyError as e:
+            print(f'download_type Missing property {e}')
     else:
         print("download_type error")
 
@@ -314,19 +318,26 @@ def download_image(url, parent_fold, file_name):
 
 
 def download_related():
-    list_url = ['https://api.giphy.com/v1/videos/related?gif_id=artj92V8o75VPL7AeQ&api_key'
-                '=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870d4cd3af20c73']
+    list_gif_item = [{"gifid": "aaa", "type": "gifs", "name": "love"}, {"gifid": "aaa", "type": "gifs", "name": "love"}]
     index = 0
-    for url in list_url:
-        download_type(url, os.path.join("related", str(index)))
+    for gif_item in list_gif_item:
+        gif_id = gif_item.get('gifid')
+        gif_name = gif_item.get('name')
+        url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
+            f'&pingback_id=1870d4cd3af20c73 '
+        print(f'download_related start {gif_name}')
+        download_type(url, os.path.join("related", f"{gif_name}"))
         index = index + 1
+        print(f'download_related end {gif_name}')
 
 
 def image_resize(parent_fold, file_name):
     # 打开webp动图文件
     origin_url = os.path.join(parent_fold, 'origin', file_name)
-    if os.path.exists(origin_url) is not None:
-        print(f"image_resize not exists : {origin_url}")
+    if os.path.exists(origin_url):
+        print('image_resize origin_url exist')
+    else:
+        print(f"image_resize origin_url not exists : {origin_url}")
         return False
     resize_fold = os.path.join(parent_fold, 'resize')
     resize_url = os.path.join(resize_fold, file_name)
@@ -334,6 +345,7 @@ def image_resize(parent_fold, file_name):
     if os.path.exists(resize_url):
         print(f"image_resize already exists locally: {resize_url}")
         return True
+    print(f'image_resize resize_url  {resize_url}')
     # 循环遍历每一帧
     with Image.open(origin_url) as im_pillow:
         frames = []
@@ -353,7 +365,6 @@ def image_resize(parent_fold, file_name):
         # 保存图片
         frames[0].save(resize_url, format='webp', save_all=True,
                        append_images=frames[1:])
-        # image_zip(parent_fold, file_name)
     return True
 
 
@@ -369,47 +380,67 @@ def image_zip(parent_fold, file_name):
     os.makedirs(os.path.join(zip_fold), exist_ok=True)
     if os.path.exists(zip_url):
         print(f"image_zip already exists locally: {zip_url}")
-        return True
-    # 打开webp动图
-    animated_image = Image.open(resize_url)
+        # return True
 
-    # 获取动图的帧数和帧率
+    image = Image.open(resize_url)
     frames = []
     try:
         while True:
-            frame = animated_image.copy()
-            frames.append(frame)
-            animated_image.seek(len(frames))  # 帧数索引从1开始
+            frames.append(image.copy())
+            image.seek(len(frames))
     except EOFError:
         pass
-    fps = animated_image.info['fps']
-    duration = animated_image.info['duration']
-    total_frames = len(frames)
 
-    # 如果帧率大于20，则降低帧率
-    if fps > 20:
-        target_fps = 20
-        target_duration = int(duration * fps / target_fps)
-        target_frames = int(total_frames * target_fps / fps)
-
-        new_frames = []
-        for i in range(target_frames):
-            frame_index = int(i * total_frames / target_frames)
-            new_frames.append(frames[frame_index])
-
-        frames = new_frames
-        fps = target_fps
-        duration = target_duration
-
-    # 将压缩后的帧写入新的webp动图
-    frames[0].save(zip_url, save_all=True, append_images=frames[1:], duration=duration, loop=0, fps=fps)
-
+    total_size = os.path.getsize(resize_url)
+    print(f"image_zip total_size = {total_size}")
+    while total_size > 500 * 1024:
+        ratio = (500 * 1024) / total_size
+        ratio = int(ratio * 100)
+        print(f"image_zip ratio = {ratio}")
+        # 需要进行压缩
+        compressed_frames = []
+        for frame in frames:
+            # output = BytesIO()
+            # # frame.save(output, "webp", quality=ratio)
+            # print(f"image_zip frame before = {output.tell()}")
+            # # output = BytesIO()
+            # # frame.save(output, "webp", quality=ratio)
+            # # print(f"image_zip frame after = {output.tell()}")
+            # # while output.tell() > 500 * 1024:
+            # #     output = BytesIO()
+            # #     frame.save(output, "webp", quality=90)
+            # print(f"image_zip frame after1 = {output.tell()}")
+            # output.seek(0)
+            # print(f"image_zip frame after2 = {output.tell()}")
+            # new_frame = Image.open(output)
+            # output = BytesIO()
+            # new_frame.save(output, "webp", quality=ratio)
+            # print(f"image_zip frame after3 = {output.tell()}")
+            compressed_frames.append(frame)
+        compressed_frames[0].save(zip_url, quality=ratio, save_all=True, append_images=compressed_frames[1:],
+                                  format="webp")
+        total_size = os.path.getsize(zip_url)
+        print(f"image_zip total_size = {total_size}")
+        image = Image.open(zip_url)
+        frames = []
+        try:
+            while True:
+                frames.append(image.copy())
+                image.seek(len(frames))
+        except EOFError:
+            pass
+    else:
+        # 不需要进行压缩
+        image.save(zip_url)
+    print("image_zip end")
     return True
 
 
 def main():
     # download_categories()
     download_related()
+
+    # image_zip('./related/0', '0.webp')
 
 
 main()
