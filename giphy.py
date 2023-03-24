@@ -318,11 +318,47 @@ def download_image(url, parent_fold, file_name):
 
 
 def download_related():
-    list_gif_item = [{"gifid": "aaa", "type": "gifs", "name": "love"}, {"gifid": "aaa", "type": "gifs", "name": "love"}]
+    list_gif_item = [
+        {
+            "key": "Love emoji01",
+            "gif_id": "qmekG3ZzKyFFGNhqUR",
+            "type": "gifs"
+        },
+        {
+            "key": "Love emoji 02",
+            "gif_id": "RsysBYhKENQE8",
+            "type": "gifs"
+        },
+        {
+            "key": "Love sticker01",
+            "gif_id": "PmuLLvty3SDOIaEh77",
+            "type": "gifs"
+        },
+        {
+            "key": "Love heart",
+            "gif_id": "zt7DvntBrlHKmuFcay",
+            "type": "gifs"
+        },
+        {
+            "key": "Love Tom and Jerry",
+            "gif_id": "5dUllWbKVlaqmMTvHb",
+            "type": "gifs"
+        },
+        {
+            "key": "love Disney",
+            "gif_id": "hpQcDH5EfJRwxm03Uh",
+            "type": "gifs"
+        },
+        {
+            "key": "Love movie star",
+            "gif_id": "R6gvnAxj2ISzJdbA63",
+            "type": "gifs"
+        }
+    ]
     index = 0
     for gif_item in list_gif_item:
-        gif_id = gif_item.get('gifid')
-        gif_name = gif_item.get('name')
+        gif_id = gif_item.get('gif_id')
+        gif_name = gif_item.get('key')
         url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
             f'&pingback_id=1870d4cd3af20c73 '
         print(f'download_related start {gif_name}')
@@ -392,43 +428,18 @@ def image_zip(parent_fold, file_name):
         pass
 
     total_size = os.path.getsize(resize_url)
-    print(f"image_zip total_size = {total_size}")
-    while total_size > 500 * 1024:
-        ratio = (500 * 1024) / total_size
-        ratio = int(ratio * 100)
-        print(f"image_zip ratio = {ratio}")
+    if total_size > 500 * 1024:
         # 需要进行压缩
         compressed_frames = []
         for frame in frames:
-            # output = BytesIO()
-            # # frame.save(output, "webp", quality=ratio)
-            # print(f"image_zip frame before = {output.tell()}")
-            # # output = BytesIO()
-            # # frame.save(output, "webp", quality=ratio)
-            # # print(f"image_zip frame after = {output.tell()}")
-            # # while output.tell() > 500 * 1024:
-            # #     output = BytesIO()
-            # #     frame.save(output, "webp", quality=90)
-            # print(f"image_zip frame after1 = {output.tell()}")
-            # output.seek(0)
-            # print(f"image_zip frame after2 = {output.tell()}")
-            # new_frame = Image.open(output)
-            # output = BytesIO()
-            # new_frame.save(output, "webp", quality=ratio)
-            # print(f"image_zip frame after3 = {output.tell()}")
-            compressed_frames.append(frame)
-        compressed_frames[0].save(zip_url, quality=ratio, save_all=True, append_images=compressed_frames[1:],
-                                  format="webp")
-        total_size = os.path.getsize(zip_url)
-        print(f"image_zip total_size = {total_size}")
-        image = Image.open(zip_url)
-        frames = []
-        try:
-            while True:
-                frames.append(image.copy())
-                image.seek(len(frames))
-        except EOFError:
-            pass
+            output = BytesIO()
+            frame.save(output, "webp", quality=90)
+            while output.tell() > 500 * 1024:
+                output = BytesIO()
+                frame.save(output, "webp", quality=80)
+            output.seek(0)
+            compressed_frames.append(Image.open(output))
+        compressed_frames[0].save(zip_url, save_all=True, append_images=compressed_frames[1:], format="webp")
     else:
         # 不需要进行压缩
         image.save(zip_url)
