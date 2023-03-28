@@ -13,7 +13,10 @@ import imageio
 import imageio.v3 as iio
 from PIL.Image import Resampling
 from io import BytesIO
-
+import os
+from PIL import Image
+from io import BytesIO
+import shutil
 from PIL import Image, ImageSequence
 import io
 
@@ -323,73 +326,108 @@ def download_image(url, parent_fold, file_name):
 def download_related():
     list_gif_item = [
         {
-            "key": "Love girls",
-            "gif_id": "Aizbg1tltyEQOHYelA",
+            "key": "Hello",
+            "gif_id": "BElb9DVpHezcZufOhl",
             "type": "gifs"
         },
         {
-            "key": "Love bro",
-            "gif_id": "1lhU8KAVwmVVu",
+            "key": "Hello Cartoon1",
+            "gif_id": "noyBeNjH4nbtXV5ZLA",
             "type": "gifs"
         },
         {
-            "key": "love cat",
-            "gif_id": "9DkE0NfRGx7YGDXUu3",
+            "key": "Hello Cartoon2",
+            "gif_id": "1kJxyyCq9ZHXX0GM3a",
             "type": "gifs"
         },
         {
-            "key": "love dog",
-            "gif_id": "NudZEGlYGLkZ2",
+            "key": "Hello animal1",
+            "gif_id": "llJVg4Ri0VrUBzNOgG",
             "type": "gifs"
         },
         {
-            "key": "Love heart",
-            "gif_id": "zt7DvntBrlHKmuFcay",
+            "key": "Hello animal2",
+            "gif_id": "PgdWZV8Bb1fFqVcmtk",
             "type": "gifs"
         },
         {
-            "key": "angry face",
-            "gif_id": "UTX8UTKmpjQgo",
+            "key": "Hello cute",
+            "gif_id": "E1w0yvMxBIv5M8WkL8",
             "type": "gifs"
         },
         {
-            "key": "Angry cartoon 1",
-            "gif_id": "11tTNkNy1SdXGg",
+            "key": "Hello friend",
+            "gif_id": "3oz8xSjBmD1ZyELqW4",
             "type": "gifs"
         },
         {
-            "key": "Angry cartoon 2",
-            "gif_id": "11tTNkNy1SdXGg",
+            "key": "goodbye cute",
+            "gif_id": "UUhnOExaUB8BkDUaJn",
             "type": "gifs"
         },
         {
-            "key": "Angry cartoon 3",
-            "gif_id": "qDfgfLkj47lDi",
+            "key": "goodbye cartoon",
+            "gif_id": "3o752gFScyte7n6fCM",
             "type": "gifs"
         },
         {
-            "key": "Angry dog",
-            "gif_id": "uLwolChOTYn4s",
+            "key": "goodbye Simpson",
+            "gif_id": "l2Je9a1y33ZjSDSeY",
             "type": "gifs"
         },
         {
-            "key": "Angry cat",
-            "gif_id": "bcqAMUTUHoLDy",
+            "key": "goodbye friend",
+            "gif_id": "UQaRUOLveyjNC",
             "type": "gifs"
         },
         {
-            "key": "Cry baby",
-            "gif_id": "lwYxf0qKEjnoI",
+            "key": "goodbye sticker",
+            "gif_id": "kdEl6JgqpAvT0QonPd",
             "type": "gifs"
         },
         {
-            "key": "Angry emoji",
-            "gif_id": "11xVhnKOKtAj5e",
+            "key": "goodbye cat",
+            "gif_id": "iPiUxztIL4Sl2",
             "type": "gifs"
         },
         {
-            "key": "Angry sticker",
-            "gif_id": "RPfW9Yz9bixi4xGHii",
+            "key": "Tom and jerry01",
+            "gif_id": "y9QemIlaYYWdi",
+            "type": "gifs"
+        },
+        {
+            "key": "Tom and jerry02",
+            "gif_id": "OpiqxxEmyi4zC",
+            "type": "gifs"
+        },
+        {
+            "key": "Tom and jerry03",
+            "gif_id": "13Qumr2SLqrl5e",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan01",
+            "gif_id": "W1qqdGdnQhR2JorbbQ",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan02",
+            "gif_id": "3ohjUWt3CrcibB7R3W",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan03",
+            "gif_id": "xUNda1aXN8zSrNartK",
+            "type": "gifs"
+        },
+        {
+            "key": "SpongeBob SquarePants01",
+            "gif_id": "SKGo6OYe24EBG",
+            "type": "gifs"
+        },
+        {
+            "key": "SpongeBob SquarePants02",
+            "gif_id": "129OnZ9Qn2i0Ew",
             "type": "gifs"
         }
     ]
@@ -416,9 +454,9 @@ def image_resize(parent_fold, file_name):
     resize_fold = os.path.join(parent_fold, 'resize')
     resize_url = os.path.join(resize_fold, file_name)
     os.makedirs(resize_fold, exist_ok=True)
-    if os.path.exists(resize_url):
-        print(f"image_resize already exists locally: {resize_url}")
-        return True
+    # if os.path.exists(resize_url):
+    #     print(f"image_resize already exists locally: {resize_url}")
+    #     return True
     print(f'image_resize resize_url  {resize_url}')
     # 循环遍历每一帧
     with Image.open(origin_url) as im_pillow:
@@ -426,14 +464,17 @@ def image_resize(parent_fold, file_name):
         for frame in ImageSequence.Iterator(im_pillow):
             # 裁剪图片，使其等比例缩放并填充至512x512大小
             width, height = frame.size
-            ratio = max(512 / width, 512 / height)
+            ratio = min(512 / width, 512 / height)
             new_size = (int(width * ratio), int(height * ratio))
+            print(f"image_resize {new_size}")
             # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
             background = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
             paste_pos = ((512 - new_size[0]) // 2, (512 - new_size[1]) // 2)
             frame = frame.resize(new_size, resample=Image.LANCZOS)
             background.paste(frame, paste_pos)
-
+            # 将原始帧的duration信息传递给处理后的帧
+            if 'duration' in frame.info:
+                background.info['duration'] = frame.info['duration']
             # 将每一帧添加到帧列表中
             frames.append(background)
         # 保存图片
@@ -455,10 +496,28 @@ def image_zip(parent_fold, file_name):
     if os.path.exists(zip_url):
         print(f"image_zip already exists locally: {zip_url}")
         # return True
-
-    compress_webp_animation(resize_url, zip_url)
-    # save_webp_frames(resize_url, zip_fold)
+    if 'file_name' == '0.webp':
+        compress_webp_animation(resize_url, zip_url)
     print("image_zip end")
+    return True
+
+
+def image_tray(parent_fold, file_name):
+    zip_url = os.path.join(parent_fold, 'compressed', file_name)
+    tray_url = os.path.join(parent_fold, 'compressed', "tray.png")
+    if os.path.exists(zip_url):
+        print('image_tray zip_url exist')
+    else:
+        print(f"image_tray zip_url not exists : {zip_url}")
+        return False
+        # 打开webp动画文件
+    with Image.open(zip_url) as im:
+        # 获取第一帧图片
+        first_frame = im.copy()
+        # 调整大小为96x96
+        resized_image = first_frame.resize((96, 96))
+        # 保存为PNG格式图片
+        resized_image.save(tray_url, "PNG")
     return True
 
 
@@ -471,78 +530,64 @@ def save_webp_frames(input_path, output_prefix):
     im = Image.open(io.BytesIO(data))
     for i, frame in enumerate(ImageSequence.Iterator(im)):
         # 将每一帧保存为webp静图
-        frame.save(output_prefix + str(i) + ".webp", "webp")
+        frame.save(os.path.join(output_prefix, 'frame' + str(i) + ".webp"), "webp")
 
 
-def compress_webp_animation(input_filepath, output_filepath):
-    # 打开WebP动画文件并获取帧数
-    with Image.open(input_filepath) as im:
+size_limit = 500 * 1024;
+
+
+def compress_webp_animation(input_path, output_path):
+    # Open the input file as an image
+    with Image.open(input_path) as im:
+        # Extract all frames from the image
         frames = []
-        for frame in ImageSequence.Iterator(im):
-            frames.append(frame)
-        num_frames = len(frames)
-
-        # 获取原始文件大小
-        original_size = os.path.getsize(input_filepath)
-
-        # 如果原始文件大小已经小于等于500k，则无需进行压缩
-        if original_size <= 500 * 1024:
-            os.rename(input_filepath, output_filepath)
-            return
-
-        # 压缩每一帧并保存到新的WebP动画文件中
-        new_frames = []
-        total_size = 0
-        for i in range(num_frames):
-            frame = frames[i]
-
-            # 获取原始帧的大小
-            original_frame_size = len(frame.info['webp'])
-
-            # 如果原始帧的大小已经小于等于500k，则无需进行压缩
-            if original_frame_size <= 500 * 1024 / num_frames:
-                new_frames.append(frame)
-                total_size += original_frame_size
-                continue
-
-            # 压缩帧并获取压缩后的大小
-            new_frame = frame.copy()
+        try:
             while True:
-                # 压缩帧
-                new_frame.save("temp.webp", "webp", save_all=True, lossless=False, quality=75)
+                frames.append(im.copy())
+                im.seek(len(frames))
+        except EOFError:
+            pass
+        origin_size = os.path.getsize(input_path)
+        if origin_size > size_limit:
+            compressed_frames = []
+            quality = int((size_limit / float(origin_size)) * 60)
+            index = 0
+            for frame in frames:
+                output = BytesIO()
+                frame.save(output, format='webp', lossless=False)
+                index = index + 1
+                # while output.tell() > 500 * 1024 / len(frames):
+                #     print(f"compress_webp_animation {index} {int(500 * 1024 / len(frames))} tell = {output.tell()}")
+                #     if quality < 5:
+                #         break
+                #     quality -= 5
+                #     output = BytesIO()
+                #     frame.save(output, format='webp', quality=quality, lossless=False)
+                compressed_frames.append(Image.open(BytesIO(output.getvalue())))
+                # Save the compressed frames as an animated webp file
+                compressed_frames[0].save(output_path, quality=quality, lossless=False, optimize=False, save_all=True,
+                                          append_images=compressed_frames[1:])
+        else:
+            shutil.copy(input_path, output_path)
 
-                # 获取压缩后的大小
-                new_size = os.path.getsize("temp.webp")
-                if new_size <= 500 * 1024 / num_frames:
-                    break
-
-                # 调整压缩质量并重新压缩
-                new_frame.save("temp.webp", "webp", save_all=True, lossless=False, quality=50)
-
-            # 将压缩后的帧添加到新的帧列表中
-            new_frames.append(new_frame)
-            total_size += new_size
-
-        # 保存新的WebP动画文件
-        im.save(output_filepath, save_all=True, optimize=True, quality_mode='keep', quality_level=100, lossless=False,
-                loop=0, duration=im.info['duration'], disposal=im.info['disposal'], background=im.info['background'],
-                icc_profile=im.info['icc_profile'], exif=im.info['exif'], append_images=new_frames)
-
-        # 删除临时文件
-        os.remove("temp.webp")
-
-        # 输出压缩结果
-        new_size = os.path.getsize(output_filepath)
-        compression_ratio = original_size / new_size
-        print(
-            f"Compression complete: original size = {original_size / 1024:.2f} KB, compressed size = {new_size / 1024:.2f} KB, compression ratio = {compression_ratio:.2f}")
+    # # Compress the entire animated webp file until its size is less than 500KB
+    # with open(output_path, 'rb') as f:
+    #     compressed_data = f.read()
+    #     while len(compressed_data) > 500 * 1024:
+    #         quality -= 5
+    #         compressed_data = Image.open(BytesIO(compressed_data)).save(None, 'webp', quality=quality, lossless=True)
+    #
+    # with open(output_path, 'wb') as f:
+    #     f.write(compressed_data)
 
 
 def main():
     # download_categories()
-    download_related()
+    # download_related()
 
-    # image_zip('./related/0', '0.webp')
+    image_resize('./related/0', '0.webp')
+    image_zip('./related/0', '0.webp')
+    image_tray('./related/0', '0.webp')
 
 
 main()
