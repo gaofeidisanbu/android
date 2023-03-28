@@ -446,6 +446,7 @@ def download_related():
 def image_resize(parent_fold, file_name):
     # 打开webp动图文件
     origin_url = os.path.join(parent_fold, 'origin', file_name)
+    print(f'image_resize start {origin_url}')
     if os.path.exists(origin_url):
         print('image_resize origin_url exist')
     else:
@@ -454,10 +455,8 @@ def image_resize(parent_fold, file_name):
     resize_fold = os.path.join(parent_fold, 'resize')
     resize_url = os.path.join(resize_fold, file_name)
     os.makedirs(resize_fold, exist_ok=True)
-    # if os.path.exists(resize_url):
-    #     print(f"image_resize already exists locally: {resize_url}")
-    #     return True
-    print(f'image_resize resize_url  {resize_url}')
+    if os.path.exists(resize_url):
+        print(f"image_resize already exists locally: {resize_url}")
     # 循环遍历每一帧
     with Image.open(origin_url) as im_pillow:
         frames = []
@@ -466,7 +465,6 @@ def image_resize(parent_fold, file_name):
             width, height = frame.size
             ratio = min(512 / width, 512 / height)
             new_size = (int(width * ratio), int(height * ratio))
-            print(f"image_resize {new_size}")
             # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
             background = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
             paste_pos = ((512 - new_size[0]) // 2, (512 - new_size[1]) // 2)
@@ -480,26 +478,80 @@ def image_resize(parent_fold, file_name):
         # 保存图片
         frames[0].save(resize_url, format='webp', save_all=True,
                        append_images=frames[1:])
+    print(f'image_resize end {resize_url}')
     return True
+
+
+size_limit = 500 * 1024
 
 
 def image_zip(parent_fold, file_name):
     resize_url = os.path.join(parent_fold, 'resize', file_name)
+    print(f"image_zip start {resize_url}")
     zip_fold = os.path.join(parent_fold, 'compressed')
     zip_url = os.path.join(zip_fold, file_name)
     if os.path.exists(resize_url):
-        print("image_zip")
+        print(f"image_zip {resize_url} exists")
     else:
-        print(f"image_zip not exists : {resize_url}")
+        print(f"image_zip resize_url not exists : {resize_url}")
         return False
     os.makedirs(os.path.join(zip_fold), exist_ok=True)
     if os.path.exists(zip_url):
         print(f"image_zip already exists locally: {zip_url}")
-        # return True
-    if 'file_name' == '0.webp':
-        compress_webp_animation(resize_url, zip_url)
-    print("image_zip end")
+    compress_webp_animation(resize_url, zip_url)
+    print(f"image_zip end {zip_url}")
     return True
+
+
+def compress_webp_animation(input_path, output_path):
+    print('compress_webp_animation start')
+    origin_size = os.path.getsize(input_path)
+    if origin_size > size_limit:
+        compress_webp_animation2(input_path, output_path)
+        out_size = os.path.getsize(output_path)
+        if out_size > size_limit:
+            os.remove(output_path)
+            print('compress_webp_animation zip fail')
+        else:
+            print('compress_webp_animation zip success')
+    else:
+        shutil.copy(input_path, output_path)
+        print('compress_webp_animation not zip')
+    print('compress_webp_animation end')
+
+
+def compress_webp_animation2(input_path, output_path):
+    result = compress_webp_animation3(input_path, output_path)
+    if not result:
+        for i in range(2):
+            print(f'compress_webp_animation2 {i}')
+            result = compress_webp_animation3(output_path, output_path)
+            if result:
+                break
+
+
+def compress_webp_animation3(input_path, output_path):
+    input_size = os.path.getsize(input_path)
+    print(f'compress_webp_animation2 start zip {input_path} {input_size}')
+    with Image.open(input_path) as im:
+        # Extract all frames from the image
+        frames = []
+        try:
+            while True:
+                frames.append(im.copy())
+                im.seek(len(frames))
+        except EOFError:
+            pass
+            quality = int((size_limit / float(input_size)) * 60)
+            if quality > 100:
+                quality = 100
+            if quality < 10:
+                quality = 10
+            frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
+                           save_all=True,
+                           append_images=frames[1:])
+            print(f'compress_webp_animation2 end zip {output_path} {os.path.getsize(output_path)}')
+    return os.path.getsize(output_path) < size_limit
 
 
 def image_tray(parent_fold, file_name):
@@ -531,54 +583,6 @@ def save_webp_frames(input_path, output_prefix):
     for i, frame in enumerate(ImageSequence.Iterator(im)):
         # 将每一帧保存为webp静图
         frame.save(os.path.join(output_prefix, 'frame' + str(i) + ".webp"), "webp")
-
-
-size_limit = 500 * 1024;
-
-
-def compress_webp_animation(input_path, output_path):
-    # Open the input file as an image
-    with Image.open(input_path) as im:
-        # Extract all frames from the image
-        frames = []
-        try:
-            while True:
-                frames.append(im.copy())
-                im.seek(len(frames))
-        except EOFError:
-            pass
-        origin_size = os.path.getsize(input_path)
-        if origin_size > size_limit:
-            compressed_frames = []
-            quality = int((size_limit / float(origin_size)) * 60)
-            index = 0
-            for frame in frames:
-                output = BytesIO()
-                frame.save(output, format='webp', lossless=False)
-                index = index + 1
-                # while output.tell() > 500 * 1024 / len(frames):
-                #     print(f"compress_webp_animation {index} {int(500 * 1024 / len(frames))} tell = {output.tell()}")
-                #     if quality < 5:
-                #         break
-                #     quality -= 5
-                #     output = BytesIO()
-                #     frame.save(output, format='webp', quality=quality, lossless=False)
-                compressed_frames.append(Image.open(BytesIO(output.getvalue())))
-                # Save the compressed frames as an animated webp file
-                compressed_frames[0].save(output_path, quality=quality, lossless=False, optimize=False, save_all=True,
-                                          append_images=compressed_frames[1:])
-        else:
-            shutil.copy(input_path, output_path)
-
-    # # Compress the entire animated webp file until its size is less than 500KB
-    # with open(output_path, 'rb') as f:
-    #     compressed_data = f.read()
-    #     while len(compressed_data) > 500 * 1024:
-    #         quality -= 5
-    #         compressed_data = Image.open(BytesIO(compressed_data)).save(None, 'webp', quality=quality, lossless=True)
-    #
-    # with open(output_path, 'wb') as f:
-    #     f.write(compressed_data)
 
 
 def main():
