@@ -532,7 +532,7 @@ def compress_webp_animation2(input_path, output_path):
 
 def compress_webp_animation3(input_path, output_path):
     input_size = os.path.getsize(input_path)
-    print(f'compress_webp_animation2 start zip {input_path} {input_size}')
+    print(f'compress_webp_animation3 start zip {input_path} {input_size}')
     with Image.open(input_path) as im:
         # Extract all frames from the image
         frames = []
@@ -542,7 +542,7 @@ def compress_webp_animation3(input_path, output_path):
                 im.seek(len(frames))
         except EOFError:
             pass
-            quality = int((size_limit / float(input_size)) * 60)
+            quality = int((size_limit / float(input_size)) / 60)
             if quality > 100:
                 quality = 100
             if quality < 10:
@@ -550,13 +550,14 @@ def compress_webp_animation3(input_path, output_path):
             frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
                            save_all=True,
                            append_images=frames[1:])
-            print(f'compress_webp_animation2 end zip {output_path} {os.path.getsize(output_path)}')
+            print(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
     return os.path.getsize(output_path) < size_limit
 
 
-def image_tray(parent_fold, file_name):
-    zip_url = os.path.join(parent_fold, 'compressed', file_name)
+def image_tray(parent_fold, file_name, max_size):
+    zip_url = os.path.join(parent_fold, 'origin', file_name)
     tray_url = os.path.join(parent_fold, 'compressed', "tray.png")
+    print(f'image_tray start {zip_url}')
     if os.path.exists(zip_url):
         print('image_tray zip_url exist')
     else:
@@ -569,7 +570,17 @@ def image_tray(parent_fold, file_name):
         # 调整大小为96x96
         resized_image = first_frame.resize((96, 96))
         # 保存为PNG格式图片
-        resized_image.save(tray_url, "PNG")
+        resized_image.save(tray_url, "PNG", optimize=True, compress_level=9)
+        # Check if the file size is within the specified limit
+        if os.path.getsize(tray_url) > max_size:
+            # If the file size is larger than the specified limit, try to reduce it by reducing the compression level
+            for compress_level in range(8, 0, -1):
+                print(f'image_tray compress before {os.path.getsize(tray_url)}')
+                tray_url.save(tray_url, format='PNG', optimize=True, compress_level=compress_level)
+                print(f'image_tray compress after {os.path.getsize(tray_url)}')
+                if os.path.getsize(tray_url) / 1024 <= max_size:
+                    break
+    print(f'image_tray end {tray_url} {os.path.getsize(tray_url)}')
     return True
 
 
@@ -591,7 +602,7 @@ def main():
 
     image_resize('./related/0', '0.webp')
     image_zip('./related/0', '0.webp')
-    image_tray('./related/0', '0.webp')
+    image_tray('./related/0', '0.webp', 50 * 1024)
 
 
 main()
