@@ -46,7 +46,7 @@ driver.get('https://giphy.com/artists')
 
 # 等待 Artist 加载完成
 WebDriverWait(driver, 100).until(EC.presence_of_all_elements_located((By.XPATH, artist_xpath)))
-print("WebDriverWait 1")
+logger.info("WebDriverWait 1")
 
 # 获取所有 Artist 的链接
 artist_links = driver.find_elements(By.XPATH, artist_xpath)
@@ -65,17 +65,17 @@ def get_image_name(image_url_str):
 
 # 对于每个 Artist
 for i, artist_link in enumerate(artist_links):
-    print(f'Processing Artist {i + 1}/{len(artist_links)}')
+    logger.info(f'Processing Artist {i + 1}/{len(artist_links)}')
 
     # 点击链接进入 Artist 的页面
     artist_link.click()
 
     # 等待 Artist 页面加载完成
     WebDriverWait(driver, 100).until(EC.presence_of_all_elements_located((By.XPATH, artist_name_xpath)))
-    print("WebDriverWait 2")
+    logger.info("WebDriverWait 2")
     # 获取 Artist 的名字，并创建一个文件夹
     artist_name = driver.find_element(By.XPATH, '//h1/span').text
-    print("artist_name="+artist_name)
+    logger.info("artist_name="+artist_name)
     artist_folder = f'./{artist_name}'
     os.makedirs(artist_folder, exist_ok=True)
 
@@ -84,12 +84,12 @@ for i, artist_link in enumerate(artist_links):
 
     # 对于每个作品集
     for j, gallery_link in enumerate(gallery_links):
-        print(f'  Processing Gallery {j + 1}/{len(gallery_links)}')
+        logger.info(f'  Processing Gallery {j + 1}/{len(gallery_links)}')
         # 获取作品集的名字，并创建一个文件夹
         gallery_name = driver.find_element(By.XPATH, '//a/h2').text
         gallery_folder = f'{artist_folder}/{gallery_name}'
         os.makedirs(gallery_folder, exist_ok=True)
-        print("gallery_name="+gallery_name)
+        logger.info("gallery_name="+gallery_name)
         # 点击链接进入作品集的页面
         gallery_link.click()
         image_xpath = '//img[@class="giphy-gif-img giphy-img-loaded"]'
@@ -98,11 +98,11 @@ for i, artist_link in enumerate(artist_links):
             EC.presence_of_all_elements_located((By.XPATH, image_xpath)))
         image_links = driver.find_elements(By.XPATH, image_xpath)
         num_images = min(max_images_per_gallery, len(image_links))
-        print('num_images len='+str(num_images))
+        logger.info('num_images len='+str(num_images))
         for k in range(num_images):
             image_link = image_links[k]
             image_url = image_link.get_attribute('src')
-            print("image_url=" + image_url)
+            logger.info("image_url=" + image_url)
             # 获取图片名字
             image_name = get_image_name(image_url)
             # 下载图片
@@ -111,11 +111,11 @@ for i, artist_link in enumerate(artist_links):
                     with request.urlopen(image_url, timeout=download_timeout) as response, open(
                             f'{gallery_folder}/{image_name}', 'wb') as f:
                         f.write(response.read())
-                        print("finish image_name=" + image_name)
+                        logger.info("finish image_name=" + image_name)
                     break
                 except URLError as e:
-                    print('reason', e.reason)
-                    print(f'Download failed for {image_url}. Retry {retry + 1}/{max_download_retries}')
+                    logger.info('reason', e.reason)
+                    logger.info(f'Download failed for {image_url}. Retry {retry + 1}/{max_download_retries}')
                     time.sleep(1)
 
         # 返回到 Artist 页面
