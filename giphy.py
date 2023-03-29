@@ -1,24 +1,15 @@
-import requests
-import logging
-import json
-import os
-import requests
 import datetime
-import time
-from PIL import Image, WebPImagePlugin, ImageSequence, ImageOps
-from urllib.parse import urlparse
-from collections import OrderedDict
-import subprocess
-import imageio
-import imageio.v3 as iio
-from PIL.Image import Resampling
-from io import BytesIO
-import os
-from PIL import Image
-from io import BytesIO
-import shutil
-from PIL import Image, ImageSequence
 import io
+import json
+import logging
+import os
+import shutil
+import time
+from collections import OrderedDict
+from urllib.parse import urlparse
+
+import requests
+from PIL import Image, ImageSequence
 
 
 class ImageList:
@@ -119,10 +110,17 @@ def download_webp(result: Result, parent_fold):
         file_extension = path.split('.')[-1]
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
-        download_image(result.images.original.webp, parent_fold, filename)
-        image_resize(parent_fold, filename)
-        image_zip(parent_fold, filename)
-        image_tray(parent_fold, filename, 50 * 1024)
+        download_output_fold = os.path.join(parent_fold, 'origin')
+        download_image(result.images.original.webp, download_output_fold, filename)
+        resize_input_file = os.path.join(download_output_fold, filename)
+        resize_output_fold = os.path.join(parent_fold, 'resize')
+        image_resize(resize_input_file, resize_output_fold, filename, 512, 512)
+        zip_input_file = os.path.join(resize_output_fold, filename)
+        zip_output_fold = os.path.join(parent_fold, 'compressed')
+        image_zip(zip_input_file, zip_output_fold, filename)
+        tray_input_file = os.path.join(zip_output_fold, filename)
+        tray_output_file = os.path.join(zip_output_fold, "tray.png")
+        image_tray(tray_input_file, tray_output_file, 50 * 1024)
 
 
 def download_gif(result: Result, parent_fold):
@@ -133,7 +131,8 @@ def download_gif(result: Result, parent_fold):
         file_extension = path.split('.')[-1]
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
-        download_image(result.images.original.gif, parent_fold, filename, 'gif')
+        output_fold = os.path.join(parent_fold, 'gif')
+        download_image(result.images.original.gif, output_fold, filename)
 
 
 def download_tag_image(response: TagResponse, parent_fold):
@@ -303,12 +302,11 @@ def download_categories():
     print("download_animal end")
 
 
-def download_image(url, parent_fold, file_name, image_type='origin'):
+def download_image(url, output_fold, file_name):
     print('download_image ------- start ', url)
-    parent_fold = os.path.join(parent_fold, image_type)
-    os.makedirs(parent_fold, exist_ok=True)
+    os.makedirs(output_fold, exist_ok=True)
     # Combine the parent folder path and filename to create the full file path.
-    file_path = os.path.join(parent_fold, file_name)
+    file_path = os.path.join(output_fold, file_name)
 
     if os.path.exists(file_path):
         print(f"Image already exists locally: {file_path}")
@@ -465,31 +463,29 @@ def download_related():
         print(f'download_related end {gif_name}')
 
 
-def image_resize(parent_fold, file_name):
+def image_resize(input_file, output_fold, file_name, target_width, target_height):
     # 打开webp动图文件
-    origin_url = os.path.join(parent_fold, 'origin', file_name)
-    print(f'image_resize start {origin_url}')
-    if os.path.exists(origin_url):
-        print('image_resize origin_url exist')
+    print(f'image_resize start {input_file}')
+    if os.path.exists(input_file):
+        print('image_resize input_file exist')
     else:
-        print(f"image_resize origin_url not exists : {origin_url}")
+        print(f"image_resize input_file not exists : {input_file}")
         return False
-    resize_fold = os.path.join(parent_fold, 'resize')
-    resize_url = os.path.join(resize_fold, file_name)
-    os.makedirs(resize_fold, exist_ok=True)
+    resize_url = os.path.join(output_fold, file_name)
+    os.makedirs(output_fold, exist_ok=True)
     if os.path.exists(resize_url):
         print(f"image_resize already exists locally: {resize_url}")
     # 循环遍历每一帧
-    with Image.open(origin_url) as im_pillow:
+    with Image.open(input_file) as im_pillow:
         frames = []
         for frame in ImageSequence.Iterator(im_pillow):
             # 裁剪图片，使其等比例缩放并填充至512x512大小
             width, height = frame.size
-            ratio = min(512 / width, 512 / height)
+            ratio = min(target_width / width, target_height / height)
             new_size = (int(width * ratio), int(height * ratio))
             # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
-            background = Image.new('RGBA', (512, 512), (0, 0, 0, 0))
-            paste_pos = ((512 - new_size[0]) // 2, (512 - new_size[1]) // 2)
+            background = Image.new('RGBA', (target_width, target_height), (0, 0, 0, 0))
+            paste_pos = ((target_width - new_size[0]) // 2, (target_height - new_size[1]) // 2)
             frame = frame.resize(new_size, resample=Image.LANCZOS)
             background.paste(frame, paste_pos)
             # 将原始帧的duration信息传递给处理后的帧
@@ -507,20 +503,18 @@ def image_resize(parent_fold, file_name):
 size_limit = 500 * 1024
 
 
-def image_zip(parent_fold, file_name):
-    resize_url = os.path.join(parent_fold, 'resize', file_name)
-    print(f"image_zip start {resize_url}")
-    zip_fold = os.path.join(parent_fold, 'compressed')
-    zip_url = os.path.join(zip_fold, file_name)
-    if os.path.exists(resize_url):
-        print(f"image_zip {resize_url} exists")
+def image_zip(input_file, output_fold, file_name):
+    print(f"image_zip start {input_file}")
+    zip_url = os.path.join(output_fold, file_name)
+    if os.path.exists(input_file):
+        print(f"image_zip {input_file} exists")
     else:
-        print(f"image_zip resize_url not exists : {resize_url}")
+        print(f"image_zip input_file not exists : {input_file}")
         return False
-    os.makedirs(os.path.join(zip_fold), exist_ok=True)
+    os.makedirs(os.path.join(output_fold), exist_ok=True)
     if os.path.exists(zip_url):
         print(f"image_zip already exists locally: {zip_url}")
-    compress_webp_animation(resize_url, zip_url)
+    compress_webp_animation(input_file, zip_url)
     print(f"image_zip end {zip_url}")
     return True
 
@@ -576,39 +570,37 @@ def compress_webp_animation3(input_path, output_path):
     return os.path.getsize(output_path) < size_limit
 
 
-def image_tray(parent_fold, file_name, max_size):
-    zip_url = os.path.join(parent_fold, 'compressed', file_name)
-    tray_url = os.path.join(parent_fold, 'compressed', "tray.png")
-    print(f'image_tray start {zip_url}')
-    if os.path.exists(zip_url):
+def image_tray(input_file, output_file, max_size):
+    print(f'image_tray start {input_file}')
+    if os.path.exists(input_file):
         print('image_tray zip_url exist')
     else:
-        print(f"image_tray zip_url not exists : {zip_url}")
+        print(f"image_tray zip_url not exists : {input_file}")
         return False
-    if os.path.exists(tray_url):
-        print(f'image_tray {tray_url} exist')
+    if os.path.exists(output_file):
+        print(f'image_tray {output_file} exist')
         return True
         # 打开webp动画文件
-    with Image.open(zip_url) as im:
+    with Image.open(input_file) as im:
         # 获取第一帧图片
         first_frame = im.copy()
         # 调整大小为96x96
         resized_image = first_frame.resize((96, 96))
         # 保存为PNG格式图片
-        resized_image.save(tray_url, "PNG", optimize=True, compress_level=9)
+        resized_image.save(output_file, "PNG", optimize=True, compress_level=9)
         # Check if the file size is within the specified limit
-        if os.path.getsize(tray_url) > max_size:
+        if os.path.getsize(output_file) > max_size:
             # If the file size is larger than the specified limit, try to reduce it by reducing the compression level
             for compress_level in range(8, 0, -1):
-                print(f'image_tray compress before {os.path.getsize(tray_url)}')
-                tray_url.save(tray_url, format='PNG', optimize=True, compress_level=compress_level)
-                print(f'image_tray compress after {os.path.getsize(tray_url)}')
-                if os.path.getsize(tray_url) / 1024 <= max_size:
+                print(f'image_tray compress before {os.path.getsize(output_file)}')
+                im.save(output_file, format='PNG', optimize=True, compress_level=compress_level)
+                print(f'image_tray compress after {os.path.getsize(output_file)}')
+                if os.path.getsize(output_file) / 1024 <= max_size:
                     break
-    if os.path.getsize(tray_url) > max_size:
-        os.remove(tray_url)
+    if os.path.getsize(output_file) > max_size:
+        os.remove(output_file)
         return False
-    print(f'image_tray end {tray_url} {os.path.getsize(tray_url)}')
+    print(f'image_tray end {output_file} {os.path.getsize(output_file)}')
     return True
 
 
