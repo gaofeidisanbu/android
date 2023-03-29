@@ -7,9 +7,35 @@ import shutil
 import time
 from collections import OrderedDict
 from urllib.parse import urlparse
-
+import colorlog
 import requests
 from PIL import Image, ImageSequence
+
+# 创建logging实例
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+# 定义控制台输出格式
+formatter = colorlog.ColoredFormatter(
+    "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
+    log_colors={
+        'DEBUG': 'cyan',
+        'INFO': 'green',
+        'WARNING': 'yellow',
+        'ERROR': 'red',
+        'CRITICAL': 'red,bg_white',
+    },
+    secondary_log_colors={},
+    style='%'
+)
+
+# 创建控制台处理器
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.DEBUG)
+console_handler.setFormatter(formatter)
+
+# 将控制台处理器添加到logger
+logger.addHandler(console_handler)
 
 
 class ImageList:
@@ -52,9 +78,6 @@ class TagResponse:
 
 
 def request_url(url, timeout=600):
-    # 设置日志格式
-    logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', level=logging.INFO)
-
     # 设置重试次数
     MAX_RETRIES = 3
     retries = 0
@@ -65,8 +88,8 @@ def request_url(url, timeout=600):
             response = requests.get(url, timeout=timeout)
             end_time = datetime.datetime.now()  # 获取下载结束时间
             delta_time = end_time - start_time  # 计算时间差
-            print('request_url ------- delta_time ', delta_time.seconds)
-            print('request_url ------- end ', url)
+            logger.info(f'request_url ------- delta_time {delta_time.seconds} {url}')
+            logger.info('request_url ------- end')
             # 如果返回码为200，表示请求成功，返回响应内容
             if response.status_code == 200:
                 return response.content
@@ -76,7 +99,7 @@ def request_url(url, timeout=600):
             retries += 1
             time.sleep(5)  # 等待5秒后重试
     # 重试多次后仍然失败，记录日志并返回None
-    logging.error(f'Request failed after {MAX_RETRIES} retries: {url}')
+    logger.error(f'Request failed after {MAX_RETRIES} retries: {url}')
     return None
 
 
@@ -110,17 +133,25 @@ def download_webp(result: Result, parent_fold):
         file_extension = path.split('.')[-1]
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
+
         download_output_fold = os.path.join(parent_fold, 'origin')
         download_image(result.images.original.webp, download_output_fold, filename)
+
         resize_input_file = os.path.join(download_output_fold, filename)
         resize_output_fold = os.path.join(parent_fold, 'resize')
         image_resize(resize_input_file, resize_output_fold, filename, 512, 512)
+
         zip_input_file = os.path.join(resize_output_fold, filename)
         zip_output_fold = os.path.join(parent_fold, 'compressed')
         image_zip(zip_input_file, zip_output_fold, filename)
+
         tray_input_file = os.path.join(zip_output_fold, filename)
         tray_output_file = os.path.join(zip_output_fold, "tray.png")
         image_tray(tray_input_file, tray_output_file, 50 * 1024)
+
+        resize_240_input_file = os.path.join(zip_output_fold, filename)
+        resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
+        image_resize(resize_240_input_file, resize_240_output_fold, filename, 240, 240)
 
 
 def download_gif(result: Result, parent_fold):
@@ -144,14 +175,14 @@ def download_tag_image(response: TagResponse, parent_fold):
 
 
 def download_tag_2(url, parent_fold):
-    print('download_tag_2 start ', url)
+    logger.info(f'download_tag_2 start {url}')
     response_str = request_url(url)
     if response_str is not None:
         response = parse_image_tag(response_str)
         download_tag_image(response, parent_fold)
-        print('download_tag_2 end ', url)
+        logger.info('download_tag_2 end ')
     else:
-        print('download_tag_2 end error', url)
+        logger.info('download_tag_2 end error')
 
     return response
 
@@ -160,7 +191,7 @@ max_count = 50
 
 
 def download_tag(url, parent_fold):
-    print('download_tag start ', url)
+    logger.info(f'download_tag start {url}')
     count = 0
     i = 0
     while i < 10:
@@ -169,16 +200,16 @@ def download_tag(url, parent_fold):
         if response is None or response.next_url is None or count > max_count:
             break
         i += 1
-    print('download_tag end ', url)
+    logger.info('download_tag end ')
 
 
 def download_artists(url):
-    print("download_category start", url)
+    logger.info(f"download_category start {url}")
     response_str = request_url(url)
     if response_str is not None:
         category_dict = json.loads(response_str)
         display_name = category_dict.get("display_name")
-        print('download_category display name ', display_name)
+        logger.info(f'download_category display name {display_name}')
         childrens_dict = category_dict.get('children')
         count = 0
         for children_dict in childrens_dict:
@@ -186,32 +217,32 @@ def download_artists(url):
             children_name = children_dict.get('display_name')
             children_slug = children_dict.get('slug')
             children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
-            print('download_category children name ', children_name)
+            logger.info('download_category children name ', children_name)
             download_tag(children_url, os.path.join(display_name, children_name))
             count = count + 1
             if count > 100:
                 break
-        print("download_category end", url)
+        logger.info("download_category end")
     else:
-        print("download_category error", url)
+        logger.info("download_category error")
 
 
 def download_search(name, offset, parent_fold):
     url = f'https://api.giphy.com/v1/gifs/search?offset={offset}&type=gifs&sort=&q={name}&api_key' \
         f'=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4'
-    print("download_search start name", name)
-    download_type(url, parent_fold)
-    print("download_search end name", name)
+    logger.info(f"download_search start name {name} {offset} {url}")
+    download_type(url, parent_fold, offset)
+    logger.info(f"download_search end name {name}")
 
 
-def download_type(url, parent_fold):
-    print("download_type start name url = ", url)
+def download_type(url, parent_fold, start_index):
+    logger.info(f"download_type start name url = {url}")
     response_str = request_url(url)
     if response_str is not None:
         try:
             category_dict = json.loads(response_str)
             display_name = parent_fold
-            print('download_type display name ', display_name)
+            logger.info(f'download_type display name {display_name}', )
             childrens_dict = category_dict.get('data')
             if len(childrens_dict) != 0:
                 count = 0
@@ -219,24 +250,26 @@ def download_type(url, parent_fold):
                     id_str = result_dict.get('id')
                     title = result_dict.get('title')
                     images_dict = result_dict.get('images')
+                    tags_dict = result_dict.get('tags')
                     original = get_meet_image_webp_url(images_dict)
                     if original is not None:
                         images = Images(original)
-                        result = Result(id_str, title, images, count)
+                        result = Result(id_str, title, images, count + start_index)
                         download_webp(result, parent_fold)
                         download_gif(result, parent_fold)
+                        download_tags(tags_dict, parent_fold, result.image_name)
                         count = count + 1
-                        if count > 50:
+                        if count > 200:
                             break
-                print("download_type end")
+                logger.info("download_type end")
             else:
-                print("download_type len 0")
+                logger.error("download_type len 0")
         except json.JSONDecodeError:
-            print('download_type Invalid JSON string')
+            logger.error('download_type Invalid JSON string')
         except KeyError as e:
-            print(f'download_type Missing property {e}')
+            logger.error(f'download_type Missing property {e}')
     else:
-        print("download_type error")
+        logger.error("download_type error")
 
 
 def get_meet_image_webp_url(images_dict):
@@ -269,7 +302,7 @@ def check_image_type(url, image_type):
 
 
 def download_category(url, category):
-    print("download_category start", category)
+    logger.info(f"download_category start {category}")
     response_str = request_url(url)
     if response_str is not None:
         response_dict = json.loads(response_str)
@@ -278,15 +311,22 @@ def download_category(url, category):
             name = data.get('name_encoded')
             if name is not None:
                 download_search(name, 0, os.path.join('sticker', category, name))
-                # download_search(name, 25, os.path.join('sticker', category, name))
+                download_search(name, 25, os.path.join('sticker', category, name))
+                download_search(name, 50, os.path.join('sticker', category, name))
+                download_search(name, 75, os.path.join('sticker', category, name))
+                download_search(name, 100, os.path.join('sticker', category, name))
+                download_search(name, 125, os.path.join('sticker', category, name))
+                download_search(name, 150, os.path.join('sticker', category, name))
+                download_search(name, 175, os.path.join('sticker', category, name))
+                download_search(name, 200, os.path.join('sticker', category, name))
                 break
             else:
-                print('download_category error', name)
-    print("download_category end", category)
+                logger.info(f'download_category error {name}')
+    logger.info(f"download_category end {category}")
 
 
 def download_categories():
-    print("download_categories start")
+    logger.info("download_categories start")
     url = 'https://api.giphy.com/v1/gifs/categories?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id' \
           '=186fda3de4e75f6b '
     response_str = request_url(url)
@@ -298,23 +338,21 @@ def download_categories():
             url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
                 f'&pingback_id=186fda3de4e75f6b '
             download_category(url, category)
-            break
-    print("download_animal end")
+    logger.info("download_animal end")
 
 
 def download_image(url, output_fold, file_name):
-    print('download_image ------- start ', url)
+    logger.info(f'download_image ------- start {url}')
     os.makedirs(output_fold, exist_ok=True)
     # Combine the parent folder path and filename to create the full file path.
     file_path = os.path.join(output_fold, file_name)
 
     if os.path.exists(file_path):
-        print(f"Image already exists locally: {file_path}")
+        logger.warning(f"Image already exists locally: {file_path}")
         return True
     else:
         # Make a request to the URL to get the image data.
         # 设置日志格式
-        logging.basicConfig(format='download_image %(asctime)s %(levelname)s %(message)s', level=logging.INFO)
         # 设置重试次数
         MAX_RETRIES = 3
         retries = 0
@@ -330,126 +368,21 @@ def download_image(url, output_fold, file_name):
                         file.write(response.content)
                     end_time = datetime.datetime.now()  # e 获取下载结束时间
                     delta_time = end_time - start_time  # 计算时间差
-                    print('download_image ------- delta_time ', delta_time.seconds)
-                    print('download_image ------- end ', url)
+                    logger.info(f'download_image ------- delta_time {delta_time.seconds}')
+                    logger.info('download_image ------- end ')
                     return True
             except requests.exceptions.RequestException as e:
                 # 发生异常时记录日志并重试
-                logging.error(f'download_image Request failed: {str(e)}. Retry {retries + 1}/{MAX_RETRIES}')
+                logger.error(f'download_image Request failed: {str(e)}. Retry {retries + 1}/{MAX_RETRIES}')
                 retries += 1
                 time.sleep(5)  # 等待5秒后重试
         # 重试多次后仍然失败，记录日志并返回None
-        logging.error(f'download_image Request failed after image name {file_path} {MAX_RETRIES} retries: {url}')
+        logger.error(f'download_image Request failed after image name {file_path} {MAX_RETRIES} retries: {url}')
         return False
 
 
 def download_related():
     list_gif_item = [
-        {
-            "key": "Hello",
-            "gif_id": "BElb9DVpHezcZufOhl",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello Cartoon1",
-            "gif_id": "noyBeNjH4nbtXV5ZLA",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello Cartoon2",
-            "gif_id": "1kJxyyCq9ZHXX0GM3a",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello animal1",
-            "gif_id": "llJVg4Ri0VrUBzNOgG",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello animal2",
-            "gif_id": "PgdWZV8Bb1fFqVcmtk",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello cute",
-            "gif_id": "E1w0yvMxBIv5M8WkL8",
-            "type": "gifs"
-        },
-        {
-            "key": "Hello friend",
-            "gif_id": "3oz8xSjBmD1ZyELqW4",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye cute",
-            "gif_id": "UUhnOExaUB8BkDUaJn",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye cartoon",
-            "gif_id": "3o752gFScyte7n6fCM",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye Simpson",
-            "gif_id": "l2Je9a1y33ZjSDSeY",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye friend",
-            "gif_id": "UQaRUOLveyjNC",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye sticker",
-            "gif_id": "kdEl6JgqpAvT0QonPd",
-            "type": "gifs"
-        },
-        {
-            "key": "goodbye cat",
-            "gif_id": "iPiUxztIL4Sl2",
-            "type": "gifs"
-        },
-        {
-            "key": "Tom and jerry01",
-            "gif_id": "y9QemIlaYYWdi",
-            "type": "gifs"
-        },
-        {
-            "key": "Tom and jerry02",
-            "gif_id": "OpiqxxEmyi4zC",
-            "type": "gifs"
-        },
-        {
-            "key": "Tom and jerry03",
-            "gif_id": "13Qumr2SLqrl5e",
-            "type": "gifs"
-        },
-        {
-            "key": "Crayon Shin-chan01",
-            "gif_id": "W1qqdGdnQhR2JorbbQ",
-            "type": "gifs"
-        },
-        {
-            "key": "Crayon Shin-chan02",
-            "gif_id": "3ohjUWt3CrcibB7R3W",
-            "type": "gifs"
-        },
-        {
-            "key": "Crayon Shin-chan03",
-            "gif_id": "xUNda1aXN8zSrNartK",
-            "type": "gifs"
-        },
-        {
-            "key": "SpongeBob SquarePants01",
-            "gif_id": "SKGo6OYe24EBG",
-            "type": "gifs"
-        },
-        {
-            "key": "SpongeBob SquarePants02",
-            "gif_id": "129OnZ9Qn2i0Ew",
-            "type": "gifs"
-        }
     ]
     index = 0
     for gif_item in list_gif_item:
@@ -457,24 +390,24 @@ def download_related():
         gif_name = gif_item.get('key')
         url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
             f'&pingback_id=1870d4cd3af20c73 '
-        print(f'download_related start {gif_name}')
+        logger.info(f'download_related start {gif_name}')
         download_type(url, os.path.join('sticker', "related", f"{gif_name}"))
         index = index + 1
-        print(f'download_related end {gif_name}')
+        logger.info(f'download_related end {gif_name}')
 
 
 def image_resize(input_file, output_fold, file_name, target_width, target_height):
     # 打开webp动图文件
-    print(f'image_resize start {input_file}')
+    logger.info(f'image_resize start {input_file}')
     if os.path.exists(input_file):
-        print('image_resize input_file exist')
+        logger.info('image_resize input_file exist')
     else:
-        print(f"image_resize input_file not exists : {input_file}")
+        logger.error(f"image_resize input_file not exists : {input_file}")
         return False
     resize_url = os.path.join(output_fold, file_name)
     os.makedirs(output_fold, exist_ok=True)
     if os.path.exists(resize_url):
-        print(f"image_resize already exists locally: {resize_url}")
+        logger.warning(f"image_resize already exists locally: {resize_url}")
     # 循环遍历每一帧
     with Image.open(input_file) as im_pillow:
         frames = []
@@ -496,7 +429,7 @@ def image_resize(input_file, output_fold, file_name, target_width, target_height
         # 保存图片
         frames[0].save(resize_url, format='webp', save_all=True,
                        append_images=frames[1:])
-    print(f'image_resize end {resize_url}')
+    logger.info(f'image_resize end {resize_url}')
     return True
 
 
@@ -504,43 +437,43 @@ size_limit = 500 * 1024
 
 
 def image_zip(input_file, output_fold, file_name):
-    print(f"image_zip start {input_file}")
+    logger.info(f"image_zip start {input_file}")
     zip_url = os.path.join(output_fold, file_name)
     if os.path.exists(input_file):
-        print(f"image_zip {input_file} exists")
+        logger.info(f"image_zip {input_file} exists")
     else:
-        print(f"image_zip input_file not exists : {input_file}")
+        logger.error(f"image_zip input_file not exists : {input_file}")
         return False
     os.makedirs(os.path.join(output_fold), exist_ok=True)
     if os.path.exists(zip_url):
-        print(f"image_zip already exists locally: {zip_url}")
+        logger.warning(f"image_zip already exists locally: {zip_url}")
     compress_webp_animation(input_file, zip_url)
-    print(f"image_zip end {zip_url}")
+    logger.info(f"image_zip end {zip_url}")
     return True
 
 
 def compress_webp_animation(input_path, output_path):
-    print('compress_webp_animation start')
+    logger.info('compress_webp_animation start')
     origin_size = os.path.getsize(input_path)
     if origin_size > size_limit:
         compress_webp_animation2(input_path, output_path)
         out_size = os.path.getsize(output_path)
         if out_size > size_limit:
             os.remove(output_path)
-            print('compress_webp_animation zip fail')
+            logger.error('compress_webp_animation zip fail')
         else:
-            print('compress_webp_animation zip success')
+            logger.info('compress_webp_animation zip success')
     else:
         shutil.copy(input_path, output_path)
-        print('compress_webp_animation not zip')
-    print('compress_webp_animation end')
+        logger.info('compress_webp_animation not zip')
+    logger.info('compress_webp_animation end')
 
 
 def compress_webp_animation2(input_path, output_path):
     result = compress_webp_animation3(input_path, output_path)
     if not result:
         for i in range(2):
-            print(f'compress_webp_animation2 {i}')
+            logger.warning(f'compress_webp_animation2 {i}')
             result = compress_webp_animation3(output_path, output_path)
             if result:
                 break
@@ -548,7 +481,7 @@ def compress_webp_animation2(input_path, output_path):
 
 def compress_webp_animation3(input_path, output_path):
     input_size = os.path.getsize(input_path)
-    print(f'compress_webp_animation3 start zip {input_path} {input_size}')
+    logger.info(f'compress_webp_animation3 start zip {input_path} {input_size}')
     with Image.open(input_path) as im:
         # Extract all frames from the image
         frames = []
@@ -561,24 +494,24 @@ def compress_webp_animation3(input_path, output_path):
             quality = int((size_limit / float(input_size)) / 60)
             if quality > 100:
                 quality = 100
-            if quality < 10:
-                quality = 10
+            if quality < 2:
+                quality = 2
             frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
                            save_all=True,
                            append_images=frames[1:])
-            print(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
+            logger.info(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
     return os.path.getsize(output_path) < size_limit
 
 
 def image_tray(input_file, output_file, max_size):
-    print(f'image_tray start {input_file}')
+    logger.info(f'image_tray start {input_file}')
     if os.path.exists(input_file):
-        print('image_tray zip_url exist')
+        logger.info('image_tray zip_url exist')
     else:
-        print(f"image_tray zip_url not exists : {input_file}")
+        logger.error(f"image_tray zip_url not exists : {input_file}")
         return False
     if os.path.exists(output_file):
-        print(f'image_tray {output_file} exist')
+        logger.warning(f'image_tray {output_file} exist')
         return True
         # 打开webp动画文件
     with Image.open(input_file) as im:
@@ -592,15 +525,33 @@ def image_tray(input_file, output_file, max_size):
         if os.path.getsize(output_file) > max_size:
             # If the file size is larger than the specified limit, try to reduce it by reducing the compression level
             for compress_level in range(8, 0, -1):
-                print(f'image_tray compress before {os.path.getsize(output_file)}')
+                logger.info(f'image_tray compress before {os.path.getsize(output_file)}')
                 im.save(output_file, format='PNG', optimize=True, compress_level=compress_level)
-                print(f'image_tray compress after {os.path.getsize(output_file)}')
+                logger.info(f'image_tray compress after {os.path.getsize(output_file)}')
                 if os.path.getsize(output_file) / 1024 <= max_size:
                     break
     if os.path.getsize(output_file) > max_size:
         os.remove(output_file)
+        logger.warning('image_tray remove')
         return False
-    print(f'image_tray end {output_file} {os.path.getsize(output_file)}')
+    logger.info(f'image_tray end {output_file} {os.path.getsize(output_file)}')
+    return True
+
+
+def download_tags(tags_dict, parent_fold, image_name):
+    logger.info(f'download_tags start')
+    output_fold = os.path.join(parent_fold, 'tag')
+    output_file = os.path.join(output_fold, f'{image_name}.json')
+    if tags_dict is None:
+        logger.error(f'download_tags {output_file}')
+        return False
+    os.makedirs(os.path.join(output_fold), exist_ok=True)
+    if os.path.exists(output_file):
+        logger.warning(f'download_tags {output_file} exist')
+    json = ','.join(tags_dict)
+    with open(output_file, "w") as file:
+        file.write(json)
+    logger.info(f'download_tags end {json}')
     return True
 
 
@@ -619,10 +570,7 @@ def save_webp_frames(input_path, output_prefix):
 def main():
     download_categories()
     # download_related()
-    #
-    # image_resize('./related/0', '0.webp')
-    # image_zip('./related/0', '0.webp')
-    # image_tray('./related/0', '0.webp', 50 * 1024)
+    # 不同级别的日志输出
 
 
 main()
