@@ -35,8 +35,10 @@ class ImageInfo:
 
 
 class ImageOriginal:
-    def __init__(self, webp):
+
+    def __init__(self, webp=None, gif=None):
         self.webp = webp
+        self.gif = gif
 
 
 class Images:
@@ -109,7 +111,7 @@ def parse_image_tag(tag_str):
     return tag_response
 
 
-def download_result(result: Result, parent_fold):
+def download_webp(result: Result, parent_fold):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.webp)
@@ -119,13 +121,26 @@ def download_result(result: Result, parent_fold):
         filename = f'{result.image_name}.{file_extension}'
         download_image(result.images.original.webp, parent_fold, filename)
         image_resize(parent_fold, filename)
+        image_zip(parent_fold, filename)
+        image_tray(parent_fold, filename, 50 * 1024)
+
+
+def download_gif(result: Result, parent_fold):
+    if result.images.original:
+        # Get the file extension from the URL.
+        parsed_link = urlparse(result.images.original.gif)
+        path = parsed_link.path
+        file_extension = path.split('.')[-1]
+        # Generate a filename for the image using the file extension.
+        filename = f'{result.image_name}.{file_extension}'
+        download_image(result.images.original.gif, parent_fold, filename, 'gif')
 
 
 def download_tag_image(response: TagResponse, parent_fold):
     index = 0
     for result in response.results:
         result.image_name = index
-        download_result(result, parent_fold)
+        download_webp(result, parent_fold)
         index = index + 1
 
 
@@ -205,11 +220,12 @@ def download_type(url, parent_fold):
                     id_str = result_dict.get('id')
                     title = result_dict.get('title')
                     images_dict = result_dict.get('images')
-                    original = get_meet_image_url(images_dict)
+                    original = get_meet_image_webp_url(images_dict)
                     if original is not None:
                         images = Images(original)
                         result = Result(id_str, title, images, count)
-                        download_result(result, parent_fold)
+                        download_webp(result, parent_fold)
+                        download_gif(result, parent_fold)
                         count = count + 1
                         if count > 50:
                             break
@@ -224,29 +240,33 @@ def download_type(url, parent_fold):
         print("download_type error")
 
 
-def get_meet_image_url(images_dict):
+def get_meet_image_webp_url(images_dict):
+    image_original = ImageOriginal()
     if images_dict is not None:
         if 'original' in images_dict:
             original_dict = images_dict.get('original')
             if original_dict is not None:
-                if 'webp' in original_dict:
-                    return ImageOriginal(original_dict['webp'])
-        if 'fixed_width' in images_dict:
+                if image_original.webp is None and 'webp' in original_dict:
+                    image_original.webp = original_dict['webp']
+                if image_original.gif is None and 'url' in original_dict:
+                    url = original_dict['url']
+                    if check_image_type(url, 'gif'):
+                        image_original.gif = url
+
+        if image_original.webp is None and 'fixed_width' in images_dict:
             fixed_width = images_dict.get('fixed_width')
             if 'webp' in fixed_width:
-                return ImageOriginal(fixed_width['webp'])
-    return None
+                image_original.webp = fixed_width['webp']
+    return image_original
 
 
-def download_emotion():
-    emotion_list = ['reaction', 'love', 'happy', 'sad', 'excited', 'angry', 'shocked', 'hungry', 'scared', 'tired',
-                    'surprised',
-                    'drunk', 'bored', 'sassy', 'frustrated', 'nervous', 'pain', 'sick', 'disappointed', 'lonely',
-                    'stressed',
-                    'suspicious', 'embarrassed', 'unimpressed', 'relaxed', 'inspired']
-    for name in emotion_list:
-        download_search(0, name, os.path.join("emotion", name))
-        download_search(25, name, os.path.join("emotion", name))
+def check_image_type(url, image_type):
+    parsed_link = urlparse(url)
+    path = parsed_link.path
+    file_extension = path.split('.')[-1]
+    if file_extension == image_type:
+        return True
+    return False
 
 
 def download_category(url, category):
@@ -258,8 +278,9 @@ def download_category(url, category):
         for data in datas_dict:
             name = data.get('name_encoded')
             if name is not None:
-                download_search(name, 0, os.path.join(category, name))
-                download_search(name, 25, os.path.join(category, name))
+                download_search(name, 0, os.path.join('sticker', category, name))
+                # download_search(name, 25, os.path.join('sticker', category, name))
+                break
             else:
                 print('download_category error', name)
     print("download_category end", category)
@@ -278,12 +299,13 @@ def download_categories():
             url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
                 f'&pingback_id=186fda3de4e75f6b '
             download_category(url, category)
+            break
     print("download_animal end")
 
 
-def download_image(url, parent_fold, file_name):
+def download_image(url, parent_fold, file_name, image_type='origin'):
     print('download_image ------- start ', url)
-    parent_fold = os.path.join(parent_fold, 'origin')
+    parent_fold = os.path.join(parent_fold, image_type)
     os.makedirs(parent_fold, exist_ok=True)
     # Combine the parent folder path and filename to create the full file path.
     file_path = os.path.join(parent_fold, file_name)
@@ -438,7 +460,7 @@ def download_related():
         url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
             f'&pingback_id=1870d4cd3af20c73 '
         print(f'download_related start {gif_name}')
-        download_type(url, os.path.join("related", f"{gif_name}"))
+        download_type(url, os.path.join('sticker', "related", f"{gif_name}"))
         index = index + 1
         print(f'download_related end {gif_name}')
 
@@ -555,7 +577,7 @@ def compress_webp_animation3(input_path, output_path):
 
 
 def image_tray(parent_fold, file_name, max_size):
-    zip_url = os.path.join(parent_fold, 'origin', file_name)
+    zip_url = os.path.join(parent_fold, 'compressed', file_name)
     tray_url = os.path.join(parent_fold, 'compressed', "tray.png")
     print(f'image_tray start {zip_url}')
     if os.path.exists(zip_url):
@@ -563,6 +585,9 @@ def image_tray(parent_fold, file_name, max_size):
     else:
         print(f"image_tray zip_url not exists : {zip_url}")
         return False
+    if os.path.exists(tray_url):
+        print(f'image_tray {tray_url} exist')
+        return True
         # 打开webp动画文件
     with Image.open(zip_url) as im:
         # 获取第一帧图片
@@ -580,6 +605,9 @@ def image_tray(parent_fold, file_name, max_size):
                 print(f'image_tray compress after {os.path.getsize(tray_url)}')
                 if os.path.getsize(tray_url) / 1024 <= max_size:
                     break
+    if os.path.getsize(tray_url) > max_size:
+        os.remove(tray_url)
+        return False
     print(f'image_tray end {tray_url} {os.path.getsize(tray_url)}')
     return True
 
@@ -597,12 +625,12 @@ def save_webp_frames(input_path, output_prefix):
 
 
 def main():
-    # download_categories()
+    download_categories()
     # download_related()
-
-    image_resize('./related/0', '0.webp')
-    image_zip('./related/0', '0.webp')
-    image_tray('./related/0', '0.webp', 50 * 1024)
+    #
+    # image_resize('./related/0', '0.webp')
+    # image_zip('./related/0', '0.webp')
+    # image_tray('./related/0', '0.webp', 50 * 1024)
 
 
 main()
