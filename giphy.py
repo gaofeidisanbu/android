@@ -470,18 +470,13 @@ def compress_webp_animation(input_path, output_path):
 
 
 def compress_webp_animation2(input_path, output_path):
-    result = compress_webp_animation3(input_path, output_path)
-    if not result:
-        for i in range(2):
-            logger.warning(f'compress_webp_animation2 {i}')
-            result = compress_webp_animation3(output_path, output_path)
-            if result:
-                break
+    compress_webp_animation3(input_path, output_path)
 
 
-def compress_webp_animation3(input_path, output_path):
+def compress_webp_animation3(input_path, output_path, ):
     input_size = os.path.getsize(input_path)
     logger.info(f'compress_webp_animation3 start zip {input_path} {input_size}')
+    quality = int((size_limit / float(input_size)) * 80)
     with Image.open(input_path) as im:
         # Extract all frames from the image
         frames = []
@@ -491,16 +486,23 @@ def compress_webp_animation3(input_path, output_path):
                 im.seek(len(frames))
         except EOFError:
             pass
-            quality = int((size_limit / float(input_size)) / 60)
-            if quality > 100:
-                quality = 100
-            if quality < 2:
-                quality = 2
-            frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
-                           save_all=True,
-                           append_images=frames[1:])
-            logger.info(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
-    return os.path.getsize(output_path) < size_limit
+            is_continue = True
+            while is_continue:
+                quality = quality - 5
+                if quality > 100:
+                    quality = 100
+                    is_continue = False
+                if quality < 1:
+                    quality = 1
+                    is_continue = False
+                frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
+                               save_all=True,
+                               append_images=frames[1:])
+                logger.info(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
+                if os.path.getsize(output_path) < size_limit:
+                    return True
+                if is_continue is False:
+                    return False
 
 
 def image_tray(input_file, output_file, max_size):
@@ -568,9 +570,10 @@ def save_webp_frames(input_path, output_prefix):
 
 
 def main():
-    download_categories()
+    # download_categories()
     # download_related()
     # 不同级别的日志输出
+    compress_webp_animation2('./sticker/actions/breaking-up/origin/82.webp', './test.webp')
 
 
 main()
