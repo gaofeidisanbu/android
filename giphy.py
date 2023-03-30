@@ -152,15 +152,16 @@ def download_webp(result: Result, parent_fold):
 
         zip_input_file = os.path.join(resize_output_fold, filename)
         zip_output_fold = os.path.join(parent_fold, 'compressed')
-        image_zip(zip_input_file, zip_output_fold, filename)
+        is_zip_success = image_zip(zip_input_file, zip_output_fold, filename)
 
-        tray_input_file = os.path.join(zip_output_fold, filename)
-        tray_output_file = os.path.join(zip_output_fold, "tray.png")
-        image_tray(tray_input_file, tray_output_file, 50 * 1024)
+        if is_zip_success:
+            tray_input_file = os.path.join(zip_output_fold, filename)
+            tray_output_file = os.path.join(zip_output_fold, "tray.png")
+            image_tray(tray_input_file, tray_output_file, 50 * 1024)
 
-        resize_240_input_file = os.path.join(zip_output_fold, filename)
-        resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
-        image_resize(resize_240_input_file, resize_240_output_fold, filename, 240, 240)
+            resize_240_input_file = os.path.join(zip_output_fold, filename)
+            resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
+            image_resize(resize_240_input_file, resize_240_output_fold, filename, 240, 240)
 
 
 def download_gif(result: Result, parent_fold):
@@ -468,9 +469,9 @@ def image_zip(input_file, output_fold, file_name):
     os.makedirs(os.path.join(output_fold), exist_ok=True)
     if os.path.exists(zip_url):
         logger.warning(f"image_zip already exists locally: {zip_url}")
-    compress_webp_animation(input_file, zip_url)
-    logger.info(f"image_zip end {zip_url}")
-    return True
+    is_success = compress_webp_animation(input_file, zip_url)
+    logger.info(f"image_zip end {is_success}")
+    return is_success
 
 
 def compress_webp_animation(input_path, output_path):
@@ -483,11 +484,14 @@ def compress_webp_animation(input_path, output_path):
         logger.info('compress_webp_animation not zip')
 
     if validate_sticker(output_path):
+        is_success = True
         logger.info('compress_webp_animation validate success')
     else:
         os.remove(output_path)
+        is_success = False
         logger.error('compress_webp_animation validate fail')
     logger.info('compress_webp_animation end')
+    return is_success
 
 
 def compress_webp_animation2(input_path, output_path):
