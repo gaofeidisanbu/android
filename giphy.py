@@ -134,7 +134,7 @@ def parse_image_tag(tag_str):
     return tag_response
 
 
-def download_webp(result: Result, parent_fold):
+def download_webp(result: Result, parent_fold, tags_dict):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.webp)
@@ -154,14 +154,24 @@ def download_webp(result: Result, parent_fold):
         zip_output_fold = os.path.join(parent_fold, 'compressed')
         is_zip_success = image_zip(zip_input_file, zip_output_fold, filename)
 
+        tray_input_file = os.path.join(zip_output_fold, filename)
+        tray_output_file = os.path.join(zip_output_fold, "tray.png")
         if is_zip_success:
-            tray_input_file = os.path.join(zip_output_fold, filename)
-            tray_output_file = os.path.join(zip_output_fold, "tray.png")
             image_tray(tray_input_file, tray_output_file, 50 * 1024)
+        else:
+            if os.path.exists(tray_output_file):
+                os.remove(tray_output_file)
 
-            resize_240_input_file = os.path.join(zip_output_fold, filename)
-            resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
+        resize_240_input_file = os.path.join(zip_output_fold, filename)
+        resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
+        resize_240_output_file = os.path.join(resize_240_output_fold, filename)
+        if is_zip_success:
             image_resize(resize_240_input_file, resize_240_output_fold, filename, 240, 240)
+        else:
+            if os.path.exists(resize_240_output_file):
+                os.remove(resize_240_output_file)
+
+        download_tags(tags_dict, parent_fold, result.image_name, is_zip_success)
 
 
 def download_gif(result: Result, parent_fold):
@@ -265,9 +275,8 @@ def download_type(url, parent_fold, start_index):
                     if original is not None:
                         images = Images(original)
                         result = Result(id_str, title, images, count + start_index)
-                        download_webp(result, parent_fold)
+                        download_webp(result, parent_fold, tags_dict)
                         download_gif(result, parent_fold)
-                        download_tags(tags_dict, parent_fold, result.image_name)
                         count = count + 1
                         if count > 200:
                             break
@@ -573,21 +582,26 @@ def image_tray(input_file, output_file, max_size):
     return True
 
 
-def download_tags(tags_dict, parent_fold, image_name):
-    logger.info(f'download_tags start')
+def download_tags(tags_dict, parent_fold, image_name, is_zip_success):
     output_fold = os.path.join(parent_fold, 'tag')
     output_file = os.path.join(output_fold, f'{image_name}.json')
-    if tags_dict is None:
-        logger.error(f'download_tags {output_file}')
+    logger.info(f'download_tags start {output_file}')
+    if is_zip_success:
+        if tags_dict is None:
+            logger.error(f'download_tags {output_file}')
+            return False
+        os.makedirs(os.path.join(output_fold), exist_ok=True)
+        if os.path.exists(output_file):
+            logger.warning(f'download_tags {output_file} exist')
+        json = ','.join(tags_dict)
+        with open(output_file, "w") as file:
+            file.write(json)
+        return True
+    else:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+            logger.error(f'download_tags remove {output_file}')
         return False
-    os.makedirs(os.path.join(output_fold), exist_ok=True)
-    if os.path.exists(output_file):
-        logger.warning(f'download_tags {output_file} exist')
-    json = ','.join(tags_dict)
-    with open(output_file, "w") as file:
-        file.write(json)
-    logger.info(f'download_tags end {json}')
-    return True
 
 
 def save_webp_frames(input_path, output_prefix):
@@ -659,9 +673,6 @@ def main():
     download_categories()
     # download_related()
     # validate()
-
-
-
 
 
 main()
