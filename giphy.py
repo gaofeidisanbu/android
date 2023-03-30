@@ -17,7 +17,7 @@ logger.setLevel(logging.DEBUG)
 
 # 定义控制台输出格式
 formatter = colorlog.ColoredFormatter(
-    "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
+    "%(log_color)s%(asctime)s %(log_color)s%(levelname)-8s%(reset)s %(log_color)s%(message)s",
     log_colors={
         'DEBUG': 'cyan',
         'INFO': 'green',
@@ -305,23 +305,28 @@ def download_category(url, category):
     logger.info(f"download_category start {category}")
     response_str = request_url(url)
     if response_str is not None:
-        response_dict = json.loads(response_str)
-        datas_dict = response_dict.get('data')
-        for data in datas_dict:
-            name = data.get('name_encoded')
-            if name is not None:
-                download_search(name, 0, os.path.join('sticker', category, name))
-                download_search(name, 25, os.path.join('sticker', category, name))
-                download_search(name, 50, os.path.join('sticker', category, name))
-                download_search(name, 75, os.path.join('sticker', category, name))
-                download_search(name, 100, os.path.join('sticker', category, name))
-                download_search(name, 125, os.path.join('sticker', category, name))
-                download_search(name, 150, os.path.join('sticker', category, name))
-                download_search(name, 175, os.path.join('sticker', category, name))
-                download_search(name, 200, os.path.join('sticker', category, name))
-                break
-            else:
-                logger.info(f'download_category error {name}')
+        try:
+            response_dict = json.loads(response_str)
+            datas_dict = response_dict.get('data')
+            for data in datas_dict:
+                name = data.get('name_encoded')
+                if name is not None:
+                    download_search(name, 0, os.path.join('sticker', category, name))
+                    download_search(name, 25, os.path.join('sticker', category, name))
+                    download_search(name, 50, os.path.join('sticker', category, name))
+                    download_search(name, 75, os.path.join('sticker', category, name))
+                    download_search(name, 100, os.path.join('sticker', category, name))
+                    download_search(name, 125, os.path.join('sticker', category, name))
+                    download_search(name, 150, os.path.join('sticker', category, name))
+                    download_search(name, 175, os.path.join('sticker', category, name))
+                    download_search(name, 200, os.path.join('sticker', category, name))
+                    break
+                else:
+                    logger.error(f'download_category error {name}')
+        except Exception as e:
+            logger.error(e)
+    else:
+        logger.error(f'error {category} {url}')
     logger.info(f"download_category end {category}")
 
 
@@ -338,6 +343,8 @@ def download_categories():
             url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
                 f'&pingback_id=186fda3de4e75f6b '
             download_category(url, category)
+    else:
+        logger.error(f'error {url}')
     logger.info("download_animal end")
 
 
@@ -376,6 +383,8 @@ def download_image(url, output_fold, file_name):
                 logger.error(f'download_image Request failed: {str(e)}. Retry {retries + 1}/{MAX_RETRIES}')
                 retries += 1
                 time.sleep(5)  # 等待5秒后重试
+            except Exception as e:
+                logger.error(e)
         # 重试多次后仍然失败，记录日志并返回None
         logger.error(f'download_image Request failed after image name {file_path} {MAX_RETRIES} retries: {url}')
         return False
@@ -409,26 +418,29 @@ def image_resize(input_file, output_fold, file_name, target_width, target_height
     if os.path.exists(resize_url):
         logger.warning(f"image_resize already exists locally: {resize_url}")
     # 循环遍历每一帧
-    with Image.open(input_file) as im_pillow:
-        frames = []
-        for frame in ImageSequence.Iterator(im_pillow):
-            # 裁剪图片，使其等比例缩放并填充至512x512大小
-            width, height = frame.size
-            ratio = min(target_width / width, target_height / height)
-            new_size = (int(width * ratio), int(height * ratio))
-            # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
-            background = Image.new('RGBA', (target_width, target_height), (0, 0, 0, 0))
-            paste_pos = ((target_width - new_size[0]) // 2, (target_height - new_size[1]) // 2)
-            frame = frame.resize(new_size, resample=Image.LANCZOS)
-            background.paste(frame, paste_pos)
-            # 将原始帧的duration信息传递给处理后的帧
-            if 'duration' in frame.info:
-                background.info['duration'] = frame.info['duration']
-            # 将每一帧添加到帧列表中
-            frames.append(background)
-        # 保存图片
-        frames[0].save(resize_url, format='webp', save_all=True,
-                       append_images=frames[1:])
+    try:
+        with Image.open(input_file) as im_pillow:
+            frames = []
+            for frame in ImageSequence.Iterator(im_pillow):
+                # 裁剪图片，使其等比例缩放并填充至512x512大小
+                width, height = frame.size
+                ratio = min(target_width / width, target_height / height)
+                new_size = (int(width * ratio), int(height * ratio))
+                # 创建一个全透明的512x512大小的图片，将裁剪后的图片粘贴到居中位置
+                background = Image.new('RGBA', (target_width, target_height), (0, 0, 0, 0))
+                paste_pos = ((target_width - new_size[0]) // 2, (target_height - new_size[1]) // 2)
+                frame = frame.resize(new_size, resample=Image.LANCZOS)
+                background.paste(frame, paste_pos)
+                # 将原始帧的duration信息传递给处理后的帧
+                if 'duration' in frame.info:
+                    background.info['duration'] = frame.info['duration']
+                # 将每一帧添加到帧列表中
+                frames.append(background)
+            # 保存图片
+            frames[0].save(resize_url, format='webp', save_all=True,
+                           append_images=frames[1:])
+    except Exception as e:
+        logger.error(e)
     logger.info(f'image_resize end {resize_url}')
     return True
 
@@ -477,32 +489,36 @@ def compress_webp_animation3(input_path, output_path, ):
     input_size = os.path.getsize(input_path)
     logger.info(f'compress_webp_animation3 start zip {input_path} {input_size}')
     quality = int((size_limit / float(input_size)) * 80)
-    with Image.open(input_path) as im:
-        # Extract all frames from the image
-        frames = []
-        try:
-            while True:
-                frames.append(im.copy())
-                im.seek(len(frames))
-        except EOFError:
-            pass
-            is_continue = True
-            while is_continue:
-                quality = quality - 5
-                if quality > 100:
-                    quality = 100
-                    is_continue = False
-                if quality < 1:
-                    quality = 1
-                    is_continue = False
-                frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
-                               save_all=True,
-                               append_images=frames[1:])
-                logger.info(f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
-                if os.path.getsize(output_path) < size_limit:
-                    return True
-                if is_continue is False:
-                    return False
+    try:
+        with Image.open(input_path) as im:
+            # Extract all frames from the image
+            frames = []
+            try:
+                while True:
+                    frames.append(im.copy())
+                    im.seek(len(frames))
+            except EOFError:
+                pass
+                is_continue = True
+                while is_continue:
+                    quality = quality - 5
+                    if quality > 100:
+                        quality = 100
+                        is_continue = False
+                    if quality < 1:
+                        quality = 1
+                        is_continue = False
+                    frames[0].save(output_path, quality=quality, lossless=False, optimize=False,
+                                   save_all=True,
+                                   append_images=frames[1:])
+                    logger.info(
+                        f'compress_webp_animation3 end zip {output_path} {quality} {os.path.getsize(output_path)}')
+                    if os.path.getsize(output_path) < size_limit:
+                        return True
+                    if is_continue is False:
+                        return False
+    except Exception as e:
+        logger.error(e)
 
 
 def image_tray(input_file, output_file, max_size):
@@ -515,23 +531,27 @@ def image_tray(input_file, output_file, max_size):
     if os.path.exists(output_file):
         logger.warning(f'image_tray {output_file} exist')
         return True
+    try:
         # 打开webp动画文件
-    with Image.open(input_file) as im:
-        # 获取第一帧图片
-        first_frame = im.copy()
-        # 调整大小为96x96
-        resized_image = first_frame.resize((96, 96))
-        # 保存为PNG格式图片
-        resized_image.save(output_file, "PNG", optimize=True, compress_level=9)
-        # Check if the file size is within the specified limit
-        if os.path.getsize(output_file) > max_size:
-            # If the file size is larger than the specified limit, try to reduce it by reducing the compression level
-            for compress_level in range(8, 0, -1):
-                logger.info(f'image_tray compress before {os.path.getsize(output_file)}')
-                im.save(output_file, format='PNG', optimize=True, compress_level=compress_level)
-                logger.info(f'image_tray compress after {os.path.getsize(output_file)}')
-                if os.path.getsize(output_file) / 1024 <= max_size:
-                    break
+        with Image.open(input_file) as im:
+            # 获取第一帧图片
+            first_frame = im.copy()
+            # 调整大小为96x96
+            resized_image = first_frame.resize((96, 96))
+            # 保存为PNG格式图片
+            resized_image.save(output_file, "PNG", optimize=True, compress_level=9)
+            # Check if the file size is within the specified limit
+            if os.path.getsize(output_file) > max_size:
+                # If the file size is larger than the specified limit, try to reduce it by reducing the compression
+                # level
+                for compress_level in range(8, 0, -1):
+                    logger.info(f'image_tray compress before {os.path.getsize(output_file)}')
+                    im.save(output_file, format='PNG', optimize=True, compress_level=compress_level)
+                    logger.info(f'image_tray compress after {os.path.getsize(output_file)}')
+                    if os.path.getsize(output_file) / 1024 <= max_size:
+                        break
+    except Exception as e:
+        logger.error(e)
     if os.path.getsize(output_file) > max_size:
         os.remove(output_file)
         logger.warning('image_tray remove')
@@ -570,10 +590,8 @@ def save_webp_frames(input_path, output_prefix):
 
 
 def main():
-    # download_categories()
+    download_categories()
     # download_related()
-    # 不同级别的日志输出
-    compress_webp_animation2('./sticker/actions/breaking-up/origin/82.webp', './test.webp')
 
 
 main()
