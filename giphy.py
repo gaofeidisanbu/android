@@ -47,8 +47,6 @@ file_handler.setFormatter(formatter_file)
 logger.addHandler(file_handler)
 
 
-
-
 class ImageList:
     def __init__(self, ordered_dict: OrderedDict):
         self.ordered_dict = ordered_dict
@@ -480,15 +478,15 @@ def compress_webp_animation(input_path, output_path):
     origin_size = os.path.getsize(input_path)
     if origin_size > size_limit:
         compress_webp_animation2(input_path, output_path)
-        out_size = os.path.getsize(output_path)
-        if out_size > size_limit:
-            os.remove(output_path)
-            logger.error('compress_webp_animation zip fail')
-        else:
-            logger.info('compress_webp_animation zip success')
     else:
         shutil.copy(input_path, output_path)
         logger.info('compress_webp_animation not zip')
+
+    if validate_sticker(output_path):
+        logger.info('compress_webp_animation validate success')
+    else:
+        os.remove(output_path)
+        logger.error('compress_webp_animation validate fail')
     logger.info('compress_webp_animation end')
 
 
@@ -496,7 +494,7 @@ def compress_webp_animation2(input_path, output_path):
     compress_webp_animation3(input_path, output_path)
 
 
-def compress_webp_animation3(input_path, output_path, ):
+def compress_webp_animation3(input_path, output_path):
     input_size = os.path.getsize(input_path)
     logger.info(f'compress_webp_animation3 start zip {input_path} {input_size}')
     quality = int((size_limit / float(input_size)) * 80)
@@ -600,9 +598,66 @@ def save_webp_frames(input_path, output_prefix):
         frame.save(os.path.join(output_prefix, 'frame' + str(i) + ".webp"), "webp")
 
 
+def validate_sticker(input_path):
+    logger.info(f'validate_sticker start {input_path}')
+    if os.path.exists(input_path):
+        logger.info(f'validate_sticker exist')
+    else:
+        logger.error(f'validate_sticker not exist')
+        return False
+    size = os.path.getsize(input_path)
+    if size > size_limit:
+        logger.error(f'validate_sticker size {input_path} {size} fail')
+        return False
+
+    try:
+        frames = []
+        with Image.open(input_path) as im:
+            # Extract all frames from the image
+            try:
+                while True:
+                    frames.append(im.copy())
+                    im.seek(len(frames))
+            except EOFError:
+                pass
+            durations = []
+            for frame in frames:
+                durations.append(frame.info['duration'])
+            if len(frames) <= 1:
+                logger.error(f'validate_sticker frames {input_path} {frames} fail')
+                return False
+            total_duration = sum(durations)
+            if total_duration > 10000:
+                logger.error(f'validate_sticker total_duration {input_path} {total_duration} fail')
+                return False
+            for duration in durations:
+                if duration < 8:
+                    logger.error(f'validate_sticker duration {input_path} {duration} fail')
+                    return False
+            return True
+
+    except Exception as e:
+        logger.error(e)
+        return False
+
+
+def validate():
+    file_name = '6.webp'
+    input_file = os.path.join('sticker', 'actions', 'breaking-up', 'resize', file_name)
+    output_folder = os.path.join('sticker', 'actions', 'breaking-up', 'compressed')
+    output_file = os.path.join(output_folder, file_name)
+    # image_resize(input_file, output_folder, file_name, 512, 512)
+    # image_zip(input_file, output_folder, file_name)
+    validate_sticker(output_file)
+
+
 def main():
     download_categories()
     # download_related()
+    # validate()
+
+
+
 
 
 main()
