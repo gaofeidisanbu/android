@@ -134,7 +134,7 @@ def parse_image_tag(tag_str):
     return tag_response
 
 
-def download_webp(result: Result, parent_fold, tags_dict):
+def download_webp(result: Result, download_fold, output_fold, tags_dict):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.webp)
@@ -143,15 +143,15 @@ def download_webp(result: Result, parent_fold, tags_dict):
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
 
-        download_output_fold = os.path.join(parent_fold, 'origin')
+        download_output_fold = os.path.join(download_fold, 'origin')
         download_image(result.images.original.webp, download_output_fold, filename)
 
         resize_input_file = os.path.join(download_output_fold, filename)
-        resize_output_fold = os.path.join(parent_fold, 'resize')
+        resize_output_fold = os.path.join(download_fold, 'resize')
         image_resize(resize_input_file, resize_output_fold, filename, 512, 512)
 
         zip_input_file = os.path.join(resize_output_fold, filename)
-        zip_output_fold = os.path.join(parent_fold, 'compressed')
+        zip_output_fold = os.path.join(output_fold, 'compressed')
         is_zip_success = image_zip(zip_input_file, zip_output_fold, filename)
 
         tray_input_file = os.path.join(zip_output_fold, filename)
@@ -163,7 +163,7 @@ def download_webp(result: Result, parent_fold, tags_dict):
                 os.remove(tray_output_file)
 
         resize_240_input_file = os.path.join(zip_output_fold, filename)
-        resize_240_output_fold = os.path.join(parent_fold, 'compressed_240')
+        resize_240_output_fold = os.path.join(output_fold, 'compressed_240')
         resize_240_output_file = os.path.join(resize_240_output_fold, filename)
         if is_zip_success:
             image_resize(resize_240_input_file, resize_240_output_fold, filename, 240, 240)
@@ -171,7 +171,7 @@ def download_webp(result: Result, parent_fold, tags_dict):
             if os.path.exists(resize_240_output_file):
                 os.remove(resize_240_output_file)
 
-        download_tags(tags_dict, parent_fold, result.image_name, is_zip_success)
+        download_tags(tags_dict, output_fold, result.image_name, is_zip_success)
 
 
 def download_gif(result: Result, parent_fold):
@@ -247,21 +247,21 @@ def download_artists(url):
         logger.info("download_category error")
 
 
-def download_search(name, offset, parent_fold):
+def download_search2(name, offset, download_fold, output_fold):
     url = f'https://api.giphy.com/v1/gifs/search?offset={offset}&type=gifs&sort=&q={name}&api_key' \
         f'=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id=1870447a7cdb48f4'
     logger.info(f"download_search start name {name} {offset} {url}")
-    download_type(url, parent_fold, offset)
+    download_type(url, download_fold, output_fold, offset)
     logger.info(f"download_search end name {name}")
 
 
-def download_type(url, parent_fold, start_index):
+def download_type(url, download_fold, output_fold, start_index):
     logger.info(f"download_type start name url = {url}")
     response_str = request_url(url)
     if response_str is not None:
         try:
             category_dict = json.loads(response_str)
-            display_name = parent_fold
+            display_name = download_fold
             logger.info(f'download_type display name {display_name}', )
             childrens_dict = category_dict.get('data')
             if len(childrens_dict) != 0:
@@ -275,8 +275,8 @@ def download_type(url, parent_fold, start_index):
                     if original is not None:
                         images = Images(original)
                         result = Result(id_str, title, images, count + start_index)
-                        download_webp(result, parent_fold, tags_dict)
-                        download_gif(result, parent_fold)
+                        download_webp(result, download_fold, output_fold, tags_dict)
+                        download_gif(result, output_fold)
                         count = count + 1
                         if count > 200:
                             break
@@ -331,15 +331,15 @@ def download_category(url, category):
                 name = data.get('name_encoded')
                 logger.info(f"download_category  {name}")
                 if name is not None:
-                    download_search(name, 0, os.path.join('sticker', category, name))
-                    download_search(name, 25, os.path.join('sticker', category, name))
-                    download_search(name, 50, os.path.join('sticker', category, name))
-                    download_search(name, 75, os.path.join('sticker', category, name))
-                    download_search(name, 100, os.path.join('sticker', category, name))
-                    download_search(name, 125, os.path.join('sticker', category, name))
-                    download_search(name, 150, os.path.join('sticker', category, name))
-                    download_search(name, 175, os.path.join('sticker', category, name))
-                    download_search(name, 200, os.path.join('sticker', category, name))
+                    download_search(name, category, 0)
+                    download_search(name, category, 25)
+                    download_search(name, category, 50)
+                    download_search(name, category, 75)
+                    download_search(name, category, 100)
+                    download_search(name, category, 125)
+                    download_search(name, category, 150)
+                    download_search(name, category, 175)
+                    download_search(name, category, 200)
                 else:
                     logger.error(f'download_category error {name}')
         except Exception as e:
@@ -347,6 +347,11 @@ def download_category(url, category):
     else:
         logger.error(f'error {category} {url}')
     logger.info(f"download_category end {category}")
+
+
+def download_search(name, category, offset):
+    download_search2(name, offset, os.path.join('sticker', 'download', category, name),
+                     os.path.join('sticker', 'output', category, name))
 
 
 def download_categories():
