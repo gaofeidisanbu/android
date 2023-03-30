@@ -364,7 +364,7 @@ def download_image(url, output_fold, file_name):
     file_path = os.path.join(output_fold, file_name)
 
     if os.path.exists(file_path):
-        logger.warning(f"Image already exists locally: {file_path}")
+        logger.warning(f"download_image exists locally: {file_path}")
         return True
     else:
         # Make a request to the URL to get the image data.
