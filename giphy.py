@@ -33,9 +33,20 @@ formatter = colorlog.ColoredFormatter(
 console_handler = logging.StreamHandler()
 console_handler.setLevel(logging.DEBUG)
 console_handler.setFormatter(formatter)
-
 # 将控制台处理器添加到logger
 logger.addHandler(console_handler)
+
+log_file = 'log_file.log'
+
+os.remove(log_file)
+file_handler = logging.FileHandler(log_file)
+file_handler.setLevel(logging.DEBUG)
+formatter_file = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter_file)
+# 将控制台处理器添加到logger
+logger.addHandler(file_handler)
+
+
 
 
 class ImageList:
