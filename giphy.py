@@ -329,6 +329,7 @@ def download_category(url, category):
             datas_dict = response_dict.get('data')
             for data in datas_dict:
                 name = data.get('name_encoded')
+                logger.info(f"download_category  {name}")
                 if name is not None:
                     download_search(name, 0, os.path.join('sticker', category, name))
                     download_search(name, 25, os.path.join('sticker', category, name))
@@ -339,7 +340,6 @@ def download_category(url, category):
                     download_search(name, 150, os.path.join('sticker', category, name))
                     download_search(name, 175, os.path.join('sticker', category, name))
                     download_search(name, 200, os.path.join('sticker', category, name))
-                    break
                 else:
                     logger.error(f'download_category error {name}')
         except Exception as e:
