@@ -13,7 +13,7 @@ from PIL import Image, ImageSequence
 
 # 创建logging实例
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # 定义控制台输出格式
 formatter = colorlog.ColoredFormatter(
@@ -31,7 +31,7 @@ formatter = colorlog.ColoredFormatter(
 
 # 创建控制台处理器
 console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.DEBUG)
+console_handler.setLevel(logging.INFO)
 console_handler.setFormatter(formatter)
 # 将控制台处理器添加到logger
 logger.addHandler(console_handler)
@@ -40,7 +40,7 @@ log_file = 'log_file.log'
 
 os.remove(log_file)
 file_handler = logging.FileHandler(log_file)
-file_handler.setLevel(logging.DEBUG)
+file_handler.setLevel(logging.INFO)
 formatter_file = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter_file)
 # 将控制台处理器添加到logger
