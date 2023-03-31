@@ -62,9 +62,10 @@ class ImageInfo:
 
 class ImageOriginal:
 
-    def __init__(self, webp=None, gif=None):
+    def __init__(self, webp=None, gif=None, fix_width=None):
         self.webp = webp
         self.gif = gif
+        self.fix_width = fix_width
 
 
 class Images:
@@ -173,6 +174,13 @@ def download_webp(result: Result, download_fold, output_fold, tags_dict):
 
         download_tags(tags_dict, output_fold, result.image_name, is_zip_success)
 
+        if is_zip_success:
+            download_gif(result, output_fold)
+            download_fix_width_webp(result, output_fold)
+        else:
+            if os.path.exists(resize_240_output_file):
+                os.remove(resize_240_output_file)
+
 
 def download_gif(result: Result, parent_fold):
     if result.images.original:
@@ -184,6 +192,18 @@ def download_gif(result: Result, parent_fold):
         filename = f'{result.image_name}.{file_extension}'
         output_fold = os.path.join(parent_fold, 'gif')
         download_image(result.images.original.gif, output_fold, filename)
+
+
+def download_fix_width_webp(result: Result, parent_fold):
+    if result.images.original:
+        # Get the file extension from the URL.
+        parsed_link = urlparse(result.images.original.fix_width)
+        path = parsed_link.path
+        file_extension = path.split('.')[-1]
+        # Generate a filename for the image using the file extension.
+        filename = f'{result.image_name}.{file_extension}'
+        output_fold = os.path.join(parent_fold, 'fix_width')
+        download_image(result.images.original.fix_width, output_fold, filename)
 
 
 def download_tag_image(response: TagResponse, parent_fold):
@@ -276,7 +296,6 @@ def download_type(url, download_fold, output_fold, start_index):
                         images = Images(original)
                         result = Result(id_str, title, images, count + start_index)
                         download_webp(result, download_fold, output_fold, tags_dict)
-                        download_gif(result, output_fold)
                         count = count + 1
                         if count > 200:
                             break
@@ -303,11 +322,14 @@ def get_meet_image_webp_url(images_dict):
                     url = original_dict['url']
                     if check_image_type(url, 'gif'):
                         image_original.gif = url
-
         if image_original.webp is None and 'fixed_width' in images_dict:
             fixed_width = images_dict.get('fixed_width')
             if 'webp' in fixed_width:
                 image_original.webp = fixed_width['webp']
+        if 'fixed_width' in images_dict:
+            fixed_width = images_dict.get('fixed_width')
+            if 'webp' in fixed_width:
+                image_original.fix_width = fixed_width['webp']
     return image_original
 
 
@@ -852,7 +874,7 @@ def validate():
 
 def main():
     # download_categories()
-    # download_category('emotions')
+    download_category('actions')
     # download_related()
     # validate()
     download_related()
