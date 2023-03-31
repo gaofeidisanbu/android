@@ -320,8 +320,10 @@ def check_image_type(url, image_type):
     return False
 
 
-def download_category(url, category):
-    logger.info(f"download_category start {category}")
+def download_category(category):
+    url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
+        f'&pingback_id=186fda3de4e75f6b '
+    logger.info(f"download_category start {url}")
     response_str = request_url(url)
     if response_str is not None:
         try:
@@ -355,18 +357,16 @@ def download_search(name, category, offset):
 
 
 def download_categories():
-    logger.info("download_categories start")
     url = 'https://api.giphy.com/v1/gifs/categories?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g&pingback_id' \
           '=186fda3de4e75f6b '
+    logger.info(f"download_categories start {url}")
     response_str = request_url(url)
     if response_str is not None:
         response_dict = json.loads(response_str)
         datas_dict = response_dict.get('data')
         for data in datas_dict:
             category = data.get('name_encoded')
-            url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
-                f'&pingback_id=186fda3de4e75f6b '
-            download_category(url, category)
+            download_category(category)
     else:
         logger.error(f'error {url}')
     logger.info("download_animal end")
@@ -675,7 +675,8 @@ def validate():
 
 
 def main():
-    download_categories()
+    # download_categories()
+    download_category('adjectives')
     # download_related()
     # validate()
 
