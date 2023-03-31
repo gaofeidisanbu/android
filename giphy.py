@@ -416,6 +416,181 @@ def download_image(url, output_fold, file_name):
 
 def download_related():
     list_gif_item = [
+        {
+            "key": "Love girls",
+            "gif_id": "Aizbg1tltyEQOHYelA",
+            "type": "gifs"
+        },
+        {
+            "key": "Love bro",
+            "gif_id": "1lhU8KAVwmVVu",
+            "type": "gifs"
+        },
+        {
+            "key": "love cat",
+            "gif_id": "9DkE0NfRGx7YGDXUu3",
+            "type": "gifs"
+        },
+        {
+            "key": "love dog",
+            "gif_id": "NudZEGlYGLkZ2",
+            "type": "gifs"
+        },
+        {
+            "key": "Love heart",
+            "gif_id": "zt7DvntBrlHKmuFcay",
+            "type": "gifs"
+        },
+        {
+            "key": "angry face",
+            "gif_id": "UTX8UTKmpjQgo",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cartoon 1",
+            "gif_id": "11tTNkNy1SdXGg",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cartoon 2",
+            "gif_id": "11tTNkNy1SdXGg",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cartoon 3",
+            "gif_id": "qDfgfLkj47lDi",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry dog",
+            "gif_id": "uLwolChOTYn4s",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry cat",
+            "gif_id": "bcqAMUTUHoLDy",
+            "type": "gifs"
+        },
+        {
+            "key": "Cry baby",
+            "gif_id": "lwYxf0qKEjnoI",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry emoji",
+            "gif_id": "11xVhnKOKtAj5e",
+            "type": "gifs"
+        },
+        {
+            "key": "Angry sticker",
+            "gif_id": "RPfW9Yz9bixi4xGHii",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello",
+            "gif_id": "BElb9DVpHezcZufOhl",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello Cartoon1",
+            "gif_id": "noyBeNjH4nbtXV5ZLA",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello Cartoon2",
+            "gif_id": "1kJxyyCq9ZHXX0GM3a",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello animal1",
+            "gif_id": "llJVg4Ri0VrUBzNOgG",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello animal2",
+            "gif_id": "PgdWZV8Bb1fFqVcmtk",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello cute",
+            "gif_id": "E1w0yvMxBIv5M8WkL8",
+            "type": "gifs"
+        },
+        {
+            "key": "Hello friend",
+            "gif_id": "3oz8xSjBmD1ZyELqW4",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye cute",
+            "gif_id": "UUhnOExaUB8BkDUaJn",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye cartoon",
+            "gif_id": "3o752gFScyte7n6fCM",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye Simpson",
+            "gif_id": "l2Je9a1y33ZjSDSeY",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye friend",
+            "gif_id": "UQaRUOLveyjNC",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye sticker",
+            "gif_id": "kdEl6JgqpAvT0QonPd",
+            "type": "gifs"
+        },
+        {
+            "key": "goodbye cat",
+            "gif_id": "iPiUxztIL4Sl2",
+            "type": "gifs"
+        },
+        {
+            "key": "Tom and jerry01",
+            "gif_id": "y9QemIlaYYWdi",
+            "type": "gifs"
+        },
+        {
+            "key": "Tom and jerry02",
+            "gif_id": "OpiqxxEmyi4zC",
+            "type": "gifs"
+        },
+        {
+            "key": "Tom and jerry03",
+            "gif_id": "13Qumr2SLqrl5e",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan01",
+            "gif_id": "W1qqdGdnQhR2JorbbQ",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan02",
+            "gif_id": "3ohjUWt3CrcibB7R3W",
+            "type": "gifs"
+        },
+        {
+            "key": "Crayon Shin-chan03",
+            "gif_id": "xUNda1aXN8zSrNartK",
+            "type": "gifs"
+        },
+        {
+            "key": "SpongeBob SquarePants01",
+            "gif_id": "SKGo6OYe24EBG",
+            "type": "gifs"
+        },
+        {
+            "key": "SpongeBob SquarePants02",
+            "gif_id": "129OnZ9Qn2i0Ew",
+            "type": "gifs"
+        }
     ]
     index = 0
     for gif_item in list_gif_item:
@@ -424,7 +599,8 @@ def download_related():
         url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
             f'&pingback_id=1870d4cd3af20c73 '
         logger.info(f'download_related start {gif_name}')
-        download_type(url, os.path.join('sticker', "related", f"{gif_name}"))
+        download_type(url, os.path.join('sticker', "download", 'related', f"{gif_name}"),
+                      os.path.join('sticker', "output", 'related', f"{gif_name}"), 0)
         index = index + 1
         logger.info(f'download_related end {gif_name}')
 
@@ -676,9 +852,10 @@ def validate():
 
 def main():
     # download_categories()
-    download_category('adjectives')
+    # download_category('emotions')
     # download_related()
     # validate()
+    download_related()
 
 
 main()
