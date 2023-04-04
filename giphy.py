@@ -74,9 +74,10 @@ class Images:
 
 
 class Result:
-    def __init__(self, id_str, title, images: Images, image_name):
+    def __init__(self, id_str, title, username, images: Images, image_name):
         self.id_str = id_str
         self.title = title
+        self.username = username
         self.images = images
         self.image_name = image_name
 
@@ -135,7 +136,7 @@ def parse_image_tag(tag_str):
     return tag_response
 
 
-def download_webp(result: Result, download_fold, output_fold, tags_dict):
+def download_webp(result: Result, download_fold, output_fold, tags_dict, result_dict):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.webp)
@@ -173,6 +174,7 @@ def download_webp(result: Result, download_fold, output_fold, tags_dict):
                 os.remove(resize_240_output_file)
 
         download_tags(tags_dict, output_fold, result.image_name, is_zip_success)
+        download_others(result_dict.copy(), output_fold, result.image_name, is_zip_success)
 
         if is_zip_success:
             download_gif(result, output_fold)
@@ -223,7 +225,6 @@ def download_tag_2(url, parent_fold):
         logger.info('download_tag_2 end ')
     else:
         logger.info('download_tag_2 end error')
-
     return response
 
 
@@ -289,13 +290,15 @@ def download_type(url, download_fold, output_fold, start_index):
                 for result_dict in childrens_dict:
                     id_str = result_dict.get('id')
                     title = result_dict.get('title')
+                    username = result_dict.get('username')
                     images_dict = result_dict.get('images')
                     tags_dict = result_dict.get('tags')
+                    featured_tags = result_dict.get('featured_tags')
                     original = get_meet_image_webp_url(images_dict)
                     if original is not None:
                         images = Images(original)
-                        result = Result(id_str, title, images, count + start_index)
-                        download_webp(result, download_fold, output_fold, tags_dict)
+                        result = Result(id_str, title, username, images, count + start_index)
+                        download_webp(result, download_fold, output_fold, tags_dict, result_dict)
                         count = count + 1
                         if count > 200:
                             break
@@ -804,6 +807,51 @@ def download_tags(tags_dict, parent_fold, image_name, is_zip_success):
         if os.path.exists(output_file):
             os.remove(output_file)
             logger.error(f'download_tags remove {output_file}')
+        return False
+
+
+def download_featured_tags(featured_tags, parent_fold, image_name, is_zip_success):
+    output_fold = os.path.join(parent_fold, 'tag')
+    output_file = os.path.join(output_fold, f'{image_name}.json')
+    logger.info(f'featured_tags start {output_file}')
+    if is_zip_success:
+        if featured_tags is None:
+            logger.error(f'featured_tags {output_file}')
+            return False
+        os.makedirs(os.path.join(output_fold), exist_ok=True)
+        if os.path.exists(output_file):
+            logger.warning(f'featured_tags {output_file} exist')
+        json = ','.join(featured_tags)
+        with open(output_file, "w") as file:
+            file.write(json)
+        return True
+    else:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+            logger.error(f'featured_tags remove {output_file}')
+        return False
+
+
+def download_others(result, parent_fold, image_name, is_zip_success):
+    output_fold = os.path.join(parent_fold, 'json')
+    output_file = os.path.join(output_fold, f'{image_name}.json')
+    logger.info(f'download_others start {output_file}')
+    if is_zip_success:
+        if result is None:
+            logger.error(f'download_others {output_file}')
+            return False
+        os.makedirs(os.path.join(output_fold), exist_ok=True)
+        if os.path.exists(output_file):
+            logger.warning(f'download_others {output_file} exist')
+        with open(output_file, "w") as file:
+            # 使用del语句删除key1键值对
+            del result["images"]
+            json.dump(result, file)
+        return True
+    else:
+        if os.path.exists(output_file):
+            os.remove(output_file)
+            logger.error(f'download_others remove {output_file}')
         return False
 
 
