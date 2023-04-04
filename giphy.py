@@ -362,11 +362,11 @@ def download_category(category):
                     download_search(name, category, 25)
                     download_search(name, category, 50)
                     download_search(name, category, 75)
-                    download_search(name, category, 100)
-                    download_search(name, category, 125)
-                    download_search(name, category, 150)
-                    download_search(name, category, 175)
-                    download_search(name, category, 200)
+                    # download_search(name, category, 100)
+                    # download_search(name, category, 125)
+                    # download_search(name, category, 150)
+                    # download_search(name, category, 175)
+                    # download_search(name, category, 200)
                 else:
                     logger.error(f'download_category error {name}')
         except Exception as e:
@@ -844,8 +844,13 @@ def download_others(result, parent_fold, image_name, is_zip_success):
         if os.path.exists(output_file):
             logger.warning(f'download_others {output_file} exist')
         with open(output_file, "w") as file:
-            # 使用del语句删除key1键值对
-            del result["images"]
+            if 'images' in result:
+                images = result["images"]
+                if images is not None:
+                    original = images["original"]
+                    result['original'] = original
+                # 使用del语句删除key1键值对
+                del result["images"]
             json.dump(result, file)
         return True
     else:
