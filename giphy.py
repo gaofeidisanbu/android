@@ -136,7 +136,7 @@ def parse_image_tag(tag_str):
     return tag_response
 
 
-def download_webp(result: Result, download_fold, output_fold, tags_dict, result_dict):
+def download_webp(result: Result, download_fold, output_fold, result_dict):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.webp)
@@ -153,13 +153,14 @@ def download_webp(result: Result, download_fold, output_fold, tags_dict, result_
         image_resize(resize_input_file, resize_output_fold, filename, 512, 512)
 
         zip_input_file = os.path.join(resize_output_fold, filename)
-        zip_output_fold = os.path.join(output_fold, 'compressed')
+        zip_output_fold = os.path.join(output_fold, 'compressed_512')
         is_zip_success = image_zip(zip_input_file, zip_output_fold, filename)
 
         tray_input_file = os.path.join(zip_output_fold, filename)
-        tray_output_file = os.path.join(zip_output_fold, "tray.png")
+        tray_out_fold = os.path.join(output_fold, 'tray')
+        tray_output_file = os.path.join(tray_out_fold, filename)
         if is_zip_success:
-            image_tray(tray_input_file, tray_output_file, 50 * 1024)
+            image_tray(tray_input_file, tray_out_fold, tray_output_file, 50 * 1024)
         else:
             if os.path.exists(tray_output_file):
                 os.remove(tray_output_file)
@@ -173,18 +174,13 @@ def download_webp(result: Result, download_fold, output_fold, tags_dict, result_
             if os.path.exists(resize_240_output_file):
                 os.remove(resize_240_output_file)
 
-        download_tags(tags_dict, output_fold, result.image_name, is_zip_success)
+        download_gif(result, output_fold, is_zip_success)
+        download_fix_width_webp(result, output_fold, is_zip_success)
+
         download_others(result_dict.copy(), output_fold, result.image_name, is_zip_success)
 
-        if is_zip_success:
-            download_gif(result, output_fold)
-            download_fix_width_webp(result, output_fold)
-        else:
-            if os.path.exists(resize_240_output_file):
-                os.remove(resize_240_output_file)
 
-
-def download_gif(result: Result, parent_fold):
+def download_gif(result: Result, parent_fold, is_zip_success):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.gif)
@@ -193,10 +189,15 @@ def download_gif(result: Result, parent_fold):
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
         output_fold = os.path.join(parent_fold, 'gif')
-        download_image(result.images.original.gif, output_fold, filename)
+        output_file = os.path.join(output_fold, filename)
+        if is_zip_success:
+            download_image(result.images.original.gif, output_fold, filename)
+        else:
+            if os.path.exists(output_file):
+                os.remove(output_file)
 
 
-def download_fix_width_webp(result: Result, parent_fold):
+def download_fix_width_webp(result: Result, parent_fold, is_zip_success):
     if result.images.original:
         # Get the file extension from the URL.
         parsed_link = urlparse(result.images.original.fix_width)
@@ -205,67 +206,73 @@ def download_fix_width_webp(result: Result, parent_fold):
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
         output_fold = os.path.join(parent_fold, 'fix_width')
-        download_image(result.images.original.fix_width, output_fold, filename)
+        output_file = os.path.join(output_fold, filename)
+        if is_zip_success:
+            download_image(result.images.original.fix_width, output_fold, filename)
+        else:
+            if os.path.exists(output_file):
+                os.remove(output_file)
 
 
-def download_tag_image(response: TagResponse, parent_fold):
-    index = 0
-    for result in response.results:
-        result.image_name = index
-        download_webp(result, parent_fold)
-        index = index + 1
-
-
-def download_tag_2(url, parent_fold):
-    logger.info(f'download_tag_2 start {url}')
-    response_str = request_url(url)
-    if response_str is not None:
-        response = parse_image_tag(response_str)
-        download_tag_image(response, parent_fold)
-        logger.info('download_tag_2 end ')
-    else:
-        logger.info('download_tag_2 end error')
-    return response
+# def download_tag_image(response: TagResponse, parent_fold):
+#     index = 0
+#     for result in response.results:
+#         result.image_name = index
+#         download_webp(result, parent_fold)
+#         index = index + 1
+#
+#
+# def download_tag_2(url, parent_fold):
+#     logger.info(f'download_tag_2 start {url}')
+#     response_str = request_url(url)
+#     if response_str is not None:
+#         response = parse_image_tag(response_str)
+#         download_tag_image(response, parent_fold)
+#         logger.info('download_tag_2 end ')
+#     else:
+#         logger.info('download_tag_2 end error')
+#     return response
 
 
 max_count = 50
 
 
-def download_tag(url, parent_fold):
-    logger.info(f'download_tag start {url}')
-    count = 0
-    i = 0
-    while i < 10:
-        response = download_tag_2(url, parent_fold)
-        count = count + len(response.results)
-        if response is None or response.next_url is None or count > max_count:
-            break
-        i += 1
-    logger.info('download_tag end ')
+#
+# def download_tag(url, parent_fold):
+#     logger.info(f'download_tag start {url}')
+#     count = 0
+#     i = 0
+#     while i < 10:
+#         response = download_tag_2(url, parent_fold)
+#         count = count + len(response.results)
+#         if response is None or response.next_url is None or count > max_count:
+#             break
+#         i += 1
+#     logger.info('download_tag end ')
 
 
-def download_artists(url):
-    logger.info(f"download_category start {url}")
-    response_str = request_url(url)
-    if response_str is not None:
-        category_dict = json.loads(response_str)
-        display_name = category_dict.get("display_name")
-        logger.info(f'download_category display name {display_name}')
-        childrens_dict = category_dict.get('children')
-        count = 0
-        for children_dict in childrens_dict:
-            children_id = children_dict.get('id')
-            children_name = children_dict.get('display_name')
-            children_slug = children_dict.get('slug')
-            children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
-            logger.info('download_category children name ', children_name)
-            download_tag(children_url, os.path.join(display_name, children_name))
-            count = count + 1
-            if count > 100:
-                break
-        logger.info("download_category end")
-    else:
-        logger.info("download_category error")
+# def download_artists(url):
+#     logger.info(f"download_category start {url}")
+#     response_str = request_url(url)
+#     if response_str is not None:
+#         category_dict = json.loads(response_str)
+#         display_name = category_dict.get("display_name")
+#         logger.info(f'download_category display name {display_name}')
+#         childrens_dict = category_dict.get('children')
+#         count = 0
+#         for children_dict in childrens_dict:
+#             children_id = children_dict.get('id')
+#             children_name = children_dict.get('display_name')
+#             children_slug = children_dict.get('slug')
+#             children_url = f"https://giphy.com/api/v4/channels/{children_id}/feed/"
+#             logger.info('download_category children name ', children_name)
+#             download_tag(children_url, os.path.join(display_name, children_name))
+#             count = count + 1
+#             if count > 100:
+#                 break
+#         logger.info("download_category end")
+#     else:
+#         logger.info("download_category error")
 
 
 def download_search2(name, offset, download_fold, output_fold):
@@ -292,13 +299,11 @@ def download_type(url, download_fold, output_fold, start_index):
                     title = result_dict.get('title')
                     username = result_dict.get('username')
                     images_dict = result_dict.get('images')
-                    tags_dict = result_dict.get('tags')
-                    featured_tags = result_dict.get('featured_tags')
                     original = get_meet_image_webp_url(images_dict)
                     if original is not None:
                         images = Images(original)
                         result = Result(id_str, title, username, images, count + start_index)
-                        download_webp(result, download_fold, output_fold, tags_dict, result_dict)
+                        download_webp(result, download_fold, output_fold, result_dict)
                         count = count + 1
                         if count > 200:
                             break
@@ -749,7 +754,7 @@ def compress_webp_animation3(input_path, output_path):
         logger.error(e)
 
 
-def image_tray(input_file, output_file, max_size):
+def image_tray(input_file, output_fold, output_file, max_size):
     logger.info(f'image_tray start {input_file}')
     if os.path.exists(input_file):
         logger.info('image_tray zip_url exist')
@@ -758,7 +763,8 @@ def image_tray(input_file, output_file, max_size):
         return False
     if os.path.exists(output_file):
         logger.warning(f'image_tray {output_file} exist')
-        return True
+        os.remove(output_file)
+    os.makedirs(output_fold, exist_ok=True)
     try:
         # 打开webp动画文件
         with Image.open(input_file) as im:
@@ -780,7 +786,7 @@ def image_tray(input_file, output_file, max_size):
                         break
     except Exception as e:
         logger.error(e)
-    if os.path.getsize(output_file) > max_size:
+    if os.path.exists(output_file) and os.path.getsize(output_file) > max_size:
         os.remove(output_file)
         logger.warning('image_tray remove')
         return False
@@ -846,11 +852,11 @@ def download_others(result, parent_fold, image_name, is_zip_success):
         with open(output_file, "w") as file:
             if 'images' in result:
                 images = result["images"]
-                if images is not None:
-                    original = images["original"]
-                    result['original'] = original
                 # 使用del语句删除key1键值对
                 del result["images"]
+                if images is not None:
+                    new_images = {'gif': images['original'], 'fixed_width': images['fixed_width']}
+                    result['images'] = new_images
             json.dump(result, file)
         return True
     else:
