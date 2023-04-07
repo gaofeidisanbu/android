@@ -45,6 +45,7 @@ formatter_file = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 file_handler.setFormatter(formatter_file)
 # 将控制台处理器添加到logger
 logger.addHandler(file_handler)
+root_path = "../sticker"
 
 
 class ImageList:
@@ -389,8 +390,8 @@ def download_category(category):
 
 
 def download_search(name, category, offset):
-    download_search2(name, offset, os.path.join('sticker', 'download', category, name),
-                     os.path.join('sticker', 'output', category, name))
+    download_search2(name, offset, os.path.join(root_path, 'download', category, name),
+                     os.path.join(root_path, 'output', category, name))
 
 
 def download_categories():
@@ -636,8 +637,8 @@ def download_related():
         url = f'https://api.giphy.com/v1/gifs/related?gif_id={gif_id}&api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
             f'&pingback_id=1870d4cd3af20c73 '
         logger.info(f'download_related start {gif_name}')
-        download_type(url, os.path.join('sticker', "download", 'related', f"{gif_name}"),
-                      os.path.join('sticker', "output", 'related', f"{gif_name}"), 0)
+        download_type(url, os.path.join(root_path, "download", 'related', f"{gif_name}"),
+                      os.path.join(root_path, "output", 'related', f"{gif_name}"), 0)
         index = index + 1
         logger.info(f'download_related end {gif_name}')
 
@@ -931,8 +932,8 @@ def validate_sticker(input_path):
 
 def validate():
     file_name = '6.webp'
-    input_file = os.path.join('sticker', 'actions', 'breaking-up', 'resize', file_name)
-    output_folder = os.path.join('sticker', 'actions', 'breaking-up', 'compressed')
+    input_file = os.path.join(root_path, 'actions', 'breaking-up', 'resize', file_name)
+    output_folder = os.path.join(root_path, 'actions', 'breaking-up', 'compressed')
     output_file = os.path.join(output_folder, file_name)
     # image_resize(input_file, output_folder, file_name, 512, 512)
     # image_zip(input_file, output_folder, file_name)
@@ -942,14 +943,14 @@ def validate():
 def main():
     # download_categories()
     # download_category('actions')
-    download_category('adjectives')
+    # download_category('adjectives')
+    # download_related()
     download_category('animals')
-    download_category('anime')
-    download_category('art-design')
-    download_category('cartoons-comics')
+    # download_category('anime')
+    # download_category('art-design')
+    # download_category('cartoons-comics')
     # download_related()
     # validate()
-    download_related()
 
 
 main()
