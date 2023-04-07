@@ -350,6 +350,9 @@ def check_image_type(url, image_type):
     return False
 
 
+category_max_count = 20
+
+
 def download_category(category):
     url = f'https://api.giphy.com/v1/gifs/categories/{category}?api_key=Gc7131jiJuvI7IdN0HZ1D7nh0ow5BU6g' \
         f'&pingback_id=186fda3de4e75f6b '
@@ -359,6 +362,7 @@ def download_category(category):
         try:
             response_dict = json.loads(response_str)
             datas_dict = response_dict.get('data')
+            count = 0
             for data in datas_dict:
                 name = data.get('name_encoded')
                 logger.info(f"download_category  {name}")
@@ -374,6 +378,9 @@ def download_category(category):
                     # download_search(name, category, 200)
                 else:
                     logger.error(f'download_category error {name}')
+                count = count + 1
+                if count >= category_max_count:
+                    break
         except Exception as e:
             logger.error(e)
     else:
@@ -707,9 +714,10 @@ def compress_webp_animation(input_path, output_path):
         is_success = True
         logger.info('compress_webp_animation validate success')
     else:
-        os.remove(output_path)
-        is_success = False
-        logger.error('compress_webp_animation validate fail')
+        if os.path.exists(output_path):
+            os.remove(output_path)
+            is_success = False
+            logger.error('compress_webp_animation validate fail')
     logger.info('compress_webp_animation end')
     return is_success
 
@@ -933,7 +941,12 @@ def validate():
 
 def main():
     # download_categories()
-    download_category('actions')
+    # download_category('actions')
+    download_category('adjectives')
+    download_category('animals')
+    download_category('anime')
+    download_category('art-design')
+    download_category('cartoons-comics')
     # download_related()
     # validate()
     download_related()
