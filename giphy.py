@@ -303,7 +303,7 @@ def download_type(url, download_fold, output_fold, start_index):
                     original = get_meet_image_webp_url(images_dict)
                     if original is not None:
                         images = Images(original)
-                        result = Result(id_str, title, username, images, count + start_index)
+                        result = Result(id_str, title, username, images, id_str)
                         download_webp(result, download_fold, output_fold, result_dict)
                         count = count + 1
                         if count > 200:
