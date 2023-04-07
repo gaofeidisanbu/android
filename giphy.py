@@ -63,10 +63,10 @@ class ImageInfo:
 
 class ImageOriginal:
 
-    def __init__(self, webp=None, gif=None, fix_width=None):
+    def __init__(self, webp=None, gif=None, fixed_width=None):
         self.webp = webp
         self.gif = gif
-        self.fix_width = fix_width
+        self.fixed_width = fixed_width
 
 
 class Images:
@@ -159,7 +159,7 @@ def download_webp(result: Result, download_fold, output_fold, result_dict):
 
         tray_input_file = os.path.join(zip_output_fold, filename)
         tray_out_fold = os.path.join(output_fold, 'tray')
-        tray_output_file = os.path.join(tray_out_fold, filename)
+        tray_output_file = os.path.join(tray_out_fold, f'{result.image_name}.png')
         if is_zip_success:
             image_tray(tray_input_file, tray_out_fold, tray_output_file, 50 * 1024)
         else:
@@ -176,7 +176,7 @@ def download_webp(result: Result, download_fold, output_fold, result_dict):
                 os.remove(resize_240_output_file)
 
         download_gif(result, output_fold, is_zip_success)
-        download_fix_width_webp(result, output_fold, is_zip_success)
+        download_fixed_width_webp(result, output_fold, is_zip_success)
 
         download_others(result_dict.copy(), output_fold, result.image_name, is_zip_success)
 
@@ -198,18 +198,18 @@ def download_gif(result: Result, parent_fold, is_zip_success):
                 os.remove(output_file)
 
 
-def download_fix_width_webp(result: Result, parent_fold, is_zip_success):
+def download_fixed_width_webp(result: Result, parent_fold, is_zip_success):
     if result.images.original:
         # Get the file extension from the URL.
-        parsed_link = urlparse(result.images.original.fix_width)
+        parsed_link = urlparse(result.images.original.fixed_width)
         path = parsed_link.path
         file_extension = path.split('.')[-1]
         # Generate a filename for the image using the file extension.
         filename = f'{result.image_name}.{file_extension}'
-        output_fold = os.path.join(parent_fold, 'fix_width')
+        output_fold = os.path.join(parent_fold, 'fixed_width')
         output_file = os.path.join(output_fold, filename)
         if is_zip_success:
-            download_image(result.images.original.fix_width, output_fold, filename)
+            download_image(result.images.original.fixed_width, output_fold, filename)
         else:
             if os.path.exists(output_file):
                 os.remove(output_file)
@@ -338,7 +338,7 @@ def get_meet_image_webp_url(images_dict):
         if 'fixed_width' in images_dict:
             fixed_width = images_dict.get('fixed_width')
             if 'webp' in fixed_width:
-                image_original.fix_width = fixed_width['webp']
+                image_original.fixed_width = fixed_width['webp']
     return image_original
 
 
@@ -945,8 +945,8 @@ def main():
     # download_category('actions')
     # download_category('adjectives')
     # download_related()
-    download_category('animals')
-    # download_category('anime')
+    # download_category('animals')
+    download_category('anime')
     # download_category('art-design')
     # download_category('cartoons-comics')
     # download_related()
