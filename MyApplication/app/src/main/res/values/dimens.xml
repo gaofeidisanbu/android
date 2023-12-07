@@ -4,4 +4,6 @@
     <dimen name="task_treasure_box_icon_height">124dp</dimen>
     <dimen name="new_task_root_width">360dp</dimen>
     <dimen name="new_task_root_height">992dp</dimen>
+    <dimen name="standard_padding">8dip</dimen>
+    <dimen name="half_padding">4dip</dimen>
 </resources>
