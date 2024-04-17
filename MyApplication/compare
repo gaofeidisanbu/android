@@ -2209,7 +2209,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "1",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "1",
 				"originPrice": "9",
@@ -2270,7 +2270,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "0",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "0",
 				"originPrice": "99",
@@ -2331,7 +2331,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "0",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "0",
 				"originPrice": "159",
@@ -2392,7 +2392,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "0",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "0",
 				"originPrice": "399",
@@ -2451,7 +2451,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "0",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "0",
 				"originPrice": "1699",
@@ -2512,7 +2512,7 @@
 				"pet_bg_id": "",
 				"vipType": "0",
 				"wish": "0",
-				"rebate_count_down": "19571934",
+				"rebate_count_down": "19571896",
 				"left_tags": [],
 				"custom_send": "0",
 				"originPrice": "1999",
@@ -4691,7 +4691,7 @@
 				"tipBannerUrl": "",
 				"tipBackgroundColor": "",
 				"parentId": "3173",
-				"common_count_down": "959",
+				"common_count_down": "921",
 				"is_allmic_gift": "0"
 			}, {
 				"id": "94146",
@@ -4753,7 +4753,7 @@
 				"tipBannerUrl": "",
 				"tipBackgroundColor": "",
 				"parentId": "94145",
-				"common_count_down": "959",
+				"common_count_down": "921",
 				"is_allmic_gift": "0"
 			}, {
 				"id": "2830",
@@ -11532,7 +11532,7 @@
 				"pet_id": "0",
 				"pet_bg_id": "0",
 				"wish": "1",
-				"rebate_count_down": "82211934",
+				"rebate_count_down": "82211896",
 				"left_tags": [],
 				"custom_send": "1",
 				"originPrice": "5",
@@ -16636,5 +16636,5 @@
 		"star_to_exp": "5",
 		"graffiti_material_url": "https:\/\/s3.amazonaws.com\/liveme.storage.test\/liveglb\/202101191832\/gifts\/resource_manage\/TemplateResource_md5_03aad0959aefa6c133391a4d39fb63f3_.zip"
 	},
-	"gdelay": "347"
+	"gdelay": "461"
 }
