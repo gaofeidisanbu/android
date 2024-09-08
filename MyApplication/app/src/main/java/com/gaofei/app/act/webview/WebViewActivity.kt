@@ -5,7 +5,6 @@ import android.text.TextUtils
 import android.webkit.*
 import android.widget.Button
 import com.gaofei.app.R
-import kotlinx.android.synthetic.main.act_web_view.*
 
 class WebViewActivity : BaseWebViewAct() {
 

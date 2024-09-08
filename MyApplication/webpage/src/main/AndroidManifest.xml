@@ -1,4 +1,4 @@
-<manifest package="com.yangcong345.webpage"
+<manifest
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application >

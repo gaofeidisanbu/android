@@ -3,18 +3,22 @@ package com.gaofei.app.act
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import com.gaofei.app.R
+import com.gaofei.app.databinding.ActGlSurfaceBinding
 import com.gaofei.library.base.BaseAct
 import com.gaofei.library.utils.LogUtils
-import kotlinx.android.synthetic.main.act_gl_surface.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
+private lateinit var binding: ActGlSurfaceBinding
+
+
 
 class GLSurfaceAct: BaseAct() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActGlSurfaceBinding.inflate(layoutInflater)
         setContentView(R.layout.act_gl_surface)
-        surface.setRenderer(object: GLSurfaceView.Renderer {
+        binding.surface.setRenderer(object: GLSurfaceView.Renderer {
             override fun onDrawFrame(gl: GL10?) {
                 LogUtils.d(gl)
             }

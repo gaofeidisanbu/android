@@ -17,25 +17,27 @@ import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.mylibrary.databinding.LayoutHighFiveBinding
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.image.ImageInfo
 import com.gaofei.app.R.layout
+import com.gaofei.app.databinding.ActCanvasBinding
 import com.gaofei.library.ProjectApplication
 import com.gaofei.library.base.BaseAct
 import com.gaofei.library.utils.CommonUtils
 import com.gaofei.library.utils.DimenUtils
 import com.gaofei.library.utils.LogUtils
-import kotlinx.android.synthetic.main.act_canvas.*
-import kotlinx.android.synthetic.main.layout_gif_item.view.*
 
 
 class CanvasActivity : BaseAct() {
     private val mData = ArrayList<Int>()
+    private var binding:ActCanvasBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActCanvasBinding.inflate(layoutInflater)
         setContentView(layout.act_canvas)
         createTextImage()
     }
@@ -50,7 +52,7 @@ class CanvasActivity : BaseAct() {
     private fun createTextImage(): Bitmap? {
         val maxWidth: Int = DimenUtils.getWindowWidth()
         val height: Int = DimenUtils.dp2px(36f)
-        val view = LayoutInflater.from(ProjectApplication.getContext()).inflate(layout.layout_high_five, null)
+        val view = LayoutHighFiveBinding.inflate(layoutInflater).root
         val measuredWidth = View.MeasureSpec.makeMeasureSpec(maxWidth, View.MeasureSpec.EXACTLY)
         val measuredHeight = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
         view.measure(measuredWidth, measuredHeight)

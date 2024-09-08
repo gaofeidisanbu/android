@@ -28,6 +28,7 @@ import com.yangcong345.webpage.base.BaseFragment
 import com.yangcong345.webpage.bridge.inter.INavigation
 import com.yangcong345.webpage.bridge.inter.IWebView
 import com.yangcong345.webpage.callback.GoBackListener
+import com.yangcong345.webpage.databinding.FragmentBridgeWebviewBinding
 import com.yangcong345.webpage.handler.BrowserNavHandler
 import com.yangcong345.webpage.handler.NavigationHandler
 import com.yangcong345.webpage.log.LogUtils
@@ -39,7 +40,6 @@ import com.yangcong345.webpage.page.OnActivityWebViewInteractionListener
 import com.yangcong345.webpage.toast.OmToastManager
 import com.yangcong345.webpage.view.YCBridgeWebViewV2
 import com.yangcong345.webpage.view.YCLoadBridgeWebViewV2
-import kotlinx.android.synthetic.main.fragment_bridge_webview.*
 import kotlin.let as let1
 
 
@@ -100,10 +100,12 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
      * 用来表示页面是第一次进入还是重新回来
      */
     protected var isFirstEnterPage: Boolean = true
+    protected var binding: FragmentBridgeWebviewBinding? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mRootView = inflater.inflate(R.layout.fragment_bridge_webview, container, false) as ViewGroup
+        FragmentBridgeWebviewBinding.bind(mRootView);
         return mRootView
     }
 
@@ -155,7 +157,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
             finish()
             Bundle()
         } else {
-            arguments!!
+            requireArguments()
         }
     }
 
@@ -169,13 +171,13 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
         showToolbar(isShowToolbar)
         val let = mToolbarStyle?.let1 {
             if (isShowToolbar) {
-                rlToolbar.setBackgroundColor(getColor(resources, it.toolbarBackgroundColor, null))
-                ivImageLeft.setImageResource(it.leftImageId)
-                tvTitle.setTextColor(getColor(resources, it.titleColor, null))
+                binding!!.rlToolbar.setBackgroundColor(getColor(resources, it.toolbarBackgroundColor, null))
+                binding!!.ivImageLeft.setImageResource(it.leftImageId)
+                binding!!.tvTitle.setTextColor(getColor(resources, it.titleColor, null))
                 setCustomTitle(mParams?.title ?: "")
             }
         }
-        ivImageLeft.setOnClickListener {
+        binding!!.ivImageLeft.setOnClickListener {
             if (!dispatchBackEvent(ClickBackType.LEFT)) {
                 finish()
             }
@@ -183,11 +185,11 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
     }
 
     private fun setCustomTitle(title: String) {
-        tvTitle.text = title
+        binding!!.tvTitle.text = title
     }
 
     private fun showToolbar(isShow: Boolean) {
-        rlToolbar.visibility = if (isShow) View.VISIBLE else View.GONE
+        binding!!.rlToolbar.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
     private fun installModule() {
@@ -433,7 +435,7 @@ open class BaseBridgeWebViewFragment : BaseFragment(), IToolbar, INavigation, IW
     }
 
     override fun getToolBar(): View? {
-        return rlToolbar
+        return  binding!!.rlToolbar
     }
 
     override fun getWebView(): WebView? {

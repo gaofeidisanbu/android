@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import com.gaofei.app.R
+import com.gaofei.app.databinding.ActHttpClientBinding
 import com.gaofei.library.base.BaseAct
 import com.gaofei.library.utils.LogUtils
-import kotlinx.android.synthetic.main.act_http_client.*
 import okhttp3.*
 import okhttp3.internal.Util
 import java.io.IOException
@@ -16,11 +16,14 @@ import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 class OKHttpClientAct : BaseAct() {
+    private lateinit var binding: ActHttpClientBinding
+
+
     val handlerThread = HandlerThread("network")
     var count = 0;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_http_client)
+        binding = ActHttpClientBinding.inflate(layoutInflater)
         handlerThread.start()
         val handler = Handler(handlerThread.looper)
         val executorService = ThreadPoolExecutor(0, Int.MAX_VALUE, 600, TimeUnit.SECONDS,
@@ -28,7 +31,7 @@ class OKHttpClientAct : BaseAct() {
         val client = OkHttpClient.Builder()
                 .dispatcher(Dispatcher(executorService))
                 .build()
-        button.setOnClickListener {
+        binding.button.setOnClickListener {
             handler.post {
                 for (i in 0..1) {
                     val request = Request.Builder()
@@ -49,7 +52,7 @@ class OKHttpClientAct : BaseAct() {
             }
 
         }
-        button2.setOnClickListener {
+        binding.button2.setOnClickListener {
             executorService.shutdown()
         }
     }
