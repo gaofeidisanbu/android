@@ -7,18 +7,20 @@ import android.os.Handler
 import com.gaofei.app.R
 import com.gaofei.app.anr.IO
 import com.gaofei.app.broadcast.BroadcastReceiverTest
+import com.gaofei.app.databinding.ActAidlBinding
+import com.gaofei.app.databinding.ActAnrBinding
 import com.gaofei.app.plugin.AesUtils
 import com.gaofei.library.base.BaseAct
-import kotlinx.android.synthetic.main.act_anr.*
-
+private lateinit var binding: ActAnrBinding
 class AnrAct : BaseAct() {
     private val mHandler = Handler()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_anr)
+        binding = ActAnrBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val intentFilter = IntentFilter(BroadcastReceiverTest.ACTION)
         registerReceiver(BroadcastReceiverTest(), intentFilter)
-        button.setOnClickListener {
+        binding.button.setOnClickListener {
             val intent = Intent()
             intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND)
             intent.action = BroadcastReceiverTest.ACTION
@@ -35,7 +37,7 @@ class AnrAct : BaseAct() {
 //        intent.action = TestBroadCastReceiver.ACTION
 //        this.sendBroadcast(intent)
         IO.aa()
-        text.setText(getTex11t())
+        binding.text.setText(getTex11t())
     }
 
     private fun getTex11t(): String {

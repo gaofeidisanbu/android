@@ -109,15 +109,15 @@ public class ScreenCaptureFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.toggle:
-                if (mVirtualDisplay == null) {
-                    startScreenCapture();
-                } else {
-                    stopScreenCapture();
-                }
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.toggle:
+//                if (mVirtualDisplay == null) {
+//                    startScreenCapture();
+//                } else {
+//                    stopScreenCapture();
+//                }
+//                break;
+//        }
     }
 
     @Override

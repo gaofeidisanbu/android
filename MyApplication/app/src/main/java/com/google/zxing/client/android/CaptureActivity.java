@@ -333,7 +333,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
           return true;
         }
         if ((source == IntentSource.NONE || source == IntentSource.ZXING_LINK) && lastResult != null) {
-          restartPreviewAfterDelay(0L);
+//          restartPreviewAfterDelay(0L);
           return true;
         }
         break;
@@ -363,26 +363,26 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
   public boolean onOptionsItemSelected(MenuItem item) {
     Intent intent = new Intent(Intent.ACTION_VIEW);
     intent.addFlags(Intents.FLAG_NEW_DOC);
-    switch (item.getItemId()) {
-      case R.id.menu_share:
-        intent.setClassName(this, ShareActivity.class.getName());
-        startActivity(intent);
-        break;
-      case R.id.menu_history:
-        intent.setClassName(this, HistoryActivity.class.getName());
-        startActivityForResult(intent, HISTORY_REQUEST_CODE);
-        break;
-      case R.id.menu_settings:
-        intent.setClassName(this, PreferencesActivity.class.getName());
-        startActivity(intent);
-        break;
-      case R.id.menu_help:
-        intent.setClassName(this, HelpActivity.class.getName());
-        startActivity(intent);
-        break;
-      default:
-        return super.onOptionsItemSelected(item);
-    }
+//    switch (item.getItemId()) {
+//      case R.id.menu_share:
+//        intent.setClassName(this, ShareActivity.class.getName());
+//        startActivity(intent);
+//        break;
+//      case R.id.menu_history:
+//        intent.setClassName(this, HistoryActivity.class.getName());
+//        startActivityForResult(intent, HISTORY_REQUEST_CODE);
+//        break;
+//      case R.id.menu_settings:
+//        intent.setClassName(this, PreferencesActivity.class.getName());
+//        startActivity(intent);
+//        break;
+//      case R.id.menu_help:
+//        intent.setClassName(this, HelpActivity.class.getName());
+//        startActivity(intent);
+//        break;
+//      default:
+//        return super.onOptionsItemSelected(item);
+//    }
     return true;
   }
 
