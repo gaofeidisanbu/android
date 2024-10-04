@@ -26,8 +26,9 @@ class EasyService : Service() {
         LogUtils.d("$TAG ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
         val service = object : IEasyService.Stub(){
 
-            override fun connect(mes: String?) {
+            override fun connect(mes: String?) :Int{
                 LogUtils.d("$TAG connect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
+                return 1;
             }
 
             override fun disConnect(mes: String?) {
