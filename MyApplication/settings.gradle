@@ -1,3 +1,4 @@
-include ':app', ':app2', ':commonLibrary', ':lib'
+include ':app', ':commonLibrary', ':lib'
 //include ':android4'
+include ':app2'
 include ':webpage'

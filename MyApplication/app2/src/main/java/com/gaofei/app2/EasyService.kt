@@ -22,9 +22,7 @@ class EasyService : Service() {
     }
 
 
-
-
-    override fun onBind(intent: Intent?): IBinder? {
+    override fun onBind(intent: Intent?): IBinder {
         LogUtils.d("$TAG ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
         val service = object : IEasyService.Stub(){
 

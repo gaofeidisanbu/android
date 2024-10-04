@@ -10,12 +10,11 @@ repositories {
 android {
     buildFeatures {
         viewBinding true
+        buildConfig=true
+        aidl = true
     }
     dataBinding {
         enabled = true
-    }
-    buildFeatures {
-        buildConfig=true
     }
     namespace = "com.gaofei.app"
     signingConfigs {
