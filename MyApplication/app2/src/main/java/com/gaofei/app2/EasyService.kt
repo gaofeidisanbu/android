@@ -35,6 +35,19 @@ class EasyService : Service() {
                 LogUtils.d("$TAG disConnect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
             }
 
+            override fun getBitmap(): Bitmap {
+                return BitmapFactory.decodeResource(resources, R.mipmap.plan_preview_loading_city_1)
+            }
+
+            override fun getByteArray( bitmap:Bitmap): ByteArray {
+                val array = ByteArray(1024 * 1024)
+                return array
+            }
+
+            override fun attachBinder(binder: IEasyService?) {
+                TODO("Not yet implemented")
+            }
+
         }
         return service
     }
