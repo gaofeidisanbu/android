@@ -75,17 +75,17 @@ public class PermissionAct extends BaseAct implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button1:
-                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
-                break;
-            case R.id.button2:
-                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ_EXTERNAL_STORAGE_REQUEST_CODE);
-                break;
-            case R.id.button3:
-                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_READ_PHONE_STATE_REQUEST_CODE);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.button1:
+//                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_WRITE_EXTERNAL_STORAGE_REQUEST_CODE);
+//                break;
+//            case R.id.button2:
+//                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_READ_EXTERNAL_STORAGE_REQUEST_CODE);
+//                break;
+//            case R.id.button3:
+//                PermissionHandler.requestPermission(this, new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_READ_PHONE_STATE_REQUEST_CODE);
+//                break;
+//        }
     }
 
 }

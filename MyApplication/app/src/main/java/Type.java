@@ -4,5 +4,5 @@
  */
 public enum  Type {
 
-    Type,TYPE2
+    Type ,TYPE2
 }

@@ -636,7 +636,7 @@ public class CommonUtils {
         } finally {
             try {
                 retriever.release();
-            } catch (RuntimeException e) {
+            } catch (IOException e) {
                 LogUtils.e(e);
             }
         }

@@ -89,7 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public MyItemDecoration(Context context) {
             this.mContext = context;
             dividerPaint = new Paint();
-            dividerPaint.setColor(context.getResources().getColor(R.color.divider_purchase));
+            dividerPaint.setColor(context.getResources().getColor(com.example.mylibrary.R.color.divider_purchase));
             dividerHeight = CommonUtils.dip2px(mContext.getApplicationContext(), 10);
         }
 

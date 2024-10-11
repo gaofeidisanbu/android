@@ -66,22 +66,22 @@ public class BaseDialogFragment extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.buttonNegative:
-                if(listener != null){
-                    listener.onClick(dialog,DialogInterface.BUTTON_NEGATIVE);
-                }
-                break;
-            case R.id.buttonPositive:
-                if(listener != null){
-                    listener.onClick(dialog,DialogInterface.BUTTON_POSITIVE);
-                }
-                Intent intent = new Intent(getContext(),MainActivity.class);
-                this.startActivity(intent);
-                this.dismiss();
-
-                break;
-        }
+//        switch (v.getId()){
+//            case R.id.buttonNegative:
+//                if(listener != null){
+//                    listener.onClick(dialog,DialogInterface.BUTTON_NEGATIVE);
+//                }
+//                break;
+//            case R.id.buttonPositive:
+//                if(listener != null){
+//                    listener.onClick(dialog,DialogInterface.BUTTON_POSITIVE);
+//                }
+//                Intent intent = new Intent(getContext(),MainActivity.class);
+//                this.startActivity(intent);
+//                this.dismiss();
+//
+//                break;
+//        }
     }
 
     @Override

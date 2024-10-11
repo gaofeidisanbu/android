@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.gaofei.app">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -38,11 +36,11 @@
         android:theme="@style/AppTheme">
         <activity android:name="com.gaofei.app.MainActivity"
             android:exported="true">
-           <!-- <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity android:name="com.gaofei.app.act.SkipAct" />
         <activity android:name="com.gaofei.app.act.ExceptionAct" />
@@ -81,11 +79,6 @@
         <activity
             android:name=".CanvasActivity"
             android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
-        <activity
-            android:name="com.gaofei.app.act.BarrageAnimationAct"
-            android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
-        <activity android:name="com.gaofei.app.act.ClockSetUpActivity" android:exported="false"/>
-        <activity android:name="com.gaofei.app.act.ClockStartActivity"  android:theme="@style/AppTheme.NoActionBar" android:exported="false"/>
 
         <receiver android:name=".act.ClockBroadcastReceiver" android:exported="false">
             <intent-filter>
@@ -102,7 +95,7 @@
         <provider
             android:authorities="com.test.demo.fileprovider"
             android:exported="true"
-            android:name="TestContentProvider"></provider>
+            android:name=".TestContentProvider"></provider>
 
         <activity android:name="com.gaofei.app.TaskAffinityAct"  android:allowTaskReparenting="false" android:exported="true"> </activity>
 
@@ -118,10 +111,6 @@
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
             <intent-filter>
                 <action android:name="com.google.zxing.client.android.SCAN"/>
                 <category android:name="android.intent.category.DEFAULT"/>

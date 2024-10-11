@@ -13,11 +13,10 @@ import android.view.View
 import android.webkit.*
 import android.widget.FrameLayout
 import com.yangcong345.webpage.BuildConfig
-import com.yangcong345.webpage.R
+import com.yangcong345.webpage.databinding.YcBridgeLoadV2Binding
 import com.yangcong345.webpage.log.LogUtils
 import com.yangcong345.webpage.page.OnActivityWebViewInteractionListener
 import com.yangcong345.webpage.toast.OmToastManager
-import kotlinx.android.synthetic.main.yc_bridge_load_v2.view.*
 
 /**
  * Created by gaofei on 2017/7/11.
@@ -34,6 +33,7 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
     private var isLoadFail = false
     private var mCallBack: ILoadWebViewCallBack? = null
     var mAWWIL: OnActivityWebViewInteractionListener? = null
+    private lateinit var binding: YcBridgeLoadV2Binding
 
     private var webViewClientListenerList: MutableList<WebViewClientListener> = mutableListOf()
 
@@ -56,9 +56,9 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
 
     private fun init(context: Context) {
         this.mContext = context
-        LayoutInflater.from(mContext).inflate(R.layout.yc_bridge_load_v2, this, true)
-        failRefresh.setOnClickListener { loadPage(mUrl) }
-        failBack.setOnClickListener {
+        binding = YcBridgeLoadV2Binding.inflate(LayoutInflater.from(mContext),this, true)
+        binding.failRefresh.setOnClickListener { loadPage(mUrl) }
+        binding.failBack.setOnClickListener {
             mAWWIL?.onClosePage()
         }
         configureWebView()
@@ -83,11 +83,11 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
 
     private fun updateProgress(newProgress: Int) {
         LogUtils.d("YCLoadBridgeWebViewV2 $newProgress")
-        progress.progress = newProgress
+        binding.progress.progress = newProgress
     }
 
     private fun showProgress(isShow: Boolean) {
-        progress.visibility = if (isShow) View.VISIBLE else View.GONE
+        binding.progress.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
     private fun initFailPage() {
@@ -95,12 +95,12 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
     }
 
     private fun showFailPage(isShow: Boolean) {
-        failPage.visibility = if (isShow) View.VISIBLE else View.GONE
+        binding.failPage.visibility = if (isShow) View.VISIBLE else View.GONE
     }
 
 
     fun setCacheMode(mode: Int) {
-        webView1!!.settings.cacheMode = mode
+        binding.webView1!!.settings.cacheMode = mode
     }
 
 
@@ -132,15 +132,15 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
     }
 
     fun getWebView(): YCBridgeWebViewV2 {
-        return webView1
+        return binding.webView1
     }
 
     protected fun configureWebView() {
-        webView1.settings.cacheMode = WebSettings.LOAD_DEFAULT
-        webView1.settings.setSupportZoom(true)
-        webView1.settings.javaScriptEnabled = true
-        webView1.settings.domStorageEnabled = true
-        webView1.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
+        binding.webView1.settings.cacheMode = WebSettings.LOAD_DEFAULT
+        binding.webView1.settings.setSupportZoom(true)
+        binding.webView1.settings.javaScriptEnabled = true
+        binding.webView1.settings.domStorageEnabled = true
+        binding.webView1.setDownloadListener { url, userAgent, contentDisposition, mimetype, contentLength ->
             val uri = Uri.parse(url)
             val intent = Intent(Intent.ACTION_VIEW, uri)
             if (intent.resolveActivity(mContext?.packageManager!!) != null) {
@@ -151,8 +151,8 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true)
         }
-        val customWebViewClient = CustomWebViewClient(webView1, webViewClientListenerList)
-        webView1.webViewClient = customWebViewClient
+        val customWebViewClient = CustomWebViewClient(binding.webView1, webViewClientListenerList)
+        binding.webView1.webViewClient = customWebViewClient
         val webChromeClient = object : WebChromeClient() {
             override fun onReceivedTitle(webView: WebView, s: String?) {
                 super.onReceivedTitle(webView, s)
@@ -198,12 +198,12 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
                 return true
             }
         }
-        webView1.webChromeClient = webChromeClient
+        binding.webView1.webChromeClient = webChromeClient
     }
 
     fun loadPage(url: String?) {
         this.mUrl = url
-        mUrl?.let { webView1.loadUrl(it) }
+        mUrl?.let { binding.webView1.loadUrl(it) }
 //        webView1.reload()
     }
 
@@ -274,7 +274,7 @@ class YCLoadBridgeWebViewV2 : FrameLayout {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        this.removeView(webView1)
+        this.removeView(binding.webView1)
     }
 
     fun setCallBack(callBack: ILoadWebViewCallBack) {

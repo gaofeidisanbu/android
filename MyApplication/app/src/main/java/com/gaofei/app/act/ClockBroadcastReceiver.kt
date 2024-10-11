@@ -9,7 +9,7 @@ import com.gaofei.library.utils.ToastManager
 class ClockBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         LogUtils.d("ClockBroadcastReceiver $context")
-        ClockStartActivity.intentTo(context)
+//        ClockStartActivity.intentTo(context)
     }
 
     companion object {
