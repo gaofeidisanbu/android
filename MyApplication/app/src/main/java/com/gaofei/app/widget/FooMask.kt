@@ -24,7 +24,7 @@ class FooMask @JvmOverloads constructor(
                 setBackgroundColor(Color.parseColor("#B2000000"))
             }
 
-            override fun draw(canvas: Canvas?) {
+            override fun draw(canvas: Canvas) {
                 digRoundRect(
                         canvas,
                         RectF(targetOnScreenX.toFloat() + dp2px(20f),

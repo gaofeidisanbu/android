@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupWindow;
 
 import com.gaofei.app.act.AIDLActivity;
 import com.gaofei.app.act.AnnotationAct;
@@ -50,6 +53,7 @@ import com.gaofei.app.webview.WebViewActivity;
 import com.gaofei.app.widget.InstanceTest;
 import com.gaofei.library.base.BaseAct;
 import com.gaofei.library.utils.CommonUtils;
+import com.gaofei.library.utils.DimenUtils;
 import com.gaofei.library.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -83,13 +87,34 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         setContentView(R.layout.activity_main);
         initView();
         initData();
-        Class aa = InstanceTest.class;
-        aa.getCanonicalName();
+        sleep();
+    }
+
+    private void sleep() {
 //        try {
-//            InstanceTest.class.newInstance();
-//        } catch (InstantiationException e) {
-//        } catch (IllegalAccessException e) {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
 //        }
+    }
+
+    private void postMsg() {
+        mSwipeToLoadLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        mSwipeToLoadLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                postMsg();
+            }
+        }, 10);
     }
 
     private void initData() {
@@ -123,7 +148,38 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
         myAdapter.addList(getListData());
         mRecyclerView.addItemDecoration(new MyItemDecoration(this));
         mRecyclerView.setAdapter(myAdapter);
+        testPopupWindow();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sleep();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sleep();
+    }
+
+
+    private void testPopupWindow() {
+        findViewById(R.id.anchor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupWindow();
+            }
+        });
+    }
+
+    private void showPopupWindow() {
+        View anchorView = findViewById(R.id.anchor);
+        int size = DimenUtils.dp2px(200);
+        PopupWindow popupWindow = new PopupWindow(size, size);
+        popupWindow.setContentView(LayoutInflater.from(MainActivity.this).inflate(R.layout.layout_city_item, null));
+        popupWindow.showAsDropDown(anchorView);
     }
 
     @Override
@@ -146,6 +202,7 @@ public class MainActivity extends BaseAct implements BaseRecyclerAdapter.OnBaseA
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        sleep();
     }
 
     @Override

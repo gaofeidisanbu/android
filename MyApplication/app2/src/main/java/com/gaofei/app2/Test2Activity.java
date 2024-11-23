@@ -35,8 +35,13 @@ public class Test2Activity extends BaseAct {
 //                ContentResolver cr = getContentResolver();
 //                Uri uri = Uri.parse("content://com.test.demo.fileprovider/test");
 //                cr.query(uri,null,null,null,null);
-                Intent intent = new Intent(Test2Activity.this, EasyService.class);
-                startForegroundService(intent);
+//                Intent intent = new Intent(Test2Activity.this, EasyService.class);
+//                startForegroundService(intent);
+                Intent intent = new Intent("com.gaofei.app.serivce.EasyService");
+                intent.setPackage("com.gaofei.app");
+//                startForegroundService(intent);
+                startService(intent);
+
 
             }
         });

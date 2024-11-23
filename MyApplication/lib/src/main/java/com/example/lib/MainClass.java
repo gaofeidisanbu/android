@@ -53,8 +53,28 @@ public class MainClass {
 //            String dd = "-1";
 //            System.out.println(cc == dd);
             clazz();
+            testQueue();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void testQueue() {
+        Stack stack = new Stack();
+        stack.push(1);
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+        while (!stack.isEmpty()) {
+            System.out.println("stack:"+stack.pop());
+        }
+        Queue queue = new Queue();
+        queue.push(1);
+        queue.push(2);
+        queue.push(3);
+        queue.push(4);
+        while (!queue.isEmpty()) {
+            System.out.println("queue:"+queue.pop());
         }
     }
 

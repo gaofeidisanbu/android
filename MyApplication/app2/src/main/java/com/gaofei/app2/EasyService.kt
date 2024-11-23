@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Binder
 import android.os.IBinder
 import android.os.Process
 import com.gaofei.library.utils.LogUtils
@@ -24,32 +25,7 @@ class EasyService : Service() {
 
     override fun onBind(intent: Intent?): IBinder {
         LogUtils.d("$TAG ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
-        val service = object : IEasyService.Stub(){
-
-            override fun connect(mes: String?) :Int{
-                LogUtils.d("$TAG connect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
-                return 1;
-            }
-
-            override fun disConnect(mes: String?) {
-                LogUtils.d("$TAG disConnect $mes ${" processId = " + Process.myPid() + " threadId = " + Thread.currentThread().id}")
-            }
-
-            override fun getBitmap(): Bitmap {
-                return BitmapFactory.decodeResource(resources, R.mipmap.plan_preview_loading_city_1)
-            }
-
-            override fun getByteArray( bitmap:Bitmap): ByteArray {
-                val array = ByteArray(1024 * 1024)
-                return array
-            }
-
-            override fun attachBinder(binder: IEasyService?) {
-                TODO("Not yet implemented")
-            }
-
-        }
-        return service
+       return Binder();
     }
 
     override fun onUnbind(intent: Intent?): Boolean {

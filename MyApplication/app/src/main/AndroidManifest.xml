@@ -24,7 +24,11 @@
     <uses-feature android:name="android.hardware.camera.flash" android:required="false"/>
     <uses-feature android:name="android.hardware.screen.landscape"/>
     <uses-feature android:name="android.hardware.wifi" android:required="false"/>
-
+    <permission android:name="com.myapp.permission.MY_PERMISSION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <queries>
+        <package android:name="com.gaofei.app2" />
+    </queries>
 
     <application
         android:name="com.gaofei.app.AppApplication"
@@ -193,6 +197,13 @@
         <activity android:name="com.google.zxing.client.android.HelpActivity"
             android:screenOrientation="user"
             android:stateNotNeeded="true"/>
+        <service android:name="com.gaofei.app.serivce.EasyService"  android:process="com.service" android:exported="true" android:enabled="true"
+            >
+            <intent-filter>
+                <action android:name="com.gaofei.app.serivce.EasyService"/>
+            </intent-filter>
+        </service>
     </application>
+
 
 </manifest>

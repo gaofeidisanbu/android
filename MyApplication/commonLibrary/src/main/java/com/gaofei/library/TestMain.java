@@ -2,19 +2,10 @@ package com.gaofei.library;
 
 import android.annotation.SuppressLint;
 
-import com.gaofei.library.utils.LogUtils;
 import com.gaofei.library.utils.WebPageUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -25,26 +16,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.flowables.ConnectableFlowable;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.internal.functions.Functions;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -78,6 +55,7 @@ public class TestMain {
 //            kotlin();
 
 //            new User().ff();
+            testQueue();
             clazz();
         } catch (Exception e) {
             e.printStackTrace();
@@ -551,6 +529,20 @@ public class TestMain {
     interface Source<T> {
         T nextT();
     }
+
+
+    public void testSearchTree() {
+
+    }
+
+    public static class TreeNode {
+        TreeNode left;
+        TreeNode right;
+
+        int value;
+    }
+
+
 
 
 

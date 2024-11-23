@@ -83,10 +83,12 @@ public class BaseAct extends AppCompatActivity {
         LogUtils.d(TAG, "------- onNewIntent");
     }
 
+    protected long pauseTime;
     @Override
     protected void onPause() {
         super.onPause();
         ProjectApplication.getInstance().ActivityOnPause(this);
+        pauseTime = System.currentTimeMillis();
         LogUtils.d(TAG, "------- onPause");
     }
 
@@ -102,7 +104,7 @@ public class BaseAct extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         ProjectApplication.getInstance().ActivityOnStop(this);
-        LogUtils.d(TAG, "------- onStop");
+        LogUtils.d(TAG, "------- onStop pause-stop:"+(System.currentTimeMillis() - pauseTime));
     }
 
     @Override

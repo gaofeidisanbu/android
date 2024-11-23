@@ -241,7 +241,7 @@ class TaskPathView : FrameLayout {
     }
 
 
-    override fun dispatchDraw(canvas: Canvas?) {
+    override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
         canvas?.let {
             drawTask(it, mAnimatedValue, mTaskTreasureBoxCount)
